@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android" android:gravity="center">
+    <TextView android:layout_column="1"
+          android:id="@+id/nameCol"
+          android:text="Player Name"
+          style="@style/TableFont" android:gravity="left" />
+    <TextView android:text="GP"
+          android:id="@+id/gamesPlayedCol"
+          style="@style/TableFont"/>
+    <TextView android:text="G"
+          android:id="@+id/goalsCol"
+          style="@style/TableFont"/>
+    <TextView android:text="A"
+          android:id="@+id/assistsCol"
+          style="@style/TableFont"/>
+    <TextView android:text="P"
+          android:id="@+id/pointsCol"
+          style="@style/TableFont"/>
+    <TextView android:text="PIM"
+          android:id="@+id/pimsCol"
+          style="@style/TableFont"/>
+</TableRow>

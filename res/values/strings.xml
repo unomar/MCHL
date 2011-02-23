@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, mchl!</string>
+    <string name="app_name">MCHL</string>
+<string name="dialog_title">Configure MCHL Info</string>
+<string name="dialog_text">Do it here</string>
+<string name="Name">Name</string>
+<string name="Goals">G</string>
+<string name="Assists">A</string>
+<string name="Points">P</string>
+<string name="SeasonTextDefault">Select a season</string>
+<string name="DivisionTextDefault">Select a division</string>
+<string name="TeamTextDefault">Select a team</string>
+</resources>

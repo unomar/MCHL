@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/teamRow"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  style="@style/TableBorders"
+>
+<TextView
+  android:id="@+id/teamName"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:text="Team Name"
+  android:layout_weight=".5"
+  android:layout_margin="1px"
+android:background="@color/black"
+>
+</TextView>
+<TextView
+  android:id="@+id/gamesPlayed"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_weight=".07"
+  android:text="GP "
+  android:layout_margin="1px"
+android:background="@color/black"
+>
+</TextView>
+<TextView
+  android:id="@+id/wins"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_weight=".07"
+  android:text="W "
+  android:layout_margin="1px"
+android:background="@color/black"
+>
+</TextView>
+<TextView
+  android:id="@+id/losses"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_weight=".07"
+  android:text="L "
+  android:layout_margin="1px"
+android:background="@color/black"
+>
+</TextView>
+<TextView
+  android:id="@+id/ties"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_weight=".07"
+  android:text="T "
+  android:layout_margin="1px"
+android:background="@color/black"
+>
+</TextView>
+<TextView
+  android:id="@+id/points"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_weight=".07"
+  android:text="P "
+  android:layout_margin="1px"
+android:background="@color/black"
+>
+</TextView>
+<TextView
+  android:id="@+id/goalsFor"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_weight=".07"
+  android:text="GF "
+  android:layout_margin="1px"
+android:background="@color/black"
+>
+</TextView>
+<TextView
+  android:id="@+id/goalsAgainst"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_weight=".07"
+  android:text="GA "
+  android:layout_margin="1px"
+android:background="@color/black"
+>
+</TextView>
+
+</TableRow>

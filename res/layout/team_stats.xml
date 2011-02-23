@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+	android:orientation="vertical">
+
+	<TextView android:id="@+id/teamName" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="Name"
+		android:layout_weight=".5" android:layout_margin="1px"
+		android:background="@color/black" android:layout_gravity="center" />
+	<TableLayout style="@style/TableBorders"
+		android:stretchColumns="*" android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TableRow android:layout_width="fill_parent">
+			<TextView android:text="Rank" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" style="@style/TableFont.Top" />
+			<TextView android:id="@+id/rank" android:text="X"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				style="@style/TableFont.Top" />
+		</TableRow>
+		<TableRow android:layout_width="fill_parent">
+
+			<TextView android:text="Games Played" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_weight=".07"
+				style="@style/TableFont" />
+			<TextView android:id="@+id/gamesPlayed" android:text="X"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				style="@style/TableFont" />
+		</TableRow>
+		<TableRow android:layout_width="fill_parent">
+
+			<TextView android:text="Wins" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_weight=".07"
+				style="@style/TableFont" />
+			<TextView android:id="@+id/wins" android:text="X"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				style="@style/TableFont" />
+		</TableRow>
+		<TableRow android:layout_width="fill_parent">
+
+			<TextView android:text="Losses" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_weight=".07"
+				style="@style/TableFont" />
+			<TextView android:id="@+id/losses" android:text="X"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				style="@style/TableFont" />
+		</TableRow>
+		<TableRow android:layout_width="fill_parent">
+
+			<TextView android:text="Ties" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_weight=".07"
+				style="@style/TableFont" />
+			<TextView android:id="@+id/ties" android:text="X"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				style="@style/TableFont" />
+		</TableRow>
+		<TableRow android:layout_width="fill_parent">
+
+			<TextView android:text="Points" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_weight=".07"
+				style="@style/TableFont" />
+			<TextView android:id="@+id/points" android:text="X"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				style="@style/TableFont" />
+		</TableRow>
+		<TableRow android:layout_width="fill_parent">
+
+			<TextView android:text="Goals For" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_weight=".07"
+				style="@style/TableFont" />
+			<TextView android:id="@+id/goalsFor" android:text="X"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				style="@style/TableFont" />
+		</TableRow>
+		<TableRow android:layout_width="fill_parent">
+
+			<TextView android:text="Goals Against" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_weight=".07"
+				style="@style/TableFont" />
+			<TextView android:id="@+id/goalsAgainst" android:text="X"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				style="@style/TableFont" />
+		</TableRow>
+	</TableLayout>
+</LinearLayout>

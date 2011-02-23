@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:layout_column="1"
+              android:id="@+id/name"
+              android:text="Goalie Name"
+              style="@style/CodeFont.Table" />
+    <TextView android:text="GP"
+              android:id="@+id/gamesPlayed"
+              style="@style/CodeFont.Table"/>
+    <TextView android:text="GA"
+              android:id="@+id/goalsAgainst"
+              style="@style/CodeFont.Table"/>
+    <TextView android:text="S"
+              android:id="@+id/shots"
+              style="@style/CodeFont.Table"/>
+    <TextView android:text="GAA"
+              android:id="@+id/gAA"
+              style="@style/CodeFont.Table"/>
+    <TextView android:text="S%"
+              android:id="@+id/savePercentage"
+              style="@style/CodeFont.Table"/>
+</TableRow>

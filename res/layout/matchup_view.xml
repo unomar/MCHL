@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/matchupPage" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<RelativeLayout android:id="@+id/dateTimeBar" android:gravity="center"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<TextView android:id="@+id/date" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Date">
+		</TextView>
+		<TextView android:id="@+id/at" android:layout_toRightOf="@id/date"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:text=" @ ">
+		</TextView>
+		<TextView android:id="@+id/location"
+			android:layout_toRightOf="@id/at" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Location">
+		</TextView>
+	</RelativeLayout>
+
+	<LinearLayout android:id="@+id/scoreBar" android:layout_marginTop="10dp" android:layout_marginBottom="10dp"
+		android:orientation="horizontal" android:layout_below="@id/dateTimeBar"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight=".5">
+			<TextView android:layout_width="fill_parent" android:textStyle="bold"
+				android:layout_height="wrap_content" android:text="HOME" android:gravity="center"/>
+			<TextView android:id="@+id/matchHomeName"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:text="Team Name" android:gravity="center"/>
+			<TextView android:id="@+id/homeTeamScore"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:text="0" android:gravity="center" android:textStyle="bold"/>
+		</LinearLayout>
+
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight=".5" >
+			<TextView android:layout_width="fill_parent" android:textStyle="bold"
+				android:layout_height="wrap_content" android:text="AWAY" android:gravity="center"/>
+			<TextView android:id="@+id/matchAwayName"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:text="Team Name" android:gravity="center"/>
+			<TextView android:id="@+id/awayTeamScore"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:text="0" android:gravity="center" android:textStyle="bold"/>
+		</LinearLayout>
+
+	</LinearLayout>
+
+	<TabHost android:id="@android:id/tabhost" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:orientation="vertical"
+		android:layout_below="@id/scoreBar" android:layout_alignParentLeft="true">
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:padding="5dp">
+			<TabWidget android:id="@android:id/tabs"
+				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+			<FrameLayout android:id="@android:id/tabcontent"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:padding="5dp" />
+		</LinearLayout>
+	</TabHost>
+</RelativeLayout>
