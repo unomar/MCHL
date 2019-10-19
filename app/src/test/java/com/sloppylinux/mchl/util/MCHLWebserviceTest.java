@@ -12,20 +12,20 @@ public class MCHLWebserviceTest
     private MCHLWebservice mchlWebservice;
 
     @Before
-    void setUp() {
+    public void setUp() {
         mchlWebservice = new MCHLWebservice();
     }
 
 
     @Test
-    void testPlayerLookup()
+    public void testPlayerLookup()
     {
-        Integer playerId = mchlWebservice.playerLookup("Kevin", "Weiss");
+        Long playerId = mchlWebservice.playerLookup("Kevin", "Weiss");
         assertNotNull("Player ID is null", playerId);
-        assertThat("Received unexpected player id", playerId, is(Integer.valueOf(3296)));
+        assertThat("Received unexpected player id", playerId, is(Long.valueOf(3296)));
     }
 
-    void testGetSeasons() {
+    public void testGetSeasons() {
     }
 
     void testGetDivisionNames() {

@@ -41,7 +41,7 @@ public class Player implements Comparable<Player>, Serializable
     private List<Long> currentTeams;
 
     @SerializedName("statistics")
-    List<Statistics> stats;
+    Statistics stats;
 
     Statistics currentStats;
 
@@ -121,11 +121,11 @@ public class Player implements Comparable<Player>, Serializable
         this.currentTeams = currentTeams;
     }
 
-    public List<Statistics> getStats() {
+    public Statistics getStats() {
         return stats;
     }
 
-    public void setStats(List<Statistics> stats) {
+    public void setStats(Statistics stats) {
         this.stats = stats;
     }
 
@@ -164,5 +164,25 @@ public class Player implements Comparable<Player>, Serializable
     public String toString()
     {
         return getName(" ");
+    }
+
+    public int getGamesPlayed() {
+        return 0;
+    }
+
+    public int getGoals() {
+        return 0;
+    }
+
+    public int getAssists() {
+        return 0;
+    }
+
+    public int getPoints() {
+        return 0;
+    }
+
+    public int getPims() {
+        return 0;
     }
 }

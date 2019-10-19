@@ -2,21 +2,34 @@ package com.sloppylinux.mchl.util;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sloppylinux.mchl.domain.Division;
+import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.domain.WSException;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
+import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MCHLWebservice
 {
+	private final Logger LOG = Logger.getLogger(MCHLWebservice.class.getName());
+
 	/** Called when the activity is first created. */
 	private static final String SOAP_ACTION = "http://ourmchl.com/wp-json/sportspress/v2/";
 	private static final String GET_SEASONS = "tables";
@@ -35,9 +48,13 @@ public class MCHLWebservice
 
 	public MCHLWebservice()
 	{
+		Gson gson = new GsonBuilder()
+				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+				.create();
+
 		Retrofit retrofit = new Retrofit.Builder()
 				.baseUrl(SOAP_ACTION)
-				.addConverterFactory(GsonConverterFactory.create())
+				.addConverterFactory(GsonConverterFactory.create(gson))
 				.build();
 
 		mchlService = retrofit.create(MCHLService.class);
@@ -55,9 +72,41 @@ public class MCHLWebservice
 		}
 	}
 
-	public Integer playerLookup(String firstName, String lastName)
+	public Long playerLookup(String firstName, String lastName)
 	{
-		return 0;
+		Long playerId = null;
+
+		String fullName = StringUtils.capitalize(firstName) + " " + StringUtils.capitalize(lastName);
+		try {
+			int page = 0;
+			boolean moreResults = true;
+			while (playerId == null && moreResults) {
+				LOG.info("Querying page #" + page);
+				Call<List<Player>> playerCall = mchlService.listPlayers(page);
+				Response<List<Player>> players = playerCall.execute();
+				if (players != null && players.body() != null) {
+					LOG.info("Got " + players.body().size() + " results.");
+					for (Player player : players.body()) {
+						LOG.info("Checking player: " + player.getName(" "));
+						if (fullName.equals(player.getName(" "))) {
+							playerId = player.getPlayerId();
+						}
+					}
+					page++;
+					moreResults = (players.body().size() < 10);
+				}
+				else
+				{
+					LOG.info("listPlayers returned " + ((players == null || players.body() == null) ? "null" : players.body().toString()));
+					moreResults = false;
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			LOG.warning("Caught exception performing player search." + e.getMessage());
+		}
+		return playerId;
 	}
 
 	public static String[] getSeasons() throws WSException
