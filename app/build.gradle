@@ -1,0 +1,73 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+//    sourceSets {
+//        main {
+//            manifest.srcFile 'AndroidManifest.xml'
+//            java.srcDirs = ['src']
+//            resources.srcDirs = ['src']
+//            aidl.srcDirs = ['src']
+//            renderscript.srcDirs = ['src']
+//            res.srcDirs = ['res']
+//            assets.srcDirs = ['assets']
+//        }
+//
+//    }
+
+    defaultConfig{
+        applicationId 'com.sloppylinux.mchl.gui'
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dexOptions {
+        javaMaxHeapSize "4g" //specify the heap size for the dex process
+        preDexLibraries = false //delete the already predexed libraries
+    }
+    lintOptions {
+// This is needed to avoid spurious lint errors from libthrift on android.
+        disable 'InvalidPackage'
+        abortOnError false
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+        mavenCentral()
+        google()
+    }
+}
+
+
+dependencies {
+    implementation group: 'log4j', name: 'log4j', version: '1.2.17'
+    implementation group: 'org.slf4j', name: 'log4j-over-slf4j', version: '1.7.28'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.28'
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.28'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+    implementation group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.6.2'
+    implementation group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.6.2'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+
+
+
+
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '2.18.3'
+    testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+
+}
