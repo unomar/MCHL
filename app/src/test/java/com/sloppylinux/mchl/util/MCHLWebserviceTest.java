@@ -22,7 +22,7 @@ public class MCHLWebserviceTest
     {
         Long playerId = mchlWebservice.playerLookup("Kevin", "Weiss");
         assertNotNull("Player ID is null", playerId);
-        assertThat("Received unexpected player id", playerId, is(Long.valueOf(3296)));
+        assertThat("Received unexpected player id", playerId, is(3296L));
     }
 
     public void testGetSeasons() {

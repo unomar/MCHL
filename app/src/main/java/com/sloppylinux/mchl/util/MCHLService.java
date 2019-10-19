@@ -5,13 +5,11 @@ import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
 
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import retrofit2.http.QueryMap;
 
 public interface MCHLService {
 
@@ -30,7 +28,7 @@ public interface MCHLService {
     Call<Event> getEvent(@Path(value = "event") int eventId);
 
     @GET("players")
-    Call<List<Player>> listPlayers(@Query("page") Integer page);
+    Call<List<Player>> listPlayers(@Query("per_page") Integer perPage, @Query("page") Integer page);
 
     @GET("players/{player}")
     Call<Player> getPlayer(@Path(value = "player") int playerId);

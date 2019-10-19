@@ -16,11 +16,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -52,9 +52,16 @@ public class MCHLWebservice
 				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 				.create();
 
+		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor((msg)-> { LOG.info(msg); });
+		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+		OkHttpClient client = new OkHttpClient.Builder()
+				.addInterceptor(interceptor)
+				.build();
+
 		Retrofit retrofit = new Retrofit.Builder()
 				.baseUrl(SOAP_ACTION)
 				.addConverterFactory(GsonConverterFactory.create(gson))
+				.client(client)
 				.build();
 
 		mchlService = retrofit.create(MCHLService.class);
@@ -78,11 +85,11 @@ public class MCHLWebservice
 
 		String fullName = StringUtils.capitalize(firstName) + " " + StringUtils.capitalize(lastName);
 		try {
-			int page = 0;
+			int page = 1;
 			boolean moreResults = true;
 			while (playerId == null && moreResults) {
 				LOG.info("Querying page #" + page);
-				Call<List<Player>> playerCall = mchlService.listPlayers(page);
+				Call<List<Player>> playerCall = mchlService.listPlayers(null, page);
 				Response<List<Player>> players = playerCall.execute();
 				if (players != null && players.body() != null) {
 					LOG.info("Got " + players.body().size() + " results.");
@@ -93,7 +100,7 @@ public class MCHLWebservice
 						}
 					}
 					page++;
-					moreResults = (players.body().size() < 10);
+					moreResults = !(players.body().size() < 10);
 				}
 				else
 				{
