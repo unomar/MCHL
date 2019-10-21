@@ -5,10 +5,12 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sloppylinux.mchl.domain.Division;
+import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.domain.WSException;
+import com.sloppylinux.mchl.domain.retrofit.Event;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,8 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -52,16 +52,16 @@ public class MCHLWebservice
 				.setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 				.create();
 
-		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor((msg)-> { LOG.info(msg); });
-		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-		OkHttpClient client = new OkHttpClient.Builder()
-				.addInterceptor(interceptor)
-				.build();
+//		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor((msg)-> { LOG.info(msg); });
+//		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//		OkHttpClient client = new OkHttpClient.Builder()
+//				.addInterceptor(interceptor)
+//				.build();
 
 		Retrofit retrofit = new Retrofit.Builder()
 				.baseUrl(SOAP_ACTION)
 				.addConverterFactory(GsonConverterFactory.create(gson))
-				.client(client)
+//				.client(client)
 				.build();
 
 		mchlService = retrofit.create(MCHLService.class);
@@ -94,13 +94,13 @@ public class MCHLWebservice
 				if (players != null && players.body() != null) {
 					LOG.info("Got " + players.body().size() + " results.");
 					for (Player player : players.body()) {
-						LOG.info("Checking player: " + player.getName(" "));
-						if (fullName.equals(player.getName(" "))) {
-							playerId = player.getPlayerId();
+						LOG.info("Checking player: " + player.getTitle().getRendered());
+						if (fullName.equals(player.getTitle().getRendered())) {
+							playerId = player.getId();
 						}
 					}
 					page++;
-					moreResults = !(players.body().size() < 10);
+					moreResults = !(players.body().size() < 10); //TODO: Change to allow dynamic query size
 				}
 				else
 				{
@@ -146,7 +146,7 @@ public class MCHLWebservice
 		return null;
 	}
 
-	public static List<Team> getTeams(String season, String division) throws WSException
+	public  static List<Team> getTeams(String season, String division) throws WSException
 	{
 //		ArrayList<Team> teams = new ArrayList<Team>();
 //		Map<String, String> params = new HashMap<String, String>();
@@ -166,82 +166,57 @@ public class MCHLWebservice
 		return Collections.EMPTY_LIST;
 	}
 
-	public static TeamSchedule getSchedule(String season, String teamName,
-			Context context, boolean forceRefresh) throws WSException
+	public  TeamSchedule getSchedule(Integer teamId,
+			 boolean forceRefresh)
 	{
-//		TeamSchedule teamSchedule = null;
-//		String cachedName = "TeamSchedule" + season + teamName;
-//
-//		if (!forceRefresh)
-//		{
-//			teamSchedule = (TeamSchedule) ObjectCache.readCache(cachedName,
-//					context);
-//		}
-//
-//		if (teamSchedule == null)
-//		{
-//			teamSchedule = new TeamSchedule();
-//			teamSchedule.setName(teamName);
-//			ArrayList<Game> games = new ArrayList<Game>();
-//
-//			Map<String, String> params = new HashMap<String, String>();
-//			params.put(SEASON_PARAM, season);
-//			params.put(TEAM_PARAM, teamName);
-//
-//			SoapObject soap2 = performCall(GET_SCHEDULE, params);
-//
-//			if (soap2 != null)
-//			{
-//				for (int i = 0; i < soap2.getPropertyCount(); i++)
-//				{
-//					SoapObject gameSoap = (SoapObject) soap2.getProperty(i);
-//					String home = gameSoap.getProperty("scheduleHomeTeam")
-//							.toString();
-//					int homeScore = getInteger(gameSoap.getProperty(
-//							"scheduleHomeScore").toString());
-//					String away = gameSoap.getProperty("scheduleVisitingTeam")
-//							.toString();
-//					int awayScore = getInteger(gameSoap.getProperty(
-//							"scheduleVisitingScore").toString());
-//					String location = gameSoap.getProperty("scheduleRink")
-//							.toString();
-//
-//					/*
-//					 * For some reason we get a Date object containing the
-//					 * correct date but in correct time and a Time containing
-//					 * the incorrect Date but the correct Time. Mash this crap
-//					 * together and make one valid date string we can parse.
-//					 */
-//
-//					String dateStr = gameSoap.getProperty("scheduleDate")
-//							.toString();
-//					String timeStr = gameSoap.getProperty("scheduleTime")
-//							.toString();
-//					Date date = null;
-//					try
-//					{
-//						date = dateFormat.parse(dateStr + " " + timeStr);
-//					}
-//					catch (ParseException e)
-//					{
-//						date = new Date();
-//					}
-//
-//					Game game = new Game(home, away, date, homeScore,
-//							awayScore, location);
-//					games.add(game);
-//				}
-//			}
-//			teamSchedule.setGames(games);
-//
-//			// Write our team schedule out to cache
-//			ObjectCache.writeCache(cachedName, teamSchedule, context);
-//		}
-//		return teamSchedule;
-		return null;
+		int loops = 0;
+		TeamSchedule teamSchedule = null;
+		try {
+			// TODO: Can't use team events.  Must find way to query schedule by id, but I'm not sure how to determine the calendarID for a team.
+			Call<Team> teamCall = mchlService.getTeam(teamId);
+			Response<Team> teamResponse = teamCall.execute();
+			if (teamResponse != null && teamResponse.body() != null)
+			{
+				Team team = teamResponse.body();
+				if (null != team.getEventIds())
+				{
+					LOG.info("Got " + team.getEventIds().size() + " events");
+					teamSchedule = new TeamSchedule();
+					for (Long eventId : team.getEventIds())
+					{
+						Call<Event> eventCall = mchlService.getEvent(eventId);
+						Response<Event> eventResponse = eventCall.execute();
+
+						if (eventResponse != null && eventResponse.body() != null)
+						{
+							String eventString = eventResponse.body().getTitle().getRendered();
+							if (StringUtils.isNotBlank(eventString))
+							{
+								LOG.info("Creating Game for event [" + eventResponse.body().getId() + "] as " + eventString);
+								String[] teamNames = eventString.split(" vs ");
+								Game game = new Game(teamNames[0], teamNames[1], eventResponse.body().getEventDate(), 0, 0, "");
+								teamSchedule.getGames().add(game);
+							}
+						}
+
+						loops++;
+						if (loops > 10)
+						{
+							break;
+						}
+					}
+				}
+			}
+
+		}
+		catch (IOException e)
+			{
+				LOG.warning("Caught exception querying team schedule." + e.getMessage());
+			}
+		return teamSchedule;
 	}
 
-	public static Team getTeam(String season, String division, String teamName, Context context, boolean forceRefresh) throws WSException
+	public static  Team getTeam(String season, String division, String teamName, Context context, boolean forceRefresh) throws WSException
 	{
 //		Team team = null;
 //		String cachedName = "Team" + season + teamName;
@@ -330,7 +305,7 @@ public class MCHLWebservice
 		return null;
 	}
 
-	public static List<Team> getStandings(String season, String division) throws WSException
+	public static  List<Team> getStandings(String season, String division) throws WSException
 	{
 //		List<Team> teams = new ArrayList<Team>();
 //		Map<String, String> params = new HashMap<String, String>();
@@ -389,7 +364,7 @@ public class MCHLWebservice
 	 * @return ArrayList of all data
 	 * @throws WSException 
 	 */
-	public static ArrayList<Division> getDivisions(String season,
+	public static  ArrayList<Division> getDivisions(String season,
 			Context context, boolean forceRefresh) throws WSException
 	{
 		ArrayList<Division> divisions = new ArrayList<Division>();
@@ -420,7 +395,7 @@ public class MCHLWebservice
 		return divisions;
 	}
 
-//	private static SoapObject performCall(String methodName,
+//	private  SoapObject performCall(String methodName,
 //			Map<String, String> params) throws WSException
 //	{
 //		SoapObject resultData = null;
@@ -463,7 +438,7 @@ public class MCHLWebservice
 	 * @param strVal
 	 * @return
 	 */
-	private static int getInteger(String strVal)
+	private static  int getInteger(String strVal)
 	{
 		int retVal;
 		try

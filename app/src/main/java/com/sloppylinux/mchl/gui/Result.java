@@ -78,16 +78,16 @@ public class Result extends Activity
 			public void run()
 			{
 				Looper.prepare();
-				try
-				{
-					results = MCHLWebservice.getSchedule(config.getSeason(), config
-							.getTeam(), me, force);
-					mHandler.post(mUpdateResults);
-				}
-				catch (WSException e)
-				{
-					mHandler.post(displayError);
-				}
+//				try
+//				{
+////					results = MCHLWebservice.getSchedule(config.getSeason(), config
+////							.getTeam(), me, force);
+//					mHandler.post(mUpdateResults);
+//				}
+//				catch (WSException e)
+//				{
+//					mHandler.post(displayError);
+//				}
 			}
 		};
 		t.start();

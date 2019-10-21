@@ -1,5 +1,7 @@
 package com.sloppylinux.mchl.domain;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +12,7 @@ public class Team extends Expirable implements Comparable<Team>, Serializable
 	private static final long serialVersionUID = 1L;
 
 	// Team info
+	@SerializedName("title.rendered")
 	private String name;
 	private List<Player> players;
 	private Goalie goalie;
@@ -17,6 +20,9 @@ public class Team extends Expirable implements Comparable<Team>, Serializable
 	private String captain;
 	private String alternate1;
 	private String alternate2;
+
+	@SerializedName("events")
+	private List<Long> eventIds;
 	
 	// Stats
 	private int gamesPlayed;
@@ -287,6 +293,14 @@ public class Team extends Expirable implements Comparable<Team>, Serializable
 	public int getRank()
 	{
 		return rank;
+	}
+
+	public List<Long> getEventIds() {
+		return eventIds;
+	}
+
+	public void setEventIds(List<Long> eventIds) {
+		this.eventIds = eventIds;
 	}
 
 	@Override

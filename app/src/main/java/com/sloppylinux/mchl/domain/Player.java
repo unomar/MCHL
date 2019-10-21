@@ -1,24 +1,19 @@
 package com.sloppylinux.mchl.domain;
 
 import com.google.gson.annotations.SerializedName;
+import com.sloppylinux.mchl.domain.retrofit.BaseRestic;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
-public class Player implements Comparable<Player>, Serializable
+public class Player extends BaseRestic implements Comparable<Player>, Serializable
 {
     private static final long serialVersionUID = 1L;
     // Player info
-    @SerializedName("id")
-    private long playerId;
-
-    @SerializedName("modified")
-    private Date lastModified;
-
     @SerializedName("slug")
     private String firstLast;
 
@@ -41,28 +36,12 @@ public class Player implements Comparable<Player>, Serializable
     private List<Long> currentTeams;
 
     @SerializedName("statistics")
-    Statistics stats;
+    private Map<Long, Statistics> stats;
 
     Statistics currentStats;
 
     public Player()
     {
-    }
-
-    public long getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerId(long playerId) {
-        this.playerId = playerId;
-    }
-
-    public Date getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(Date lastModified) {
-        this.lastModified = lastModified;
     }
 
     public String getFirstLast() {
@@ -121,11 +100,11 @@ public class Player implements Comparable<Player>, Serializable
         this.currentTeams = currentTeams;
     }
 
-    public Statistics getStats() {
+    public Map<Long, Statistics> getStats() {
         return stats;
     }
 
-    public void setStats(Statistics stats) {
+    public void setStats(Map<Long, Statistics> stats) {
         this.stats = stats;
     }
 

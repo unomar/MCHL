@@ -1,5 +1,8 @@
 package com.sloppylinux.mchl.util;
 
+import com.sloppylinux.mchl.domain.Game;
+import com.sloppylinux.mchl.domain.TeamSchedule;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,16 +31,23 @@ public class MCHLWebserviceTest
     public void testGetSeasons() {
     }
 
-    void testGetDivisionNames() {
+    public void testGetDivisionNames() {
     }
 
-    void testGetTeamNames() {
+    public void testGetTeamNames() {
     }
 
-    void testGetTeams() {
+    public void testGetTeams() {
     }
 
-    void testGetSchedule() {
+    @Test
+    public void testGetSchedule() {
+        TeamSchedule teamSchedule = mchlWebservice.getSchedule(3283, true);
+        assertNotNull("Team Schedule was null", teamSchedule);
+        for (Game game : teamSchedule.getGames())
+        {
+            assertNotNull("Team Schedule contained null game", game);
+        }
     }
 
     void testGetTeam() {
