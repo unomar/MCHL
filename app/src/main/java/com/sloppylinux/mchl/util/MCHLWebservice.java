@@ -79,42 +79,60 @@ public class MCHLWebservice
 		}
 	}
 
-	public Long playerLookup(String firstName, String lastName)
+	public Player playerLookup(String firstName, String lastName)
 	{
-		Long playerId = null;
+		Player player = null;
 
-		String fullName = StringUtils.capitalize(firstName) + " " + StringUtils.capitalize(lastName);
+        String playerSlug = StringUtils.lowerCase(firstName) + "-" + StringUtils.lowerCase(lastName);
 		try {
-			int page = 1;
-			boolean moreResults = true;
-			while (playerId == null && moreResults) {
-				LOG.info("Querying page #" + page);
-				Call<List<Player>> playerCall = mchlService.listPlayers(null, page);
-				Response<List<Player>> players = playerCall.execute();
-				if (players != null && players.body() != null) {
-					LOG.info("Got " + players.body().size() + " results.");
-					for (Player player : players.body()) {
-						LOG.info("Checking player: " + player.getTitle().getRendered());
-						if (fullName.equals(player.getTitle().getRendered())) {
-							playerId = player.getId();
-						}
-					}
-					page++;
-					moreResults = !(players.body().size() < 10); //TODO: Change to allow dynamic query size
-				}
-				else
-				{
-					LOG.info("listPlayers returned " + ((players == null || players.body() == null) ? "null" : players.body().toString()));
-					moreResults = false;
-				}
-			}
+            Call<List<Player>> playerCall = mchlService.lookupPlayer(playerSlug);
+            Response<List<Player>> playerResult = playerCall.execute();
+            if (playerResult != null && playerResult.body() != null && playerResult.body().size() == 1)
+            {
+                player = playerResult.body().get(0);
+            }
+
+            else
+            {
+                player = slowPlayerLookup(firstName, lastName); 
+            }
 		}
 		catch (IOException e)
 		{
 			LOG.warning("Caught exception performing player search." + e.getMessage());
 		}
-		return playerId;
+		return player;
 	}
+
+    private Player slowPlayerLookup(String firstName, String lastName) throws IOException
+    {
+        String fullName = StringUtils.capitalize(firstName) + " " + StringUtils.capitalize(lastName);
+        Player slowPlayer = null;
+        int page = 1;
+        boolean moreResults = true;
+        while (slowPlayer == null && moreResults) {
+            LOG.info("Querying page #" + page);
+            Call<List<Player>> playerCall = mchlService.listPlayers(null, page);
+            Response<List<Player>> players = playerCall.execute();
+            if (players != null && players.body() != null) {
+                LOG.info("Got " + players.body().size() + " results.");
+                for (Player player : players.body()) {
+                    LOG.info("Checking player: " + player.getTitle().getRendered());
+                    if (fullName.equals(player.getTitle().getRendered())) {
+                        slowPlayer = player;
+                    }
+                }
+                page++;
+                moreResults = !(players.body().size() < 10); //TODO: Change to allow dynamic query size
+            }
+            else
+            {
+                LOG.info("listPlayers returned " + ((players == null || players.body() == null) ? "null" : players.body().toString()));
+                moreResults = false;
+            }
+        }
+        return slowPlayer;
+    }
 
 	public static String[] getSeasons() throws WSException
 	{

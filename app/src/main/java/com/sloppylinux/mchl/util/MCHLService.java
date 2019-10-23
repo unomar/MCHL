@@ -30,6 +30,9 @@ public interface MCHLService {
     @GET("players")
     Call<List<Player>> listPlayers(@Query("per_page") Integer perPage, @Query("page") Integer page);
 
+    @GET("players")
+    Call<List<Player>> lookupPlayer(@Query("slug") String playerSlug);
+
     @GET("players/{player}")
     Call<Player> getPlayer(@Path(value = "player") long playerId);
 }

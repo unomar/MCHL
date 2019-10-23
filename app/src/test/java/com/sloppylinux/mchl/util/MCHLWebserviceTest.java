@@ -2,6 +2,7 @@ package com.sloppylinux.mchl.util;
 
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.TeamSchedule;
+import com.sloppylinux.mchl.domain.Player;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,9 +24,10 @@ public class MCHLWebserviceTest
     @Test
     public void testPlayerLookup()
     {
-        Long playerId = mchlWebservice.playerLookup("Kevin", "Weiss");
-        assertNotNull("Player ID is null", playerId);
-        assertThat("Received unexpected player id", playerId, is(3296L));
+        Player player = mchlWebservice.playerLookup("Kevin", "Weiss");
+        assertNotNull("Player is null", player);
+        assertThat("Received unexpected player id", player.getId(), is(3296L));
+        assertThat("Player has more than one current team", player.getCurrentTeams().size(), is(1));
     }
 
     public void testGetSeasons() {
