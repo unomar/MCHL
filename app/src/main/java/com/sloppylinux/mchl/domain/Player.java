@@ -1,7 +1,7 @@
 package com.sloppylinux.mchl.domain;
 
 import com.google.gson.annotations.SerializedName;
-import com.sloppylinux.mchl.domain.retrofit.BaseRestic;
+import com.sloppylinux.mchl.domain.sportspress.ResponseBase;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -10,106 +10,115 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Player extends BaseRestic implements Comparable<Player>, Serializable
+public class Player extends ResponseBase implements Comparable<Player>, Serializable
 {
     private static final long serialVersionUID = 1L;
+    Statistics currentStats;
     // Player info
     @SerializedName("slug")
     private String firstLast;
-
     @SerializedName("leagues")
     private List<Long> leagues;
-
     @SerializedName("seasons")
     private List<Long> seasons;
-
     @SerializedName("positions")
     private List<Long> positions;
-
     @SerializedName("number")
     private int number;
-
     @SerializedName("teams")
     private List<Long> teams;
-
     @SerializedName("current_teams")
     private List<Long> currentTeams;
-
     @SerializedName("statistics")
     private Map<Long, Statistics> stats;
-
-    Statistics currentStats;
 
     public Player()
     {
     }
 
-    public String getFirstLast() {
+    public String getFirstLast()
+    {
         return firstLast;
     }
 
-    public void setFirstLast(String firstLast) {
+    public void setFirstLast(String firstLast)
+    {
         this.firstLast = firstLast;
     }
 
-    public List<Long> getLeagues() {
+    public List<Long> getLeagues()
+    {
         return leagues;
     }
 
-    public void setLeagues(List<Long> leagues) {
+    public void setLeagues(List<Long> leagues)
+    {
         this.leagues = leagues;
     }
 
-    public List<Long> getSeasons() {
+    public List<Long> getSeasons()
+    {
         return seasons;
     }
 
-    public void setSeasons(List<Long> seasons) {
+    public void setSeasons(List<Long> seasons)
+    {
         this.seasons = seasons;
     }
 
-    public List<Long> getPositions() {
+    public List<Long> getPositions()
+    {
         return positions;
     }
 
-    public void setPositions(List<Long> positions) {
+    public void setPositions(List<Long> positions)
+    {
         this.positions = positions;
     }
 
-    public int getNumber() {
+    public int getNumber()
+    {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(int number)
+    {
         this.number = number;
     }
 
-    public List<Long> getTeams() {
+    public List<Long> getTeams()
+    {
         return teams;
     }
 
-    public void setTeams(List<Long> teams) {
+    public void setTeams(List<Long> teams)
+    {
         this.teams = teams;
     }
 
-    public List<Long> getCurrentTeams() {
+    public List<Long> getCurrentTeams()
+    {
         return currentTeams;
     }
 
-    public void setCurrentTeams(List<Long> currentTeams) {
+    public void setCurrentTeams(List<Long> currentTeams)
+    {
         this.currentTeams = currentTeams;
     }
 
-    public Map<Long, Statistics> getStats() {
+    public Map<Long, Statistics> getStats()
+    {
         return stats;
     }
 
-    public void setStats(Map<Long, Statistics> stats) {
+    public void setStats(Map<Long, Statistics> stats)
+    {
         this.stats = stats;
     }
 
     /**
      * Get a players name separating first & last name by the specified separator
+     *
      * @param separator The separator to use
      * @return The players name
      */
@@ -134,9 +143,9 @@ public class Player extends BaseRestic implements Comparable<Player>, Serializab
     @Override
     public int compareTo(Player other)
     {
-               // Reverse the sort order so we order from High to Low
-               return this.currentStats.compareTo(other.currentStats);
-       }
+        // Reverse the sort order so we order from High to Low
+        return this.currentStats.compareTo(other.currentStats);
+    }
 
 
     @Override
@@ -145,23 +154,28 @@ public class Player extends BaseRestic implements Comparable<Player>, Serializab
         return getName(" ");
     }
 
-    public int getGamesPlayed() {
+    public int getGamesPlayed()
+    {
         return 0;
     }
 
-    public int getGoals() {
+    public int getGoals()
+    {
         return 0;
     }
 
-    public int getAssists() {
+    public int getAssists()
+    {
         return 0;
     }
 
-    public int getPoints() {
+    public int getPoints()
+    {
         return 0;
     }
 
-    public int getPims() {
+    public int getPims()
+    {
         return 0;
     }
 }

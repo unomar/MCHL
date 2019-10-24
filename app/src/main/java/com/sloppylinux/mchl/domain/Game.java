@@ -8,159 +8,157 @@ import java.util.Map;
 
 public class Game extends Expirable implements Comparable<Game>, Serializable
 {
-	private static final long serialVersionUID = 1L;
-	private String home;
-	private String away;
-	private int homeScore = 0;
-	private int awayScore = 0;
-	private String location;
-	private Date date;
-	
-	private static Map<String, String> locationNames = new HashMap<String, String>();
-	
-	static
-	{
-		locationNames.put("Motto McLean Ice Arena", "Motto");
-	}
-	
-	private transient static final SimpleDateFormat dateFormat = new SimpleDateFormat("EEE d MMM yyyy h:mm a");
-	
+    private static final long serialVersionUID = 1L;
+    private transient static final SimpleDateFormat dateFormat = new SimpleDateFormat("EEE d MMM yyyy h:mm a");
     private transient static final SimpleDateFormat shortDateFormat = new SimpleDateFormat("dd/MM/yy h:mm a");
-	
-	public Game(String home, String away, Date date, int homeScore, int awayScore, String location)
-	{
-		this.home = home;
-		this.away = away;
-		this.date = date;
-		this.homeScore = homeScore;
-		this.awayScore = awayScore;
-		this.location = location;
-	}
+    private static Map<String, String> locationNames = new HashMap<String, String>();
 
-	/**
-	 * @return the home
-	 */
-	public String getHome()
-	{
-		return home;
-	}
+    static
+    {
+        locationNames.put("Motto McLean Ice Arena", "Motto");
+    }
 
-	/**
-	 * @param home the home to set
-	 */
-	public void setHome(String home)
-	{
-		this.home = home;
-	}
+    private String home;
+    private String away;
+    private int homeScore = 0;
+    private int awayScore = 0;
+    private String location;
+    private Date date;
 
-	/**
-	 * @return the away
-	 */
-	public String getAway()
-	{
-		return away;
-	}
+    public Game(String home, String away, Date date, int homeScore, int awayScore, String location)
+    {
+        this.home = home;
+        this.away = away;
+        this.date = date;
+        this.homeScore = homeScore;
+        this.awayScore = awayScore;
+        this.location = location;
+    }
 
-	/**
-	 * @param away the away to set
-	 */
-	public void setAway(String away)
-	{
-		this.away = away;
-	}
+    /**
+     * @return the home
+     */
+    public String getHome()
+    {
+        return home;
+    }
 
-	/**
-	 * @return the homeScore
-	 */
-	public int getHomeScore()
-	{
-		return homeScore;
-	}
+    /**
+     * @param home the home to set
+     */
+    public void setHome(String home)
+    {
+        this.home = home;
+    }
 
-	/**
-	 * @param homeScore the homeScore to set
-	 */
-	public void setHomeScore(int homeScore)
-	{
-		this.homeScore = homeScore;
-	}
+    /**
+     * @return the away
+     */
+    public String getAway()
+    {
+        return away;
+    }
 
-	/**
-	 * @return the awayScore
-	 */
-	public int getAwayScore()
-	{
-		return awayScore;
-	}
+    /**
+     * @param away the away to set
+     */
+    public void setAway(String away)
+    {
+        this.away = away;
+    }
 
-	/**
-	 * @param awayScore the awayScore to set
-	 */
-	public void setAwayScore(int awayScore)
-	{
-		this.awayScore = awayScore;
-	}
+    /**
+     * @return the homeScore
+     */
+    public int getHomeScore()
+    {
+        return homeScore;
+    }
 
-	/**
-	 * @return the location
-	 */
-	public String getLocation()
-	{
-		return location;
-	}
+    /**
+     * @param homeScore the homeScore to set
+     */
+    public void setHomeScore(int homeScore)
+    {
+        this.homeScore = homeScore;
+    }
+
+    /**
+     * @return the awayScore
+     */
+    public int getAwayScore()
+    {
+        return awayScore;
+    }
+
+    /**
+     * @param awayScore the awayScore to set
+     */
+    public void setAwayScore(int awayScore)
+    {
+        this.awayScore = awayScore;
+    }
+
+    /**
+     * @return the location
+     */
+    public String getLocation()
+    {
+        return location;
+    }
+
+    /**
+     * @param location the location to set
+     */
+    public void setLocation(String location)
+    {
+        this.location = location;
+    }
 
     /**
      * @return a shortened location string
      */
     public String getShortLocation()
     {
-    	String loc = locationNames.get(this.location); 
-    	return loc != null ? loc : this.location;
+        String loc = locationNames.get(this.location);
+        return loc != null ? loc : this.location;
     }
 
-	/**
-	 * @param location the location to set
-	 */
-	public void setLocation(String location)
-	{
-		this.location = location;
-	}
+    /**
+     * @return the date
+     */
+    public Date getDate()
+    {
+        return date;
+    }
 
-	/**
-	 * @return the date
-	 */
-	public Date getDate()
-	{
-		return date;
-	}
-	
-	public String getDateString()
-	{
-		return dateFormat.format(date);
-	}
+    /**
+     * @param date the date to set
+     */
+    public void setDate(Date date)
+    {
+        this.date = date;
+    }
+
+    public String getDateString()
+    {
+        return dateFormat.format(date);
+    }
 
     public String getShortDateString()
     {
         return shortDateFormat.format(date);
     }
 
-	/**
-	 * @param date the date to set
-	 */
-	public void setDate(Date date)
-	{
-		this.date = date;
-	}
+    @Override
+    public int compareTo(Game arg0)
+    {
+        return this.date.compareTo(arg0.date);
+    }
 
-	@Override
-	public int compareTo(Game arg0)
-	{
-		return this.date.compareTo(arg0.date);
-	}
-	
-	@Override
-	public String toString()
-	{
-		return this.home + " vs " + this.away;
-	}
+    @Override
+    public String toString()
+    {
+        return this.home + " vs " + this.away;
+    }
 }

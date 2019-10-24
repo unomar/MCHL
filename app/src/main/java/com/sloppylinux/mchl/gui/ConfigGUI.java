@@ -1,9 +1,5 @@
 package com.sloppylinux.mchl.gui;
 
-import com.sloppylinux.mchl.util.Config;
-import com.sloppylinux.mchl.util.MCHLWebservice;
-import com.sloppylinux.mchl.domain.WSException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -20,22 +16,23 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.sloppylinux.mchl.domain.WSException;
+import com.sloppylinux.mchl.util.Config;
+import com.sloppylinux.mchl.util.MCHLWebservice;
+
 public class ConfigGUI extends Activity
 {
     private static Config config;
     private static ConfigGUI me;
-    
+
     private static TextView seasonValue;
     private static TextView divisionValue;
     private static TextView teamValue;
-    
+
     final String tag = "ConfigGUI2";
-    
+    final Handler mHandler = new Handler();
     private LayoutInflater li;
     private ProgressDialog pd = null;
-
-    final Handler mHandler = new Handler();
-
     final Runnable mUpdateResults = new Runnable()
     {
         public void run()
@@ -50,11 +47,11 @@ public class ConfigGUI extends Activity
         super.onCreate(savedInstanceState);
         me = this;
         config = new Config(this);
-        
-        li = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         pd = ProgressDialog.show(this, "Please wait...", "Fetching data");
-        fetchWebData(); 
+        fetchWebData();
         // assemble UI Shell here
     }
 
@@ -64,7 +61,7 @@ public class ConfigGUI extends Activity
         {
             public void run()
             {
-            	Looper.prepare();
+                Looper.prepare();
                 MCHLWebservice.init();
                 mHandler.post(mUpdateResults);
             }
@@ -74,64 +71,60 @@ public class ConfigGUI extends Activity
 
     private void updateUI()
     {
-    	if (pd != null && pd.isShowing())
-		{
-			pd.dismiss();
-			pd = null;
-		}
-    	ScrollView content = new ScrollView(this);
-    	
-    	//View configGUI = li.inflate(R.layout.config_gui, null);
-    	LinearLayout configGUI = new LinearLayout(this);
-    	configGUI.setOrientation(LinearLayout.VERTICAL);
-    	
-    	View season = li.inflate(R.layout.custom_spinner, null);
-    	View division = li.inflate(R.layout.custom_spinner, null);
-    	View team = li.inflate(R.layout.custom_spinner, null);
-    	
-    	TextView seasonLabel = (TextView)season.findViewById(R.id.selectorLabel);
-    	seasonValue = (TextView)season.findViewById(R.id.selectorValue);
-    	seasonLabel.setText("Season:");
-    	if (config.isLoaded() && !"".equals(config.getSeason()))
-    	{
-    		seasonValue.setText(config.getSeason());
-    	}
-    	else
-    	{
-    		seasonValue.setText(R.string.SeasonTextDefault);
-    	}
-    	
-    	TextView divisionLabel = (TextView)division.findViewById(R.id.selectorLabel);
-    	divisionValue = (TextView)division.findViewById(R.id.selectorValue);
-    	divisionLabel.setText("Division:");
-    	if (config.isLoaded() && !"".equals(config.getDivision()))
-    	{
-    		divisionValue.setText(config.getDivision());
-    	}
-    	else
-    	{
-    		divisionValue.setText(R.string.DivisionTextDefault);
-    	}
-    	
-    	TextView teamLabel = (TextView)team.findViewById(R.id.selectorLabel);
-    	teamValue = (TextView)team.findViewById(R.id.selectorValue);
-    	teamLabel.setText("Team:");
-    	if (config.isLoaded() && !"".equals(config.getTeam()))
-    	{
-    		teamValue.setText(config.getTeam());
-    	}
-    	else
-    	{
-    		teamValue.setText(R.string.TeamTextDefault);
-    	}
-    	
-    	configGUI.addView(season);
-    	configGUI.addView(division);
-    	configGUI.addView(team);
-    	
-    	content.addView(configGUI);
-    	
-        
+        if (pd != null && pd.isShowing())
+        {
+            pd.dismiss();
+            pd = null;
+        }
+        ScrollView content = new ScrollView(this);
+
+        //View configGUI = li.inflate(R.layout.config_gui, null);
+        LinearLayout configGUI = new LinearLayout(this);
+        configGUI.setOrientation(LinearLayout.VERTICAL);
+
+        View season = li.inflate(R.layout.custom_spinner, null);
+        View division = li.inflate(R.layout.custom_spinner, null);
+        View team = li.inflate(R.layout.custom_spinner, null);
+
+        TextView seasonLabel = (TextView) season.findViewById(R.id.selectorLabel);
+        seasonValue = (TextView) season.findViewById(R.id.selectorValue);
+        seasonLabel.setText("Season:");
+        if (config.isLoaded() && !"".equals(config.getSeason()))
+        {
+            seasonValue.setText(config.getSeason());
+        } else
+        {
+            seasonValue.setText(R.string.SeasonTextDefault);
+        }
+
+        TextView divisionLabel = (TextView) division.findViewById(R.id.selectorLabel);
+        divisionValue = (TextView) division.findViewById(R.id.selectorValue);
+        divisionLabel.setText("Division:");
+        if (config.isLoaded() && !"".equals(config.getDivision()))
+        {
+            divisionValue.setText(config.getDivision());
+        } else
+        {
+            divisionValue.setText(R.string.DivisionTextDefault);
+        }
+
+        TextView teamLabel = (TextView) team.findViewById(R.id.selectorLabel);
+        teamValue = (TextView) team.findViewById(R.id.selectorValue);
+        teamLabel.setText("Team:");
+        if (config.isLoaded() && !"".equals(config.getTeam()))
+        {
+            teamValue.setText(config.getTeam());
+        } else
+        {
+            teamValue.setText(R.string.TeamTextDefault);
+        }
+
+        configGUI.addView(season);
+        configGUI.addView(division);
+        configGUI.addView(team);
+
+        content.addView(configGUI);
+
 
         season.setOnClickListener(new OnClickListener()
         {
@@ -164,91 +157,97 @@ public class ConfigGUI extends Activity
 
     private void displaySeasonSelector()
     {
-    	
-		try
-		{
-			final String[] seasons = MCHLWebservice.getSeasons();
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	    	builder.setTitle("Select a season");
-	    	builder.setItems(seasons, new DialogInterface.OnClickListener() 
-	    	{
-	    	    public void onClick(DialogInterface dialog, int item) 
-	    	    {
-	    	    	String season = seasons[item];
-	    	    	seasonValue.setText(season);
-	    	    	divisionValue.setText(R.string.DivisionTextDefault);
-	    	    	teamValue.setText(R.string.TeamTextDefault);
-	    	    	config.setSeason(season);
-	    	    	config.storeValues();
-	    	    }
-	    	});
-	    	AlertDialog alert = builder.create();
-	    	alert.show();
-		}
-		catch (WSException e)
-		{
-			new AlertDialog.Builder(me)
-		      .setMessage("Could not connect to server")
-		      .setPositiveButton("Ok", null)
-		      .setOnCancelListener(new OnCancelListener() {
-		        public void onCancel(DialogInterface dialog) {
-		          me.finish();
-		        }}).show();
-		}
-    	
+
+        try
+        {
+            final String[] seasons = MCHLWebservice.getSeasons();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Select a season");
+            builder.setItems(seasons, new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int item)
+                {
+                    String season = seasons[item];
+                    seasonValue.setText(season);
+                    divisionValue.setText(R.string.DivisionTextDefault);
+                    teamValue.setText(R.string.TeamTextDefault);
+                    config.setSeason(season);
+                    config.storeValues();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        catch (WSException e)
+        {
+            new AlertDialog.Builder(me)
+                    .setMessage("Could not connect to server")
+                    .setPositiveButton("Ok", null)
+                    .setOnCancelListener(new OnCancelListener()
+                    {
+                        public void onCancel(DialogInterface dialog)
+                        {
+                            me.finish();
+                        }
+                    }).show();
+        }
+
     }
 
     private void displayDivisionSelector()
     {
-    	final String[] divisions = MCHLWebservice.getDivisionNames(config.getSeason());
-    	
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle("Select a division");
-    	builder.setItems(divisions, new DialogInterface.OnClickListener() 
-    	{
-    	    public void onClick(DialogInterface dialog, int item) 
-    	    {
-    	    	String division = divisions[item];
-    	    	divisionValue.setText(division);
-    	    	teamValue.setText(R.string.TeamTextDefault);
-    	    	config.setDivision(division);
-    	    	config.storeValues();
-    	    }
-    	});
-    	AlertDialog alert = builder.create();
-    	alert.show();
+        final String[] divisions = MCHLWebservice.getDivisionNames(config.getSeason());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select a division");
+        builder.setItems(divisions, new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int item)
+            {
+                String division = divisions[item];
+                divisionValue.setText(division);
+                teamValue.setText(R.string.TeamTextDefault);
+                config.setDivision(division);
+                config.storeValues();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void displayTeamSelector()
     {
-		try
-		{
-			final String[] teams = MCHLWebservice.getTeamNames(config.getSeason(), config.getDivision());
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	    	builder.setTitle("Select a team");
-	    	builder.setItems(teams, new DialogInterface.OnClickListener() 
-	    	{
-	    	    public void onClick(DialogInterface dialog, int item) 
-	    	    {
-	    	    	String team = teams[item];
-	    	    	teamValue.setText(team);
-	    	    	config.setTeam(team);
-	    	    	config.storeValues();
-	    	    }
-	    	});
-	    	AlertDialog alert = builder.create();
-	    	alert.show();
-		}
-		catch (WSException e)
-		{
-			new AlertDialog.Builder(me)
-		      .setMessage("Could not connect to server")
-		      .setPositiveButton("Ok", null)
-		      .setOnCancelListener(new OnCancelListener() {
-		        public void onCancel(DialogInterface dialog) {
-		          me.finish();
-		        }}).show();
-		}
-    	
+        try
+        {
+            final String[] teams = MCHLWebservice.getTeamNames(config.getSeason(), config.getDivision());
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Select a team");
+            builder.setItems(teams, new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int item)
+                {
+                    String team = teams[item];
+                    teamValue.setText(team);
+                    config.setTeam(team);
+                    config.storeValues();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        catch (WSException e)
+        {
+            new AlertDialog.Builder(me)
+                    .setMessage("Could not connect to server")
+                    .setPositiveButton("Ok", null)
+                    .setOnCancelListener(new OnCancelListener()
+                    {
+                        public void onCancel(DialogInterface dialog)
+                        {
+                            me.finish();
+                        }
+                    }).show();
+        }
+
     }
 }

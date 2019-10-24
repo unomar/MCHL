@@ -1,4 +1,4 @@
-package com.sloppylinux.mchl.domain.retrofit;
+package com.sloppylinux.mchl.domain.sportspress;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -12,11 +12,13 @@ public class Title
 
     }
 
-    public String getRendered() {
+    public String getRendered()
+    {
         return rendered;
     }
 
-    public void setRendered(String rendered) {
+    public void setRendered(String rendered)
+    {
         this.rendered = rendered;
     }
 }

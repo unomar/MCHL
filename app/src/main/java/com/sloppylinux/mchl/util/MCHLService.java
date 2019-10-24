@@ -1,8 +1,9 @@
 package com.sloppylinux.mchl.util;
 
-import com.sloppylinux.mchl.domain.retrofit.Event;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
+import com.sloppylinux.mchl.domain.sportspress.Event;
+import com.sloppylinux.mchl.domain.sportspress.Venue;
 
 import java.util.List;
 
@@ -11,7 +12,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public interface MCHLService {
+public interface MCHLService
+{
 
     int MAX_RESULTS = 50;
 
@@ -22,16 +24,19 @@ public interface MCHLService {
     Call<Team> getTeam(@Path(value = "team") long teamId);
 
     @GET("events")
-    Call<List<Event>> listEvents();
+    Call<List<Event>> listAllEvents();
+
+    @GET("events")
+    Call<List<Event>> listTeamEvents(@Query("search") String teamName, @Query("seasons") Long seasonId, @Query("leagues") Long leagueId, @Query("status") String status);
 
     @GET("events/{event}")
     Call<Event> getEvent(@Path(value = "event") long eventId);
 
-    @GET("players")
-    Call<List<Player>> listPlayers(@Query("per_page") Integer perPage, @Query("page") Integer page);
+    @GET("venues")
+    Call<List<Venue>> getVenues();
 
     @GET("players")
-    Call<List<Player>> lookupPlayer(@Query("slug") String playerSlug);
+    Call<List<Player>> lookupPlayer(@Query("search") String lastName);
 
     @GET("players/{player}")
     Call<Player> getPlayer(@Path(value = "player") long playerId);

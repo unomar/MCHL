@@ -13,7 +13,8 @@ public class Statistics implements Comparable<Statistics>, Serializable
     private int points;
 
     @Override
-    public int compareTo(Statistics other) {
+    public int compareTo(Statistics other)
+    {
         return Integer.valueOf(points).compareTo(Integer.valueOf(other.points));
     }
 }

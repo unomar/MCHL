@@ -1,13 +1,5 @@
 package com.sloppylinux.mchl.gui;
 
-import java.util.Date;
-
-import com.sloppylinux.mchl.util.Config;
-import com.sloppylinux.mchl.util.MCHLWebservice;
-import com.sloppylinux.mchl.domain.Game;
-import com.sloppylinux.mchl.domain.TeamSchedule;
-import com.sloppylinux.mchl.domain.WSException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -26,58 +18,67 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.sloppylinux.mchl.domain.Game;
+import com.sloppylinux.mchl.domain.TeamSchedule;
+import com.sloppylinux.mchl.util.Config;
+
+import java.util.Date;
+
 public class Result extends Activity
 {
-	private TeamSchedule results;
-	private static String tag = "Schedule";
+    private static String tag = "Schedule";
+    private static Result me;
+    final Handler mHandler = new Handler();
+    private TeamSchedule results;
+    private ProgressDialog pd = null;
+    final Runnable displayError = new Runnable()
+    {
+        public void run()
+        {
+            displayError();
+        }
+    };
+    private LayoutInflater li;
+    private Config config;
+    private ScrollView content = null;
+    private View nextGame = null;
+    final Runnable mUpdateResults = new Runnable()
+    {
+        public void run()
+        {
+            buildSchedule();
+        }
+    };
 
-	private ProgressDialog pd = null;
-	private LayoutInflater li;
-	private Config config;
-	private static Result me;
-	private ScrollView content = null;
-	private View nextGame = null;
+    private static void displaySelectedMatchup(Game game)
+    {
+        Intent match = new Intent(me, Matchup.class);
+        match.putExtra("Game", game);
+        me.startActivity(match);
+    }
 
-	final Handler mHandler = new Handler();
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        config = new Config(this);
+        me = this;
 
-	final Runnable mUpdateResults = new Runnable()
-	{
-		public void run()
-		{
-			buildSchedule();
-		}
-	};
-	
-	final Runnable displayError = new Runnable()
-	{
-		public void run()
-		{
-			displayError();
-		}
-	};
+        content = new ScrollView(this);
+        setContentView(content);
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		config = new Config(this);
-		me = this;
+        li = this.getLayoutInflater();
+        fetchWebData(false);
+    }
 
-		content = new ScrollView(this);
-		setContentView(content);
-
-		li = this.getLayoutInflater();
-		fetchWebData(false);
-	}
-
-	protected void fetchWebData(final boolean force)
-	{
-		pd = ProgressDialog.show(this, "Please wait...", "Fetching data");
-		Thread t = new Thread()
-		{
-			public void run()
-			{
-				Looper.prepare();
+    protected void fetchWebData(final boolean force)
+    {
+        pd = ProgressDialog.show(this, "Please wait...", "Fetching data");
+        Thread t = new Thread()
+        {
+            public void run()
+            {
+                Looper.prepare();
 //				try
 //				{
 ////					results = MCHLWebservice.getSchedule(config.getSeason(), config
@@ -88,158 +89,154 @@ public class Result extends Activity
 //				{
 //					mHandler.post(displayError);
 //				}
-			}
-		};
-		t.start();
-	}
-	
-	private void displayError()
-	{
-		Log.e(tag, "Caught exception getting schedule info");
-		pd.dismiss();
-		pd = null;
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Connection to server failed.")
-		       .setCancelable(false)
-		       .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-		           public void onClick(DialogInterface dialog, int id) {
-		                me.finish();
-		           }
-		       });
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
+            }
+        };
+        t.start();
+    }
 
-	private void buildSchedule()
-	{
-		if (content != null)
-		{
-			content.removeAllViews();
-		}
-		if (pd != null && pd.isShowing())
-		{
-			pd.dismiss();
-			pd = null;
-		}
+    private void displayError()
+    {
+        Log.e(tag, "Caught exception getting schedule info");
+        pd.dismiss();
+        pd = null;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Connection to server failed.")
+                .setCancelable(false)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        me.finish();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
-		LinearLayout gameSchedule = new LinearLayout(this);
-		gameSchedule.setOrientation(LinearLayout.VERTICAL);
+    private void buildSchedule()
+    {
+        if (content != null)
+        {
+            content.removeAllViews();
+        }
+        if (pd != null && pd.isShowing())
+        {
+            pd.dismiss();
+            pd = null;
+        }
 
-		Date now = new Date();
-		for (Game game : results.getGames())
-		{
-			View gameView = createGameView(game);
-			gameSchedule.addView(gameView);
+        LinearLayout gameSchedule = new LinearLayout(this);
+        gameSchedule.setOrientation(LinearLayout.VERTICAL);
 
-			if ((nextGame == null)
-					&& (game.getDate().getTime() > now.getTime()))
-			{
-				nextGame = gameView;
-			}
-		}
+        Date now = new Date();
+        for (Game game : results.getGames())
+        {
+            View gameView = createGameView(game);
+            gameSchedule.addView(gameView);
 
-		content.addView(gameSchedule);
-		content.post(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				int scrollOffset = getScrollY();
-				content.scrollTo(0, scrollOffset);
-				content.requestLayout();
-			}
-		});
-	}
+            if ((nextGame == null)
+                    && (game.getDate().getTime() > now.getTime()))
+            {
+                nextGame = gameView;
+            }
+        }
 
-	private View createGameView(Game game)
-	{
-		View gameView = li.inflate(R.layout.result_row, null);
-		View ResultTable = gameView.findViewById(R.id.ResultTable);
-		TextView date = (TextView) gameView.findViewById(R.id.date);
-		TextView loc = (TextView) gameView.findViewById(R.id.location);
-		TextView homeTeam = (TextView) gameView.findViewById(R.id.homeTeam);
-		TextView homeScore = (TextView) gameView.findViewById(R.id.homeScore);
-		TextView awayTeam = (TextView) gameView.findViewById(R.id.awayTeam);
-		TextView awayScore = (TextView) gameView.findViewById(R.id.awayScore);
+        content.addView(gameSchedule);
+        content.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                int scrollOffset = getScrollY();
+                content.scrollTo(0, scrollOffset);
+                content.requestLayout();
+            }
+        });
+    }
 
-		date.setText(game.getDateString());
-		loc.setText(game.getShortLocation());
-		homeTeam.setText(game.getHome());
-		awayTeam.setText(game.getAway());
-		if (game.getHomeScore() != -1)
-		{
-			homeScore.setText(Integer.toString(game.getHomeScore()));
-			awayScore.setText(Integer.toString(game.getAwayScore()));
-		}
+    private View createGameView(Game game)
+    {
+        View gameView = li.inflate(R.layout.result_row, null);
+        View ResultTable = gameView.findViewById(R.id.ResultTable);
+        TextView date = (TextView) gameView.findViewById(R.id.date);
+        TextView loc = (TextView) gameView.findViewById(R.id.location);
+        TextView homeTeam = (TextView) gameView.findViewById(R.id.homeTeam);
+        TextView homeScore = (TextView) gameView.findViewById(R.id.homeScore);
+        TextView awayTeam = (TextView) gameView.findViewById(R.id.awayTeam);
+        TextView awayScore = (TextView) gameView.findViewById(R.id.awayScore);
 
-		// Set the tag on the ResultTable since it contains the onClick method
-		ResultTable.setTag(game);
+        date.setText(game.getDateString());
+        loc.setText(game.getShortLocation());
+        homeTeam.setText(game.getHome());
+        awayTeam.setText(game.getAway());
+        if (game.getHomeScore() != -1)
+        {
+            homeScore.setText(Integer.toString(game.getHomeScore()));
+            awayScore.setText(Integer.toString(game.getAwayScore()));
+        }
 
-		return gameView;
-	}
+        // Set the tag on the ResultTable since it contains the onClick method
+        ResultTable.setTag(game);
 
-	private static void displaySelectedMatchup(Game game)
-	{
-		Intent match = new Intent(me, Matchup.class);
-		match.putExtra("Game", game);
-		me.startActivity(match);
-	}
+        return gameView;
+    }
 
-	private int getScrollY()
-	{
-		int pos = 1;
-		if (nextGame != null)
-		{
-			pos = nextGame.getTop();
-			if (pos > 5)
-			{
-				pos = pos - 5;
-			}
-		}
-		return pos;
-	}
+    private int getScrollY()
+    {
+        int pos = 1;
+        if (nextGame != null)
+        {
+            pos = nextGame.getTop();
+            if (pos > 5)
+            {
+                pos = pos - 5;
+            }
+        }
+        return pos;
+    }
 
-	/**
-	 * Overrides the Activity options menu
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.layout.option_menu, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
+    /**
+     * Overrides the Activity options menu
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.layout.option_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-	/**
-	 * Overrides the Activity option menu selected
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		switch (item.getItemId())
-		{
-		case R.id.refresh:
-			fetchWebData(true);
-			break;
-		case R.id.configure:
-			Intent config = new Intent(me, ConfigGUI.class);
-			me.startActivity(config);
-			this.config = this.config.reload(this);
-			fetchWebData(true);
-			break;
-		}
+    /**
+     * Overrides the Activity option menu selected
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.refresh:
+                fetchWebData(true);
+                break;
+            case R.id.configure:
+                Intent config = new Intent(me, ConfigGUI.class);
+                me.startActivity(config);
+                this.config = this.config.reload(this);
+                fetchWebData(true);
+                break;
+        }
 
-		return super.onOptionsItemSelected(item);
-	}
-	
-	/**
-	 * Public method for use in onClick tag in xml
-	 * @param v The view being clicked
-	 */
-	public void onClick(View v)
-	{
-		// Display matchup
-		Game game = (Game) v.getTag();
-		displaySelectedMatchup(game);
-	}
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Public method for use in onClick tag in xml
+     *
+     * @param v The view being clicked
+     */
+    public void onClick(View v)
+    {
+        // Display matchup
+        Game game = (Game) v.getTag();
+        displaySelectedMatchup(game);
+    }
 }
