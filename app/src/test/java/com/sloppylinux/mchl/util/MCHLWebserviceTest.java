@@ -4,11 +4,14 @@ import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.domain.WSException;
+import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
+import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -20,7 +23,8 @@ public class MCHLWebserviceTest
     private MCHLWebservice mchlWebservice;
 
     @Before
-    public void setUp() {
+    public void setUp()
+    {
         mchlWebservice = new MCHLWebservice();
     }
 
@@ -36,20 +40,25 @@ public class MCHLWebserviceTest
         assertThat("Player has more than one current team", player.getCurrentTeams().size(), is(1));
     }
 
-    public void testGetSeasons() {
+    public void testGetSeasons()
+    {
     }
 
-    public void testGetDivisionNames() {
+    public void testGetDivisionNames()
+    {
     }
 
-    public void testGetTeamNames() {
+    public void testGetTeamNames()
+    {
     }
 
-    public void testGetTeams() {
+    public void testGetTeams()
+    {
     }
 
     @Test
-    public void testGetSchedule() throws WSException {
+    public void testGetSchedule() throws WSException
+    {
         TeamSchedule teamSchedule = mchlWebservice.getSchedule(3283, true);
         assertNotNull("Team Schedule was null", teamSchedule);
         for (Game game : teamSchedule.getGames())
@@ -58,12 +67,24 @@ public class MCHLWebserviceTest
         }
     }
 
-    void testGetTeam() {
+    public void testGetTeam()
+    {
     }
 
-    void testGetStandings() {
+    @Test
+    public void testGetStandings() throws WSException
+    {
+        LeagueTable leagueTable = mchlWebservice.getStandings(117, 115);
+        assertNotNull("League table was null", leagueTable);
+
+        for(Map.Entry<String,TeamStatistic> entry : leagueTable.getTableData().entrySet())
+        {
+            assertNotNull("Statistics key is null", entry.getKey());
+            assertNotNull("Statistics are null", entry.getValue());
+        }
     }
 
-    void testGetDivisions() {
+    public void testGetDivisions()
+    {
     }
 }

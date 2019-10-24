@@ -11,6 +11,7 @@ import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.domain.WSException;
 import com.sloppylinux.mchl.domain.sportspress.Event;
+import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 import com.sloppylinux.mchl.domain.sportspress.Venue;
 
 import org.apache.commons.lang3.StringUtils;
@@ -218,55 +219,23 @@ public class MCHLWebservice
         return null;
     }
 
-    public static List<Team> getStandings(String season, String division) throws WSException
+    public LeagueTable getStandings(long seasonId, long leagueId) throws WSException
     {
-//		List<Team> teams = new ArrayList<Team>();
-//		Map<String, String> params = new HashMap<String, String>();
-//		params.put(SEASON_PARAM, season);
-//		params.put(DIVISION_PARAM, division);
-//
-//		SoapObject soap2 = null;
-//		try
-//		{
-//			soap2 = performCall(GET_STANDINGS, params);
-//		}
-//		catch (WSException e)
-//		{
-//			// Continue if cached data exists
-//		}
-//
-//		if (soap2 != null)
-//		{
-//			for (int i = 0; i < soap2.getPropertyCount(); i++)
-//			{
-//				SoapObject teamSoap = (SoapObject) soap2.getProperty(i);
-//				Team team = new Team();
-//				team.setName(teamSoap.getProperty("teamName").toString());
-//				team.setGamesPlayed(Integer.parseInt(teamSoap.getProperty(
-//						"gamesPlayed").toString()));
-//				team.setWins(Integer.parseInt(teamSoap.getProperty("wins")
-//						.toString()));
-//				team.setLosses(Integer.parseInt(teamSoap.getProperty("losses")
-//						.toString()));
-//				team.setTies(Integer.parseInt(teamSoap.getProperty("ties")
-//						.toString()));
-//				team.setGoalsFor(Integer.parseInt(teamSoap.getProperty(
-//						"goalsFor").toString()));
-//				team.setGoalsAgainst(Integer.parseInt(teamSoap.getProperty(
-//						"goalsAgainst").toString()));
-//				team.setPoints(Integer.parseInt(teamSoap.getProperty("points")
-//						.toString()));
-//				teams.add(team);
-//			}
-//		}
-//
-//		if (teams == null)
-//		{
-//			throw new WSException("Could not connect to server or load Teams from cache");
-//		}
-//
-//		return teams;
-        return null;
+        try
+        {
+            Call<List<LeagueTable>> call = mchlService.getLeagueTable(seasonId, leagueId);
+            Response<List<LeagueTable>> result = call.execute();
+            if (result != null && result.body() != null && result.body().size() == 1)
+            {
+                return result.body().get(0);
+            }
+        }
+        catch (IOException e)
+        {
+            LOG.warning("Caught exception attempting to lookup standings for season "+ seasonId + " and league " + leagueId + ".  " + e.getMessage());
+        }
+
+        throw new WSException("Unable to lookup standings.");
     }
 
     /**
@@ -279,32 +248,33 @@ public class MCHLWebservice
     public static ArrayList<Division> getDivisions(String season,
                                                    Context context, boolean forceRefresh) throws WSException
     {
-        ArrayList<Division> divisions = new ArrayList<Division>();
-        for (String div : getDivisionNames(season))
-        {
-            String cachedName = "Division" + season + div;
-
-            Division division = null;
-
-            if (!forceRefresh)
-            {
-                division = (Division) ObjectCache.readCache(cachedName, context);
-            }
-
-            if (division == null)
-            {
-                division = new Division(div);
-                for (Team team : getStandings(season, div))
-                {
-                    division.addTeam(team);
-                }
-
-                // Write out our division to cache
-                ObjectCache.writeCache(cachedName, division, context);
-            }
-            divisions.add(division);
-        }
-        return divisions;
+//        ArrayList<Division> divisions = new ArrayList<Division>();
+//        for (String div : getDivisionNames(season))
+//        {
+//            String cachedName = "Division" + season + div;
+//
+//            Division division = null;
+//
+//            if (!forceRefresh)
+//            {
+//                division = (Division) ObjectCache.readCache(cachedName, context);
+//            }
+//
+//            if (division == null)
+//            {
+//                division = new Division(div);
+//                for (Team team : getStandings(season, div))
+//                {
+//                    division.addTeam(team);
+//                }
+//
+//                // Write out our division to cache
+//                ObjectCache.writeCache(cachedName, division, context);
+//            }
+//            divisions.add(division);
+//        }
+//        return divisions;
+        return null;
     }
 
     /**
