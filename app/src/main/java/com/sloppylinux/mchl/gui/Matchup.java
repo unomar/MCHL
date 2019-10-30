@@ -76,19 +76,19 @@ public class Matchup extends TabActivity
                 Looper.prepare();
 
                 // Get Teams
-                try
-                {
-                    home = MCHLWebservice.getTeam(config.getSeason(), config
-                            .getDivision(), game.getHome(), me, forceRefresh);
-                    away = MCHLWebservice.getTeam(config.getSeason(), config
-                            .getDivision(), game.getAway(), me, forceRefresh);
+//                try
+//                {
+                    home = null;//MCHLWebservice.getTeam(config.getSeason(), config
+                           // .getDivision(), game.getHome(), me, forceRefresh);
+                    away = null;//MCHLWebservice.getTeam(config.getSeason(), config
+                           // .getDivision(), game.getAway(), me, forceRefresh);
 
                     mHandler.post(mUpdateResults);
-                }
-                catch (WSException e)
-                {
-                    mHandler.post(displayError);
-                }
+//                }
+//                catch (WSException e)
+//                {
+//                    mHandler.post(displayError);
+//                }
 
             }
         };

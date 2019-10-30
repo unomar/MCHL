@@ -4,6 +4,7 @@ import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.sportspress.Event;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
+import com.sloppylinux.mchl.domain.sportspress.TeamTable;
 import com.sloppylinux.mchl.domain.sportspress.Venue;
 
 import java.util.List;
@@ -15,14 +16,14 @@ import retrofit2.http.Query;
 
 public interface MCHLService
 {
-
-    int MAX_RESULTS = 50;
-
     @GET("teams")
     Call<List<Team>> listTeams();
 
     @GET("teams/{team}")
     Call<Team> getTeam(@Path(value = "team") long teamId);
+
+    @GET("lists/{listId}")
+    Call<TeamTable> getTeamStats(@Path(value = "listId") long listId);
 
     @GET("events")
     Call<List<Event>> listAllEvents();

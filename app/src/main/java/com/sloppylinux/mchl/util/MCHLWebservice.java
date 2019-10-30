@@ -4,6 +4,10 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.sloppylinux.mchl.domain.Division;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
@@ -12,11 +16,13 @@ import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.domain.WSException;
 import com.sloppylinux.mchl.domain.sportspress.Event;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
+import com.sloppylinux.mchl.domain.sportspress.TeamTable;
 import com.sloppylinux.mchl.domain.sportspress.Venue;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +55,27 @@ public class MCHLWebservice
 
     public MCHLWebservice()
     {
-        Gson gson = new GsonBuilder()
+        GsonBuilder gsonBuilder = new GsonBuilder();
+
+        gsonBuilder.registerTypeAdapter(Integer.class, new JsonDeserializer<Integer>() {
+            @Override
+            public Integer deserialize(JsonElement arg0, Type arg1,
+                                       JsonDeserializationContext arg2) throws JsonParseException
+            {
+                Integer intVal = null;
+
+                Gson g = new Gson();
+                String intString = g.fromJson(arg0, String.class);
+                if (StringUtils.isNumeric(intString))
+                {
+                    intVal = Integer.valueOf(intString);
+                }
+
+                return intVal;
+            }
+        });
+
+        Gson gson = gsonBuilder
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                 .create();
 
@@ -130,93 +156,44 @@ public class MCHLWebservice
         return Collections.EMPTY_LIST;
     }
 
-    public static Team getTeam(String season, String division, String teamName, Context context, boolean forceRefresh) throws WSException
+    public Team getTeam(int teamId, Context context, boolean forceRefresh)
     {
-//		Team team = null;
-//		String cachedName = "Team" + season + teamName;
-//
-//		if (!forceRefresh)
-//		{
-//			team = (Team) ObjectCache.readCache(cachedName, context);
-//		}
-//
-//		if (team == null)
-//		{
-//			team = new Team();
-//			Map<String, String> params = new HashMap<String, String>();
-//			params.put(SEASON_PARAM, season);
-//			params.put(TEAM_PARAM, teamName);
-//
-//			List<Team> teams = getStandings(season, division);
-//			Collections.sort(teams);
-//			for (int i =0; i < teams.size(); i++)
-//			{
-//				Team currTeam = teams.get(i);
-//				if (currTeam.getName().equals(teamName))
-//				{
-//					team = currTeam;
-//					team.setRank(i+1);
-//				}
-//			}
-//
-//			SoapObject playerStats = performCall(GET_PLAYER_STATS, params);
-//			SoapObject goalieStats = performCall(GET_GOALIE_STATS, params);
-//
-//			for (int i = 0; i < playerStats.getPropertyCount(); i++)
-//			{
-//				SoapObject playerSoap = (SoapObject) playerStats.getProperty(i);
-//				Player player = new Player();
-//				player.setFirstName(playerSoap.getProperty("firstName")
-//						.toString());
-//				player.setLastName(playerSoap.getProperty("lastName")
-//						.toString());
-//				player.setNumber(Integer.parseInt(playerSoap.getProperty(
-//						"jerseyNumber").toString()));
-//				player.setGamesPlayed(Integer.parseInt(playerSoap.getProperty(
-//						"gamesPlayed").toString()));
-//				int goals = Integer.parseInt(playerSoap.getProperty("goals")
-//						.toString());
-//				int assists = Integer.parseInt(playerSoap
-//						.getProperty("assists").toString());
-//				player.setGoals(goals);
-//				player.setAssists(assists);
-//				player.setPoints(goals + assists);
-//				player.setPims(Integer.parseInt(playerSoap.getProperty(
-//						"penaltyMinutes").toString()));
-//
-//				team.addPlayer(player);
-//			}
-//
-//			if (goalieStats.getPropertyCount() > 0)
-//			{
-//				SoapObject soapGoalie = (SoapObject) goalieStats.getProperty(0);
-//				String firstName = soapGoalie.getProperty("firstName")
-//						.toString();
-//				String lastName = soapGoalie.getProperty("lastName").toString();
-//
-//				int gamesPlayed = Integer.parseInt(soapGoalie.getProperty(
-//						"gamesPlayed").toString());
-//				int goalsAgainst = Integer.parseInt(soapGoalie.getProperty(
-//						"goalsAgainst").toString());
-//				int shots = Integer.parseInt(soapGoalie.getProperty("shots")
-//						.toString());
-//				float gaa = Float.parseFloat(soapGoalie.getProperty("gaa")
-//						.toString());
-//				String saveP = soapGoalie.getProperty("savePercentage")
-//						.toString();
-//				saveP = saveP.replace("%", "");
-//				float savePercentage = Float.parseFloat(saveP);
-//				Goalie goalie = new Goalie(firstName, lastName, gamesPlayed,
-//						goalsAgainst, shots, gaa, savePercentage);
-//				team.setGoalie(goalie);
-//			}
-//
-//			// Write our assembled team to cache
-//			ObjectCache.writeCache(cachedName, team, context);
-//		}
-//
-//		return team;
-        return null;
+		Team team = null;
+		String cachedName = "Team" + teamId;
+
+		if (!forceRefresh)
+		{
+			team = (Team) ObjectCache.readCache(cachedName, context);
+		}
+
+		if (team == null)
+		{
+		    try
+            {
+            Response<Team> teamResponse = mchlService.getTeam(teamId).execute();
+            if (teamResponse != null && teamResponse.body() != null)
+            {
+                team = teamResponse.body();
+
+                // Query team stats
+                Response<TeamTable> statResponse = mchlService.getTeamStats(team.getListId()).execute();
+                if (statResponse != null && statResponse.body() != null)
+                {
+                    team.setTeamTable(statResponse.body());
+                }
+
+                // Write our assembled team to cache
+                // TODO: Re-enable with context
+                //ObjectCache.writeCache(cachedName, team, context);
+            }
+            }
+            catch (IOException e)
+            {
+                LOG.warning("Caught exception performing player search." + e.getMessage());
+            }
+		}
+
+		return team;
     }
 
     public LeagueTable getStandings(long seasonId, long leagueId) throws WSException
@@ -398,44 +375,6 @@ public class MCHLWebservice
         }
         throw new WSException("Could not lookup venue name for id: " + venueId);
     }
-
-//	private  SoapObject performCall(String methodName,
-//			Map<String, String> params) throws WSException
-//	{
-//		SoapObject resultData = null;
-//		try
-//		{
-//
-//			SoapObject request = new SoapObject(NAMESPACE, methodName);
-//
-//			if (params != null)
-//			{
-//				for (String key : params.keySet())
-//				{
-//					request.addProperty(key, params.get(key));
-//				}
-//			}
-//
-//			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-//					SoapEnvelope.VER11);
-//			envelope.dotNet = true;
-//			envelope.setOutputSoapObject(request);
-//
-//			HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
-//
-//			androidHttpTransport.call(SOAP_ACTION + methodName, envelope);
-//
-//			resultData = (SoapObject) envelope.getResponse();
-//
-//			System.out.println(resultData);
-//		}
-//		catch (Exception e)
-//		{
-//			System.out.println(e.getMessage());
-//			throw new WSException("Caught exception connecting to server", e);
-//		}
-//		return resultData;
-//	}
 
     /**
      * Populate the list of venues

@@ -2,10 +2,13 @@ package com.sloppylinux.mchl.util;
 
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
+import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.domain.WSException;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
+import com.sloppylinux.mchl.domain.sportspress.PlayerStatistic;
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
+import com.sloppylinux.mchl.domain.sportspress.TeamTable;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -67,8 +70,17 @@ public class MCHLWebserviceTest
         }
     }
 
+    @Test
     public void testGetTeam()
     {
+        Team team = mchlWebservice.getTeam(3283, null, true);
+        assertNotNull("Team was null", team);
+        TeamTable teamTable = team.getTeamTable();
+        for(Map.Entry<String,PlayerStatistic> entry : teamTable.getTableData().entrySet())
+        {
+            assertNotNull("Statistics key is null", entry.getKey());
+            assertNotNull("Statistics are null", entry.getValue());
+        }
     }
 
     @Test

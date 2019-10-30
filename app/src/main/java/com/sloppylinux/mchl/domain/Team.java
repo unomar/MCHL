@@ -2,6 +2,7 @@ package com.sloppylinux.mchl.domain;
 
 import com.google.gson.annotations.SerializedName;
 import com.sloppylinux.mchl.domain.sportspress.ResponseBase;
+import com.sloppylinux.mchl.domain.sportspress.TeamTable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,8 +14,6 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
     private static final long serialVersionUID = 1L;
 
     // Team info
-    @SerializedName("title.rendered")
-    private String name;
     private List<Player> players;
     private Goalie goalie;
     private ArrayList<Game> schedule;
@@ -26,7 +25,10 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
     private List<Long> seasonIds;
     @SerializedName("leagues")
     private List<Long> leagueIds;
+    @SerializedName("lists")
+    private List<Long> listIds;
 
+    private TeamTable teamTable;
     // Stats
     private int gamesPlayed;
     private int wins;
@@ -280,6 +282,35 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
         this.rank = rank;
     }
 
+    public long getListId()
+    {
+        if (this.listIds.size() > 0)
+        {
+            return this.listIds.get(0);
+        }
+        return 0;
+    }
+
+    public List<Long> getListIds()
+    {
+        return listIds;
+    }
+
+    public void setListIds(List<Long> listIds)
+    {
+        this.listIds = listIds;
+    }
+
+    public TeamTable getTeamTable()
+    {
+        return teamTable;
+    }
+
+    public void setTeamTable(TeamTable teamTable)
+    {
+        this.teamTable = teamTable;
+    }
+
     public long getCurrentSeason()
     {
         long seasonId = 0l;
@@ -320,6 +351,6 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
     @Override
     public String toString()
     {
-        return this.name;
+        return this.getTitle() != null ? this.getTitle().getRendered() : super.toString();
     }
 }
