@@ -62,7 +62,7 @@ public class ConfigGUI extends Activity
             public void run()
             {
                 Looper.prepare();
-                MCHLWebservice.init();
+//                MCHLWebservice.init();
                 mHandler.post(mUpdateResults);
             }
         };

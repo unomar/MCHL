@@ -18,6 +18,7 @@ import java.util.Map;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
@@ -67,6 +68,19 @@ public class MCHLWebserviceTest
         for (Game game : teamSchedule.getGames())
         {
             assertNotNull("Team Schedule contained null game", game);
+        }
+    }
+
+    @Test
+    public void testGetResults() throws WSException
+    {
+        TeamSchedule teamResults = mchlWebservice.getResults(3283, true);
+        assertNotNull("Team Results was null", teamResults);
+        for (Game game : teamResults.getGames())
+        {
+            assertNotNull("Team Schedule contained null game", game);
+            assertNotEquals("Failed to parse home score", game.getHomeScore(), -1);
+            assertNotEquals("Failed to parse away score", game.getAwayScore(), -1);
         }
     }
 

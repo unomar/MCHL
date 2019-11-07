@@ -26,6 +26,7 @@ import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -46,12 +47,13 @@ public class MCHLWebservice
     private static final String GET_SCHEDULE = "events";
     private static final String GET_PLAYER_STATS = "players";
     private static final String NAMESPACE = "http://www.omchl.com/services";
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
-            "MM/dd/yyyy hh:mm a");
-    private static List<Division> divisions;
+    private static final String DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss";
+
     private static List<Venue> venues = null;
     private final Logger LOG = Logger.getLogger(MCHLWebservice.class.getName());
     private MCHLService mchlService = null;
+
+    private SimpleDateFormat iso8601Formatter = new SimpleDateFormat(DATE_FORMAT);
 
     public MCHLWebservice()
     {
@@ -76,7 +78,7 @@ public class MCHLWebservice
         });
 
         Gson gson = gsonBuilder
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .setDateFormat(DATE_FORMAT)
                 .create();
 
 //		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor((msg)-> { LOG.info(msg); });
@@ -92,18 +94,6 @@ public class MCHLWebservice
                 .build();
 
         mchlService = retrofit.create(MCHLService.class);
-    }
-
-    public static void init()
-    {
-        if (divisions == null)
-        {
-            divisions = new ArrayList<Division>();
-            divisions.add(new Division("MCHL"));
-            divisions.add(new Division("Intermediate"));
-            divisions.add(new Division("IntermediateB"));
-            divisions.add(new Division("Novice"));
-        }
     }
 
     public static String[] getSeasons() throws WSException
@@ -320,7 +310,7 @@ public class MCHLWebservice
             {
                 Team team = teamResponse.body();
                 LOG.info("Querying schedule for team: " + team.getName());
-                Call<List<Event>> eventCall = mchlService.listTeamEvents(team.getName(), team.getCurrentSeason(), team.getCurrentLeague(), null);
+                Call<List<Event>> eventCall = mchlService.listTeamSchedule(team.getName(), team.getCurrentSeason(), team.getCurrentLeague(), getIso8601Date(null));
                 Response<List<Event>> eventResponses = eventCall.execute();
                 List<Event> events = eventResponses.body();
                 LOG.info("Got " + events.size() + " events");
@@ -335,6 +325,63 @@ public class MCHLWebservice
                         String[] teamNames = eventString.split(" vs ");
 
                         Game game = new Game(teamNames[0], teamNames[1], event.getEventDate(), 0, 0, venueName);
+                        teamSchedule.getGames().add(game);
+                    }
+                }
+
+            }
+        }
+        catch (IOException e)
+        {
+            LOG.warning("Caught exception querying team schedule." + e.getMessage());
+        }
+        return teamSchedule;
+    }
+
+    /**
+     * Get the schedule for a team
+     *
+     * @param teamId       The id of the team to query
+     * @param forceRefresh If we should ignore cached values
+     * @return The TeamSchedule
+     * @throws WSException If an error occurs
+     */
+    public TeamSchedule getResults(Integer teamId,
+                                    boolean forceRefresh) throws WSException
+    {
+        TeamSchedule teamSchedule = null;
+        try
+        {
+            Call<Team> teamCall = mchlService.getTeam(teamId);
+            Response<Team> teamResponse = teamCall.execute();
+            if (teamResponse != null && teamResponse.body() != null)
+            {
+                Team team = teamResponse.body();
+                LOG.info("Querying schedule for team: " + team.getName());
+                Call<List<Event>> eventCall = mchlService.listTeamResults(team.getName(), team.getCurrentSeason(), team.getCurrentLeague(), getIso8601Date(null));
+                Response<List<Event>> eventResponses = eventCall.execute();
+                List<Event> events = eventResponses.body();
+                LOG.info("Got " + events.size() + " events");
+                teamSchedule = new TeamSchedule();
+                for (Event event : events)
+                {
+                    String eventString = event.getName();
+                    if (StringUtils.isNotBlank(eventString))
+                    {
+                        String venueName = getVenueName(event.getVenueIds());
+                        LOG.info("Creating Game for event [" + event.getId() + "] as " + eventString + " at " + venueName);
+                        String[] teamNames = eventString.split(" vs ");
+                        int homeScore = 0;
+                        int awayScore = 0;
+                        if (event.getResults() != null && event.getResults().size() == 2)
+                        {
+                            homeScore = safeParseInt(event.getResults().get(0));
+                            awayScore = safeParseInt(event.getResults().get(1));
+
+                            LOG.info("Final score: " + teamNames[0] + " " + homeScore + " - " + awayScore + " " + teamNames[1]);
+                        }
+
+                        Game game = new Game(teamNames[0], teamNames[1], event.getEventDate(), homeScore, awayScore, venueName);
                         teamSchedule.getGames().add(game);
                     }
                 }
@@ -394,5 +441,31 @@ public class MCHLWebservice
         {
             LOG.warning("Caught exception querying team schedule." + e.getMessage());
         }
+    }
+
+    private String getIso8601Date(Date date)
+    {
+        if (date == null)
+        {
+            date = new Date();
+        }
+        return iso8601Formatter.format(date);
+    }
+
+    private int safeParseInt(String string)
+    {
+        int retVal = -1;
+        if (string != null)
+        {
+            try
+            {
+                retVal = Integer.valueOf(string);
+            }
+            catch (NumberFormatException e)
+            {
+                LOG.fine("Unable to parse int from: " + string);
+            }
+        }
+        return retVal;
     }
 }
