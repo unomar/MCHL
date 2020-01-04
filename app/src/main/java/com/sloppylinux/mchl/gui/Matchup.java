@@ -183,7 +183,7 @@ public class Matchup extends TabActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.layout.option_menu, menu);
+        inflater.inflate(R.menu.activity_navigation_drawer, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

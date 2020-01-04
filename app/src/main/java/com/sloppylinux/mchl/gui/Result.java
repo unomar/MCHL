@@ -202,7 +202,7 @@ public class Result extends Activity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.layout.option_menu, menu);
+        inflater.inflate(R.menu.schedule, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

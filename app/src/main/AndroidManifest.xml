@@ -1,30 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.sloppylinux.mchl.gui">
+    package="com.sloppylinux.mchl.gui">
+
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-            android:allowBackup="true"
-            android:icon="@drawable/icon"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:label="@string/app_name">
-        <activity android:name=".Omchl"
-                  android:label="@string/app_name">
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.NoTitleBar">
+        <activity
+            android:name="com.sloppylinux.mchl.activity.MchlNavigation"
+            android:label="@string/title_activity_navigation"
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <data android:scheme="http"
+                    android:host="www.ourmchl.com" />
             </intent-filter>
         </activity>
 
-    	<activity android:name=".ConfigGUI"/>
-    	<activity android:name=".Standings"/>
-    	<activity android:name=".StandingsTab"/>
-<!--    	<activity android:name=".Schedule"/>-->
-    	<activity android:name=".Result"/>
-    	<activity android:name=".Matchup"/>
-    	<activity android:name=".TeamStatsTab"/>
-    	<activity android:name=".ComparisonTab"/>
-	</application>
+        <activity
+            android:name=".Omchl"
+            android:label="@string/app_name">
 
+        </activity>
+        <activity android:name=".ConfigGUI" />
+        <activity android:name=".Standings" />
+        <activity android:name=".StandingsTab" />
+        <activity android:name=".Result" />
+        <activity android:name=".Matchup" />
+        <activity android:name=".TeamStatsTab" />
+        <activity android:name=".ComparisonTab" />
 
+        <activity android:name="com.sloppylinux.mchl.activity.ScheduleActivity" />
+        <activity android:name="com.sloppylinux.mchl.activity.SettingsActivity" />
+        <activity android:name="com.sloppylinux.mchl.activity.StandingsActivity" />
 
-</manifest> 
+    </application>
+
+</manifest>

@@ -31,7 +31,8 @@ public abstract class Person extends Expirable implements Serializable
     }
 
     /**
-     * @param name the name to set
+     * @param firstName the first name to set
+     * @param lastName the last name to set
      */
     public void setName(String firstName, String lastName)
     {
