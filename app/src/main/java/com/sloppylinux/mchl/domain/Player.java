@@ -154,6 +154,8 @@ public class Player extends ResponseBase implements Comparable<Player>, Serializ
         return getName(" ");
     }
 
+    public String getShortInfo() { return getName(" ") + " #" + getNumber();}
+
     public int getGamesPlayed()
     {
         return 0;

@@ -29,7 +29,7 @@ public class MCHLWebserviceTest
     @Before
     public void setUp()
     {
-        mchlWebservice = new MCHLWebservice();
+        mchlWebservice = MCHLWebservice.getSingleton();
     }
 
 

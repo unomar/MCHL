@@ -40,7 +40,7 @@ public class MCHLWebservice
     /**
      * Called when the activity is first created.
      */
-    private static final String SOAP_ACTION = "http://ourmchl.com/wp-json/sportspress/v2/";
+    private static final String SOAP_ACTION = "https://ourmchl.com/wp-json/sportspress/v2/";
     private static final String GET_SEASONS = "tables";
     private static final String GET_TEAMS = "teams";
     private static final String GET_STANDINGS = "tables";
@@ -53,9 +53,15 @@ public class MCHLWebservice
     private final Logger LOG = Logger.getLogger(MCHLWebservice.class.getName());
     private MCHLService mchlService = null;
 
+    private static final MCHLWebservice singleton = new MCHLWebservice();
+
     private SimpleDateFormat iso8601Formatter = new SimpleDateFormat(DATE_FORMAT);
 
-    public MCHLWebservice()
+    public static MCHLWebservice getSingleton() {
+        return singleton;
+    }
+
+    private MCHLWebservice()
     {
         GsonBuilder gsonBuilder = new GsonBuilder();
 
@@ -278,7 +284,7 @@ public class MCHLWebservice
         {
             Call<List<Player>> playerCall = mchlService.lookupPlayer(name);
             Response<List<Player>> playerResult = playerCall.execute();
-            if (playerResult != null && playerResult.body() != null && playerResult.body().size() == 1)
+            if (playerResult != null && playerResult.body() != null)
             {
                 players = playerResult.body();
             }
