@@ -13,7 +13,9 @@ import java.util.Map;
 public class Player extends ResponseBase implements Comparable<Player>, Serializable
 {
     private static final long serialVersionUID = 1L;
+    public static final String DEFAULT_SEPARATOR = "-";
     Statistics currentStats;
+
     // Player info
     @SerializedName("slug")
     private String firstLast;
@@ -34,6 +36,22 @@ public class Player extends ResponseBase implements Comparable<Player>, Serializ
 
     public Player()
     {
+    }
+
+    public Player(Long playerId, String playerName)
+    {
+        this.setId(playerId);
+        this.setFirstLast(playerName);
+    }
+
+    public long getPlayerId()
+    {
+        return getId();
+    }
+
+    public void setPlayerId(long playerId)
+    {
+        this.setId(playerId);
     }
 
     public String getFirstLast()

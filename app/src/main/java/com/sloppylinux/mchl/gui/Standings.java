@@ -65,15 +65,15 @@ public class Standings extends TabActivity
             public void run()
             {
                 Looper.prepare();
-                try
-                {
-                    divisions = MCHLWebservice.getDivisions(config.getSeason(), me, force);
-                    mHandler.post(mUpdateResults);
-                }
-                catch (WSException e)
-                {
-                    mHandler.post(displayError);
-                }
+//                try
+//                {
+////                    divisions = MCHLWebservice.getDivisions(config.getSeason(), me, force);
+//                    mHandler.post(mUpdateResults);
+//                }
+//                catch (WSException e)
+//                {
+//                    mHandler.post(displayError);
+//                }
             }
         };
         t.start();
@@ -126,10 +126,10 @@ public class Standings extends TabActivity
             spec = standings.newTabSpec(d.getName()).setIndicator(d.getName())
                     .setContent(intent);
             standings.addTab(spec);
-            if (d.getName().equals(config.getDivision()))
-            {
-                currentTab = i;
-            }
+//            if (d.getName().equals(config.getDivision()))
+//            {
+//                currentTab = i;
+//            }
         }
 
         standings.setCurrentTab(currentTab);

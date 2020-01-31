@@ -1,4 +1,4 @@
-package com.sloppylinux.mchl.ui.settings;
+package com.sloppylinux.mchl.ui.navigation;
 
 import android.os.AsyncTask;
 
@@ -11,21 +11,21 @@ import com.sloppylinux.mchl.util.MCHLWebservice;
 
 import java.util.List;
 
-public class SettingsViewModel extends ViewModel {
+public class NavigationViewModel extends ViewModel {
 
-    private MutableLiveData<List<Player>> playerListData;
+    private MutableLiveData<List<Player>> mText;
 
     private MCHLWebservice mchlWebservice = MCHLWebservice.getSingleton();
 
-    public SettingsViewModel() {
-        playerListData = new MutableLiveData<>();
+    public NavigationViewModel() {
+        mText = new MutableLiveData<>();
     }
 
     public LiveData<List<Player>> getText(String playerName)
     {
         new RetrievePlayerTask().execute(playerName);
 
-        return playerListData;
+        return mText;
     }
 
     private class RetrievePlayerTask extends AsyncTask<String, Player, Void>
@@ -36,7 +36,12 @@ public class SettingsViewModel extends ViewModel {
 
             if (playerList != null)
             {
-                playerListData.postValue(playerList);
+                mText.postValue(playerList);
+            }
+            else
+            {
+                // TODO trigger failure state
+                //mText.postValue("Could not lookup player");
             }
             return null;
         }

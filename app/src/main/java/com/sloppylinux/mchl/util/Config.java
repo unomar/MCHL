@@ -3,13 +3,14 @@ package com.sloppylinux.mchl.util;
 import android.content.Context;
 import android.util.Log;
 
+import com.sloppylinux.mchl.domain.Player;
+
 import java.util.Properties;
 
 public class Config
 {
-    private static final String SEASON_KEY = "SEASON";
-    private static final String TEAM_KEY = "TEAM";
-    private static final String DIVISION_KEY = "DIVISION";
+    private static final String PLAYER_NAME = "PLAYER_NAME";
+    private static final String PLAYER_ID = "PLAYER_ID";
 
     private static final String CONFIG_FILE = "mchl.properties";
     final String tag = "Config";
@@ -17,28 +18,23 @@ public class Config
     private boolean loaded;
     private boolean changed;
     private Context context;
-    private String season;
-    private String division;
-    private String team;
+
+    private Player player;
 
     public Config(Context context)
     {
         this.context = context;
         if (!loadValues(context))
         {
-            season = "";
-            division = "";
-            team = "";
+            player = null;
         }
     }
 
     public boolean storeValues()
     {
         // Store info to the config file
-        props.setProperty(SEASON_KEY, season);
-        props.setProperty(TEAM_KEY, team);
-        props.setProperty(DIVISION_KEY, division);
-
+        props.setProperty(PLAYER_NAME, player.getName(Player.DEFAULT_SEPARATOR));
+        props.setProperty(PLAYER_ID, Long.toString(player.getPlayerId()));
         try
         {
             props.store(context.openFileOutput(CONFIG_FILE,
@@ -58,9 +54,7 @@ public class Config
         try
         {
             props.load(context.openFileInput(CONFIG_FILE));
-            season = props.getProperty(SEASON_KEY);
-            team = props.getProperty(TEAM_KEY);
-            division = props.getProperty(DIVISION_KEY);
+            player = new Player(Long.valueOf(props.getProperty(PLAYER_ID)), props.getProperty(PLAYER_NAME));
             loaded = true;
         }
         catch (Exception e)
@@ -89,38 +83,13 @@ public class Config
         this.changed = changed;
     }
 
-    public String getSeason()
-    {
-        return season;
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setSeason(String season)
-    {
-        this.season = season;
-        changed = true;
-    }
+    public void setPlayer(Player player) { this.player = player;}
 
-    public String getDivision()
-    {
-        return division;
-    }
 
-    public void setDivision(String division)
-    {
-        changed = true;
-        this.division = division;
-    }
-
-    public String getTeam()
-    {
-        return team;
-    }
-
-    public void setTeam(String team)
-    {
-        changed = true;
-        this.team = team;
-    }
 
     public boolean isLoaded()
     {

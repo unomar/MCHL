@@ -1,10 +1,17 @@
 package com.sloppylinux.mchl.ui.settings;
 
-import android.os.AsyncTask;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -14,8 +21,10 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.gui.R;
+import com.sloppylinux.mchl.util.Config;
 import com.sloppylinux.mchl.util.MCHLWebservice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsFragment extends Fragment {
@@ -26,30 +35,63 @@ public class SettingsFragment extends Fragment {
 
     private Player player;
 
+    private EditText searchName;
+
+    private SettingsFragment me;
+
+    private ListView playerListView;
+
+    private Config config;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        String lookupName = "Kevin";
-
+        config = new Config(this.getContext());
         settingsViewModel =
                 ViewModelProviders.of(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
-        final TextView textView = root.findViewById(R.id.text_settings);
-        settingsViewModel.getText(lookupName).observe(this, new Observer<List<Player>>() {
+
+        EditText editText = root.findViewById(R.id.nameEntry);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onChanged(@Nullable List<Player> players) {
-                StringBuilder sb = new StringBuilder();
-                String separator = "";
-                for (Player player : players)
-                {
-                    sb.append(separator);
-                    sb.append(player.getShortInfo());
-                    separator = "\n";
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    playerSearch(v.getText().toString());
+                    return true;
                 }
-                textView.setText(sb.toString());
+                return false;
             }
         });
+
+        playerListView = root.findViewById(R.id.playerList);
+
         return root;
     }
 
+    public void playerSearch(String playerName)
+    {
+
+        settingsViewModel.getText(playerName).observe(this, new Observer<List<Player>>() {
+            @Override
+            public void onChanged(@Nullable List<Player> players) {
+                List<String> playerNames = new ArrayList<>();
+                for (Player player : players)
+                {
+                    playerNames.add(player.getShortInfo());
+                }
+//                textView.setText(sb.toString());
+                ArrayAdapter<Player> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, players);
+                playerListView.setAdapter(adapter);
+
+                playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                    @Override
+                    public void onItemClick(AdapterView<?>adapter,View v, int pos, long position){
+                        Player player = (Player)adapter.getItemAtPosition(pos);
+                        config.setPlayer(player);
+                        config.storeValues();
+                    }
+                });
+            }
+        });
+    }
 }

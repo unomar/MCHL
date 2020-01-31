@@ -5,4 +5,8 @@
         <color name="black">#ff000000</color>
 		<color name="orange">#FF990000</color>
 		<color name="transparent">#00000000</color>
+
+        <color name="colorPrimary">#FF656565</color>
+    <color name="colorPrimaryDark">#FF232323</color>
+    <color name="colorAccent">#FF990000</color>
 </resources>
