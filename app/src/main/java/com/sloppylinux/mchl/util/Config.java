@@ -1,19 +1,22 @@
 package com.sloppylinux.mchl.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.sloppylinux.mchl.domain.Player;
 
 import java.util.Properties;
 
 public class Config
 {
-    private static final String PLAYER_NAME = "PLAYER_NAME";
-    private static final String PLAYER_ID = "PLAYER_ID";
-
     private static final String CONFIG_FILE = "mchl.properties";
-    final String tag = "Config";
+    public static final String PLAYER_JSON = "PlayerJSON";
+    final String tag = "MCHL Config";
+
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
     private Properties props = new Properties();
     private boolean loaded;
     private boolean changed;
@@ -24,7 +27,10 @@ public class Config
     public Config(Context context)
     {
         this.context = context;
-        if (!loadValues(context))
+
+        pref = context.getSharedPreferences(tag, 0); // 0 - for private mode
+        editor = pref.edit();
+        if (!loadValues())
         {
             player = null;
         }
@@ -32,44 +38,28 @@ public class Config
 
     public boolean storeValues()
     {
-        // Store info to the config file
-        props.setProperty(PLAYER_NAME, player.getName(Player.DEFAULT_SEPARATOR));
-        props.setProperty(PLAYER_ID, Long.toString(player.getPlayerId()));
-        try
-        {
-            props.store(context.openFileOutput(CONFIG_FILE,
-                    Context.MODE_PRIVATE), "MCHL Properties");
-        }
-        catch (Exception e)
-        {
-            Log.e(tag, "Failed to write config output: " +
-                    e.getMessage());
-            return false;
-        }
+        Gson gson = new Gson();
+
+        String playerJson = gson.toJson(player);
+        editor.putString(PLAYER_JSON, playerJson);
+        editor.commit();
+
         return true;
     }
 
-    public boolean loadValues(Context context)
+    public boolean loadValues()
     {
-        try
-        {
-            props.load(context.openFileInput(CONFIG_FILE));
-            player = new Player(Long.valueOf(props.getProperty(PLAYER_ID)), props.getProperty(PLAYER_NAME));
-            loaded = true;
-        }
-        catch (Exception e)
-        {
-            // Do something
-            Log.d(tag, e.getMessage());
-            return false;
-        }
+        Gson gson = new Gson();
+
+        String playerJson = pref.getString(PLAYER_JSON, "");
+        player = gson.fromJson(playerJson, Player.class);
         changed = true;
         return true;
     }
 
-    public Config reload(Context context)
+    public Config reload()
     {
-        loadValues(context);
+        loadValues();
         return this;
     }
 

@@ -63,7 +63,7 @@ public class MCHLWebserviceTest
     @Test
     public void testGetSchedule() throws WSException
     {
-        TeamSchedule teamSchedule = mchlWebservice.getSchedule(3283, true);
+        TeamSchedule teamSchedule = mchlWebservice.getSchedule(3283L, true);
         assertNotNull("Team Schedule was null", teamSchedule);
         for (Game game : teamSchedule.getGames())
         {

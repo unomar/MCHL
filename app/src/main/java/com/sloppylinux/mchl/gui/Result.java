@@ -220,7 +220,7 @@ public class Result extends Activity
             case R.id.configure:
                 Intent config = new Intent(me, ConfigGUI.class);
                 me.startActivity(config);
-                this.config = this.config.reload(this);
+                this.config = this.config.reload();
                 fetchWebData(true);
                 break;
         }

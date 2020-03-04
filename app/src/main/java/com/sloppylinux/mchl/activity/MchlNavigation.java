@@ -70,8 +70,10 @@ public class MchlNavigation extends AppCompatActivity {
         final TextView playerNameView = findViewById(R.id.playerName);
         final TextView playerDivView = findViewById(R.id.playerDivision);
 
-        playerNameView.setText(player.getShortInfo());
-        playerDivView.setText("Intermediate");
+        if (player != null) {
+            playerNameView.setText(player.getShortInfo());
+            playerDivView.setText("Intermediate");
+        }
         return true;
     }
 

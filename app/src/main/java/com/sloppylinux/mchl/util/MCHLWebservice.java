@@ -302,10 +302,9 @@ public class MCHLWebservice
      * @param teamId       The id of the team to query
      * @param forceRefresh If we should ignore cached values
      * @return The TeamSchedule
-     * @throws WSException If an error occurs
      */
-    public TeamSchedule getSchedule(Integer teamId,
-                                    boolean forceRefresh) throws WSException
+    public TeamSchedule getSchedule(Long teamId,
+                                    boolean forceRefresh)
     {
         TeamSchedule teamSchedule = null;
         try
@@ -408,11 +407,12 @@ public class MCHLWebservice
      * @return The name of the venue
      * @throws WSException If an error occurs
      */
-    private String getVenueName(List<Long> venueIds) throws WSException
+    private String getVenueName(List<Long> venueIds)
     {
+        String venueName = "Unknown";
         if (venueIds == null || venueIds.size() != 1)
         {
-            throw new WSException("Cannot get a single venue name from multiple ids.");
+            LOG.warning("Cannot get a single venue name from multiple ids.");
         }
         if (this.venues == null)
         {
@@ -426,7 +426,9 @@ public class MCHLWebservice
                 return venue.getName();
             }
         }
-        throw new WSException("Could not lookup venue name for id: " + venueId);
+        LOG.warning("Could not lookup venue name for id: " + venueId);
+
+        return venueName;
     }
 
     /**

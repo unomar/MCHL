@@ -31,13 +31,6 @@ public class SettingsFragment extends Fragment {
 
     private SettingsViewModel settingsViewModel;
 
-    private MCHLWebservice mchlWebservice;
-
-    private Player player;
-
-    private EditText searchName;
-
-    private SettingsFragment me;
 
     private ListView playerListView;
 
