@@ -19,18 +19,10 @@ public class ScheduleViewModel extends ViewModel {
 
     private MCHLWebservice mchlWebservice = MCHLWebservice.getSingleton();
 
-    private MutableLiveData<String> mText;
-
     private MutableLiveData<List<Game>> gameListData;
 
     public ScheduleViewModel() {
-        mText = new MutableLiveData<>();
         gameListData = new MutableLiveData<>();
-        mText.setValue("This is schedule fragment");
-    }
-
-    public LiveData<String> getText() {
-        return mText;
     }
 
     /**
