@@ -7,12 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-
-
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.gui.R;
-
-import org.apache.commons.codec.binary.StringUtils;
 
 import java.util.List;
 
@@ -85,7 +81,6 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
 //        result.startAnimation(animation);
         lastPosition = position;
 
-        String utf8Home = StringUtils.newStringUtf8(gameModel.getHome().getBytes());
         viewHolder.gameDate.setText(gameModel.getDateString());
         viewHolder.gameLocation.setText(gameModel.getLocation());
         viewHolder.homeTeam.setText(gameModel.getHomeFormatted(24));
