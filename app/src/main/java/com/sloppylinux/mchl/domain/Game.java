@@ -1,10 +1,14 @@
 package com.sloppylinux.mchl.domain;
 
+import com.sloppylinux.mchl.util.Utils;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.sloppylinux.mchl.util.Utils.getFormatted;
 
 public class Game extends Expirable implements Comparable<Game>, Serializable
 {
@@ -51,6 +55,11 @@ public class Game extends Expirable implements Comparable<Game>, Serializable
         this.home = home;
     }
 
+    public String getHomeFormatted(int maxChars)
+    {
+        return Utils.getFormatted(this.home, maxChars);
+    }
+
     /**
      * @return the away
      */
@@ -65,6 +74,11 @@ public class Game extends Expirable implements Comparable<Game>, Serializable
     public void setAway(String away)
     {
         this.away = away;
+    }
+
+    public String getAwayFormatted(int maxChars)
+    {
+        return Utils.getFormatted(this.away, maxChars);
     }
 
     /**

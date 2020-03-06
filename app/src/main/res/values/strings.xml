@@ -38,4 +38,12 @@
 
     <string name="player_search_header">Player Lookup</string>
     <string name="player_search_input">Enter Name</string>
+
+    <!-- Game_Row.xml strings -->
+    <string name="vs">vs</string>
+    <string name="gameLocation">Motto Mclean Ice Arena</string>
+    <string name="gameDate">Sat 27 Mar 2020 7:30PM</string>
+    <string name="homeTeam">HOME</string>
+    <string name="awayTeam">AWAY</string>
+
 </resources>

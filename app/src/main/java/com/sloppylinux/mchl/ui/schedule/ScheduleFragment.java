@@ -53,7 +53,7 @@ public class ScheduleFragment extends Fragment {
             @Override
             public void onChanged(List<Game> gameList) {
 
-                ArrayAdapter<Game> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, gameList);
+                GameListAdapter adapter = new GameListAdapter(gameList, getContext());
                 scheduleListView.setAdapter(adapter);
             }
         });
