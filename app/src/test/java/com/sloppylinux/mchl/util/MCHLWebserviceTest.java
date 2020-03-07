@@ -74,7 +74,7 @@ public class MCHLWebserviceTest
     @Test
     public void testGetResults() throws WSException
     {
-        TeamSchedule teamResults = mchlWebservice.getResults(3283, true);
+        TeamSchedule teamResults = mchlWebservice.getResults(3283L, true);
         assertNotNull("Team Results was null", teamResults);
         for (Game game : teamResults.getGames())
         {
