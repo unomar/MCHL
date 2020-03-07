@@ -1,6 +1,5 @@
 package com.sloppylinux.mchl.ui.settings;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -13,18 +12,18 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import androidx.annotation.Nullable;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.sloppylinux.mchl.activity.MchlNavigation;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.gui.R;
 import com.sloppylinux.mchl.util.Config;
-import com.sloppylinux.mchl.util.MCHLWebservice;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsFragment extends Fragment {
@@ -39,9 +38,11 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        config = new Config(this.getContext());
+        if (config == null) {
+            config = new Config(this.getContext());
+        }
         settingsViewModel =
-                ViewModelProviders.of(this).get(SettingsViewModel.class);
+                new ViewModelProvider(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
         EditText editText = root.findViewById(R.id.nameEntry);
@@ -67,12 +68,7 @@ public class SettingsFragment extends Fragment {
         settingsViewModel.getText(playerName).observe(this, new Observer<List<Player>>() {
             @Override
             public void onChanged(@Nullable List<Player> players) {
-                List<String> playerNames = new ArrayList<>();
-                for (Player player : players)
-                {
-                    playerNames.add(player.getShortInfo());
-                }
-//                textView.setText(sb.toString());
+
                 ArrayAdapter<Player> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, players);
                 playerListView.setAdapter(adapter);
 
@@ -80,8 +76,13 @@ public class SettingsFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?>adapter,View v, int pos, long position){
                         Player player = (Player)adapter.getItemAtPosition(pos);
-                        config.setPlayer(player);
-                        config.storeValues();
+                        settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>() {
+                            @Override
+                            public void onChanged(String s) {
+                                Intent home = new Intent(getContext(), MchlNavigation.class);
+                                startActivity(home);
+                            }
+                        });
                     }
                 });
             }

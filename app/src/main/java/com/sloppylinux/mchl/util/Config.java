@@ -1,12 +1,18 @@
 package com.sloppylinux.mchl.util;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.sloppylinux.mchl.domain.Player;
+import com.sloppylinux.mchl.domain.Team;
+import com.sloppylinux.mchl.domain.TeamSchedule;
+import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class Config
@@ -16,7 +22,6 @@ public class Config
     final String tag = "MCHL Config";
 
     private SharedPreferences pref;
-    private SharedPreferences.Editor editor;
     private Properties props = new Properties();
     private boolean loaded;
     private boolean changed;
@@ -29,24 +34,34 @@ public class Config
         this.context = context;
 
         pref = context.getSharedPreferences(tag, 0); // 0 - for private mode
-        editor = pref.edit();
-        if (!loadValues())
+
+        loaded = loadValues();
+        if (!loaded)
         {
             player = null;
         }
     }
 
+    /**
+     * Persist config values to disk.
+     * @return  True if successful
+     */
     public boolean storeValues()
     {
         Gson gson = new Gson();
 
         String playerJson = gson.toJson(player);
+        SharedPreferences.Editor editor = pref.edit();
         editor.putString(PLAYER_JSON, playerJson);
-        editor.commit();
+        editor.apply();
 
         return true;
     }
 
+    /**
+     * Load config values from disk.
+     * @return True if successful
+     */
     public boolean loadValues()
     {
         Gson gson = new Gson();
@@ -78,8 +93,6 @@ public class Config
     }
 
     public void setPlayer(Player player) { this.player = player;}
-
-
 
     public boolean isLoaded()
     {

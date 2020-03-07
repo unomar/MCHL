@@ -1,25 +1,26 @@
 package com.sloppylinux.mchl.activity;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import android.view.Menu;
-import android.widget.TextView;
-
 import com.sloppylinux.mchl.domain.Player;
+import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.gui.R;
 import com.sloppylinux.mchl.util.Config;
 
 import org.apache.log4j.Logger;
+
+import java.util.Date;
 
 public class MchlNavigation extends AppCompatActivity {
 
@@ -59,6 +60,11 @@ public class MchlNavigation extends AppCompatActivity {
         if (config.isLoaded())
         {
             player = config.getPlayer();
+
+            if (player.isExpired(new Date().getTime()))
+            {
+                // TODO: Notify or automatic update
+            }
         }
     }
 
@@ -72,7 +78,15 @@ public class MchlNavigation extends AppCompatActivity {
 
         if (player != null) {
             playerNameView.setText(player.getShortInfo());
-            playerDivView.setText("Intermediate");
+            StringBuilder sb = new StringBuilder();
+            String sep = "";
+            for (Team team : player.getPlayerTeams())
+            {
+                sb.append(sep);
+                sb.append(team.getName());
+                sep = ",";
+            }
+            playerDivView.setText(sb.toString());
         }
         return true;
     }
@@ -83,4 +97,10 @@ public class MchlNavigation extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    /**
+     * Get the Shared config
+     * @return The config
+     */
+    public Config getConfig() { return this.config;}
 }

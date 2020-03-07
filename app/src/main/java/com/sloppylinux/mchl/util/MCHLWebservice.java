@@ -8,7 +8,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.sloppylinux.mchl.domain.Division;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
@@ -24,8 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -41,17 +38,12 @@ public class MCHLWebservice
      * Called when the activity is first created.
      */
     private static final String SOAP_ACTION = "https://ourmchl.com/wp-json/sportspress/v2/";
-    private static final String GET_SEASONS = "tables";
-    private static final String GET_TEAMS = "teams";
-    private static final String GET_STANDINGS = "tables";
-    private static final String GET_SCHEDULE = "events";
-    private static final String GET_PLAYER_STATS = "players";
-    private static final String NAMESPACE = "http://www.omchl.com/services";
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss";
 
     private static List<Venue> venues = null;
     private final Logger LOG = Logger.getLogger(MCHLWebservice.class.getName());
     private MCHLService mchlService = null;
+    private static final long timeToLive = 86400000l; // One day...customizable?
 
     private static final MCHLWebservice singleton = new MCHLWebservice();
 
@@ -113,46 +105,29 @@ public class MCHLWebservice
         return retVal;
     }
 
-    public static String[] getTeamNames(String season, String division) throws WSException
+    /**
+     * Fetch and persist player info
+     * @param player The player to fetch
+     * @param context The application context
+     */
+    public void fetchLatestPlayerInfo(Player player, Context context)
     {
-//		List<String> teamNames = new ArrayList<String>();
-//		Map<String, String> params = new HashMap<String, String>();
-//		params.put(SEASON_PARAM, season);
-//		params.put(DIVISION_PARAM, division);
-//
-//		SoapObject soap = performCall(GET_TEAMS, params);
-//
-//		for (int i = 0; i < soap.getPropertyCount(); i++)
-//		{
-//			SoapObject team = (SoapObject) soap.getProperty(i);
-//			teamNames.add(team.getProperty(0).toString());
-//		}
-//
-//		return teamNames.toArray(new String[0]);
-        return null;
+        for (Long teamId : player.getCurrentTeams())
+        {
+            Team team = getTeam(teamId, context, true);
+            player.getPlayerTeams().add(team);
+            player.getPlayerSchedule().add(this.getSchedule(teamId, true));
+            player.getPlayerResults().add(this.getResults(teamId, true));
+            player.getLeagueTables().add(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
+        }
+
+        player.setExpiration(new Date().getTime() + timeToLive);
+        Config config = new Config(context);
+        config.setPlayer(player);
+        config.storeValues();
     }
 
-    public static List<Team> getTeams(String season, String division) throws WSException
-    {
-//		ArrayList<Team> teams = new ArrayList<Team>();
-//		Map<String, String> params = new HashMap<String, String>();
-//		params.put(SEASON_PARAM, season);
-//		params.put(DIVISION_PARAM, division);
-//
-//		SoapObject soap2 = performCall(GET_TEAMS, params);
-//
-//		for (int i = 0; i < soap2.getPropertyCount(); i++)
-//		{
-//			SoapObject teamSoap = (SoapObject) soap2.getProperty(i);
-//			Team team = new Team(teamSoap.getProperty(0).toString());
-//			teams.add(team);
-//		}
-//
-//		return teams;
-        return Collections.EMPTY_LIST;
-    }
-
-    public Team getTeam(int teamId, Context context, boolean forceRefresh)
+    public Team getTeam(long teamId, Context context, boolean forceRefresh)
     {
 		Team team = null;
 		String cachedName = "Team" + teamId;
@@ -192,81 +167,29 @@ public class MCHLWebservice
 		return team;
     }
 
-    public LeagueTable getStandings(long seasonId, long leagueId) throws WSException
+    /**
+     * Get the standings for a season/league
+     * @param seasonId The season ID
+     * @param leagueId The league ID
+     * @return The standings
+     */
+    public LeagueTable getStandings(long seasonId, long leagueId)
     {
+        LeagueTable leagueTable = null;
         try
         {
             Call<List<LeagueTable>> call = mchlService.getLeagueTable(seasonId, leagueId);
             Response<List<LeagueTable>> result = call.execute();
             if (result != null && result.body() != null && result.body().size() == 1)
             {
-                return result.body().get(0);
+                leagueTable = result.body().get(0);
             }
         }
         catch (IOException e)
         {
             LOG.warning("Caught exception attempting to lookup standings for season "+ seasonId + " and league " + leagueId + ".  " + e.getMessage());
         }
-
-        throw new WSException("Unable to lookup standings.");
-    }
-
-    /**
-     * Get a list of all divisions and all teams in each division
-     *
-     * @param season The season to use
-     * @return ArrayList of all data
-     * @throws WSException
-     */
-    public static ArrayList<Division> getDivisions(String season,
-                                                   Context context, boolean forceRefresh) throws WSException
-    {
-//        ArrayList<Division> divisions = new ArrayList<Division>();
-//        for (String div : getDivisionNames(season))
-//        {
-//            String cachedName = "Division" + season + div;
-//
-//            Division division = null;
-//
-//            if (!forceRefresh)
-//            {
-//                division = (Division) ObjectCache.readCache(cachedName, context);
-//            }
-//
-//            if (division == null)
-//            {
-//                division = new Division(div);
-//                for (Team team : getStandings(season, div))
-//                {
-//                    division.addTeam(team);
-//                }
-//
-//                // Write out our division to cache
-//                ObjectCache.writeCache(cachedName, division, context);
-//            }
-//            divisions.add(division);
-//        }
-//        return divisions;
-        return null;
-    }
-
-    /**
-     * @param strVal
-     * @return
-     */
-    private static int getInteger(String strVal)
-    {
-        int retVal;
-        try
-        {
-            retVal = Integer.parseInt(strVal);
-        }
-        catch (NumberFormatException e)
-        {
-            retVal = -1;
-        }
-
-        return retVal;
+        return leagueTable;
     }
 
     /**
@@ -349,10 +272,9 @@ public class MCHLWebservice
      * @param teamId       The id of the team to query
      * @param forceRefresh If we should ignore cached values
      * @return The TeamSchedule
-     * @throws WSException If an error occurs
      */
-    public TeamSchedule getResults(Integer teamId,
-                                    boolean forceRefresh) throws WSException
+    public TeamSchedule getResults(Long teamId,
+                                    boolean forceRefresh)
     {
         TeamSchedule teamSchedule = null;
         try
@@ -436,18 +358,16 @@ public class MCHLWebservice
      */
     private void populateVenues()
     {
-        Call<List<Venue>> venueCall = mchlService.getVenues();
-        try
-        {
-            Response<List<Venue>> venueResponse = venueCall.execute();
-            if (venueResponse != null)
-            {
-                this.venues = venueResponse.body();
+        if (this.venues == null) {
+            Call<List<Venue>> venueCall = mchlService.getVenues();
+            try {
+                Response<List<Venue>> venueResponse = venueCall.execute();
+                if (venueResponse != null) {
+                    this.venues = venueResponse.body();
+                }
+            } catch (IOException e) {
+                LOG.warning("Caught exception querying team schedule." + e.getMessage());
             }
-        }
-        catch (IOException e)
-        {
-            LOG.warning("Caught exception querying team schedule." + e.getMessage());
         }
     }
 

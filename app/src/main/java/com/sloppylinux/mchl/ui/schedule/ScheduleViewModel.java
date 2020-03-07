@@ -12,7 +12,6 @@ import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.util.MCHLWebservice;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ScheduleViewModel extends ViewModel {
@@ -52,7 +51,9 @@ public class ScheduleViewModel extends ViewModel {
             List<Game> allGames = new ArrayList<>();
             for (Long teamId : teamIds) {
                 TeamSchedule teamSchedule = mchlWebservice.getSchedule(teamId, false);
-                allGames.addAll(teamSchedule.getGames());
+                if (teamSchedule != null) {
+                    allGames.addAll(teamSchedule.getGames());
+                }
             }
 
             if (allGames != null)
