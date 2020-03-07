@@ -30,6 +30,7 @@ public class SettingsFragment extends Fragment {
 
     private SettingsViewModel settingsViewModel;
 
+    private TextView playerSelectTextView;
 
     private ListView playerListView;
 
@@ -45,6 +46,7 @@ public class SettingsFragment extends Fragment {
                 new ViewModelProvider(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        playerSelectTextView = root.findViewById(R.id.player_select_text);
         EditText editText = root.findViewById(R.id.nameEntry);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -68,17 +70,18 @@ public class SettingsFragment extends Fragment {
         settingsViewModel.getText(playerName).observe(this, new Observer<List<Player>>() {
             @Override
             public void onChanged(@Nullable List<Player> players) {
-
+                playerSelectTextView.setText("Select player from list:");
                 ArrayAdapter<Player> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, players);
                 playerListView.setAdapter(adapter);
-
                 playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                     @Override
                     public void onItemClick(AdapterView<?>adapter,View v, int pos, long position){
+                        // TODO: Display loading dialog
                         Player player = (Player)adapter.getItemAtPosition(pos);
                         settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>() {
                             @Override
                             public void onChanged(String s) {
+                                // TODO: Clear loading dialog
                                 Intent home = new Intent(getContext(), MchlNavigation.class);
                                 startActivity(home);
                             }

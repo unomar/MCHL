@@ -64,9 +64,8 @@ public class MchlNavigation extends AppCompatActivity {
 
             if (player == null)
             {
-                // TODO: Create separate Activity for initial setup
-//                Intent settings = new Intent(this.getBaseContext(), MchlNavigation.class);
-//                startActivity(settings);
+                Intent settings = new Intent(this.getBaseContext(), InitialSetup.class);
+                startActivity(settings);
             }
             else if (player.requiresUpdate())
             {

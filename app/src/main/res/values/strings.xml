@@ -2,6 +2,7 @@
 <resources>
     <string name="hello">Hello World, mchl!</string>
     <string name="app_name">MCHL</string>
+    <string name="app_setup_name">MCHL Setup</string>
     <string name="dialog_title">Configure MCHL Info</string>
     <string name="dialog_text">Do it here</string>
     <string name="Name">Name</string>
@@ -30,6 +31,7 @@
     <string name="activity_title_schedule">Schedule</string>
     <string name="activity_title_standings">Standings</string>
     <string name="activity_title_settings">Player Lookup</string>
+    <string name="mchl_configuration"><b>Settings</b></string>
 
     <string name="menu_home">Home</string>
     <string name="menu_schedule">Schedule</string>
