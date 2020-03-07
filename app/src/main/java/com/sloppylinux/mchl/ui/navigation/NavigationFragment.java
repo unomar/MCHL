@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.sloppylinux.mchl.domain.Player;
-import com.sloppylinux.mchl.gui.R;
+import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.util.Config;
 
 public class NavigationFragment extends Fragment {

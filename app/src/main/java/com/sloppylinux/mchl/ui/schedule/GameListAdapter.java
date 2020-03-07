@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.sloppylinux.mchl.domain.Game;
-import com.sloppylinux.mchl.gui.R;
+import com.sloppylinux.mchl.ui.R;
 
 import java.util.List;
 

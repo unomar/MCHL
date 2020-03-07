@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.sloppylinux.mchl.gui.R;
+import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.util.Config;
 
 public class HomeFragment extends Fragment {

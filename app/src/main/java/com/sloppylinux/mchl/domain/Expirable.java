@@ -1,6 +1,7 @@
 package com.sloppylinux.mchl.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public abstract class Expirable implements Serializable
 {
@@ -31,14 +32,23 @@ public abstract class Expirable implements Serializable
     }
 
     /**
+     * Method to determine if the object is expired.
+     * @return True if expired
+     */
+    public boolean isExpired()
+    {
+        return isExpired(new Date().getTime());
+    }
+
+    /**
      * Method to determine if the object is expired
      *
-     * @param current The current time in millis
+     * @param expirationTime The expiration time in millis
      * @return True if expired, false otherwise
      */
-    public boolean isExpired(long current)
+    public boolean isExpired(long expirationTime)
     {
-        return ((expiration != null) && (current > expiration));
+        return ((expiration != null) && (expirationTime > expiration));
     }
 
 }

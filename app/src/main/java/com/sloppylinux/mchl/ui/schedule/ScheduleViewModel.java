@@ -50,7 +50,7 @@ public class ScheduleViewModel extends ViewModel {
         protected Void doInBackground(Long... teamIds) {
             List<Game> allGames = new ArrayList<>();
             for (Long teamId : teamIds) {
-                TeamSchedule teamSchedule = mchlWebservice.getSchedule(teamId, false);
+                TeamSchedule teamSchedule = mchlWebservice.getSchedule(teamId);
                 if (teamSchedule != null) {
                     allGames.addAll(teamSchedule.getGames());
                 }

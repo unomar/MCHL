@@ -98,7 +98,7 @@ public final class ObjectCache
         if (retVal instanceof Expirable)
         {
             Expirable exp = (Expirable) retVal;
-            if (exp.isExpired(new Date().getTime()))
+            if (exp.isExpired())
             {
                 retVal = null;
             }

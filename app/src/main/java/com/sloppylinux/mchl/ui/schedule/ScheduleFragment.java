@@ -1,19 +1,18 @@
 package com.sloppylinux.mchl.ui.schedule;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.sloppylinux.mchl.activity.MchlNavigation;
 import com.sloppylinux.mchl.domain.Game;
-import com.sloppylinux.mchl.gui.R;
+import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.util.Config;
 
 import java.util.Date;
@@ -38,7 +37,7 @@ public class ScheduleFragment extends Fragment {
 
         scheduleListView = root.findViewById(R.id.scheduleList);
 
-        if (config.getPlayer() != null && !config.getPlayer().isExpired(new Date().getTime()))
+        if (config.getPlayer() != null && !config.getPlayer().isExpired())
         {
             GameListAdapter adapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
             scheduleListView.setAdapter(adapter);

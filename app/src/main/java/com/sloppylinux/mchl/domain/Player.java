@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -217,5 +218,14 @@ public class Player extends ResponseBase implements Comparable<Player>, Serializ
 
     public int getPims() {
         return 0;
+    }
+
+    /**
+     * Helper method to determine if the player info requires updating.
+     * @return True if we should query remotely for updated data
+     */
+    public boolean requiresUpdate()
+    {
+        return this.isExpired() || this.playerTeams.isEmpty();
     }
 }

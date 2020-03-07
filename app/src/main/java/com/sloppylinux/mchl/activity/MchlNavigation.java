@@ -1,5 +1,6 @@
 package com.sloppylinux.mchl.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
@@ -15,7 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
-import com.sloppylinux.mchl.gui.R;
+import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.util.Config;
 
 import org.apache.log4j.Logger;
@@ -61,8 +62,15 @@ public class MchlNavigation extends AppCompatActivity {
         {
             player = config.getPlayer();
 
-            if (player.isExpired(new Date().getTime()))
+            if (player == null)
             {
+                // TODO: Create separate Activity for initial setup
+//                Intent settings = new Intent(this.getBaseContext(), MchlNavigation.class);
+//                startActivity(settings);
+            }
+            else if (player.requiresUpdate())
+            {
+                logger.info("Player info is out of date.  Need to update!");
                 // TODO: Notify or automatic update
             }
         }
