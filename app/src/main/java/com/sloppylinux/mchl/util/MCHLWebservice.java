@@ -12,7 +12,6 @@ import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.TeamSchedule;
-import com.sloppylinux.mchl.domain.WSException;
 import com.sloppylinux.mchl.domain.sportspress.Event;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 import com.sloppylinux.mchl.domain.sportspress.TeamTable;

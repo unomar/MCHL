@@ -4,7 +4,6 @@ import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.TeamSchedule;
-import com.sloppylinux.mchl.domain.WSException;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 import com.sloppylinux.mchl.domain.sportspress.PlayerStatistic;
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
@@ -61,9 +60,9 @@ public class MCHLWebserviceTest
     }
 
     @Test
-    public void testGetSchedule() throws WSException
+    public void testGetSchedule()
     {
-        TeamSchedule teamSchedule = mchlWebservice.getSchedule(3283L, true);
+        TeamSchedule teamSchedule = mchlWebservice.getSchedule(3283L);
         assertNotNull("Team Schedule was null", teamSchedule);
         for (Game game : teamSchedule.getGames())
         {
@@ -72,9 +71,9 @@ public class MCHLWebserviceTest
     }
 
     @Test
-    public void testGetResults() throws WSException
+    public void testGetResults()
     {
-        TeamSchedule teamResults = mchlWebservice.getResults(3283L, true);
+        TeamSchedule teamResults = mchlWebservice.getResults(3283L);
         assertNotNull("Team Results was null", teamResults);
         for (Game game : teamResults.getGames())
         {
@@ -87,7 +86,7 @@ public class MCHLWebserviceTest
     @Test
     public void testGetTeam()
     {
-        Team team = mchlWebservice.getTeam(3283, null, true);
+        Team team = mchlWebservice.getTeam(3283);
         assertNotNull("Team was null", team);
         TeamTable teamTable = team.getTeamTable();
         for(Map.Entry<String,PlayerStatistic> entry : teamTable.getTableData().entrySet())
@@ -98,7 +97,7 @@ public class MCHLWebserviceTest
     }
 
     @Test
-    public void testGetStandings() throws WSException
+    public void testGetStandings()
     {
         LeagueTable leagueTable = mchlWebservice.getStandings(117, 115);
         assertNotNull("League table was null", leagueTable);
