@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_schedule" />
 
     <fragment
+        android:id="@+id/nav_results"
+        android:name="com.sloppylinux.mchl.ui.results.ResultsFragment"
+        android:label="@string/menu_results"
+        tools:layout="@layout/fragment_results" />
+
+    <fragment
         android:id="@+id/nav_standings"
         android:name="com.sloppylinux.mchl.ui.standings.StandingsFragment"
         android:label="@string/menu_standings"

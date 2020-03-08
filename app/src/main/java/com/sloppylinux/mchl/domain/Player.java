@@ -163,6 +163,16 @@ public class Player extends ResponseBase implements Comparable<Player>, Serializ
         return playerGames;
     }
 
+    public List<Game> getPlayerResultList() {
+        List<Game> playerResults = new ArrayList<>();
+        for (TeamSchedule teamSchedule : getPlayerResults()) {
+            playerResults.addAll(teamSchedule.getGames());
+        }
+        Collections.sort(playerResults);
+        Collections.reverse(playerResults);
+        return playerResults;
+    }
+
     /**
      * Get a players name separating first & last name by the specified separator
      *

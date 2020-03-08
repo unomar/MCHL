@@ -35,6 +35,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_schedule">Schedule</string>
+    <string name="menu_results">Results</string>
     <string name="menu_standings">Standings</string>
     <string name="menu_settings">Settings</string>
 
@@ -47,5 +48,7 @@
     <string name="gameDate">Sat 27 Mar 2020 7:30PM</string>
     <string name="homeTeam">HOME</string>
     <string name="awayTeam">AWAY</string>
+    <string name="upcoming_text">Upcoming Games</string>
+    <string name="previous_text">Recent Results</string>
 
 </resources>

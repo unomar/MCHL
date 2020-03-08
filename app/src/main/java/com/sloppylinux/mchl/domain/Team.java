@@ -331,6 +331,12 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
         return leagueId;
     }
 
+    public String getRecord()
+    {
+        String recordFormat = "%02d - %02d - %02d";
+        return String.format(recordFormat, wins, losses, ties);
+    }
+
     @Override
     public int compareTo(Team other)
     {
