@@ -24,6 +24,7 @@ import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.adapters.PlayerListAdapter;
 import com.sloppylinux.mchl.util.Config;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SettingsFragment extends Fragment {
@@ -71,8 +72,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<Player> players) {
                 playerSelectTextView.setText(R.string.select_player_text);
-                // TODO: Enable sorting.  Current comparator uses statistics which are not present (nor applicable) here
-//                Collections.sort(players);
+                Collections.sort(players);
                 PlayerListAdapter adapter = new PlayerListAdapter(players, getContext());
                 playerListView.setAdapter(adapter);
                 playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){

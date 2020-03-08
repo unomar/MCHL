@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -196,8 +195,14 @@ public class Player extends ResponseBase implements Comparable<Player>, Serializ
 
     @Override
     public int compareTo(Player other) {
-        // Reverse the sort order so we order from High to Low
-        return this.currentStats.compareTo(other.currentStats);
+        if (this.currentStats == null)
+        {
+            return this.getName().compareTo((other.getName()));
+        }
+        else {
+            // Reverse the sort order so we order from High to Low
+            return this.currentStats.compareTo(other.currentStats);
+        }
     }
 
 
