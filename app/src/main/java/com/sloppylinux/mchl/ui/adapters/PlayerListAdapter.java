@@ -1,4 +1,4 @@
-package com.sloppylinux.mchl.ui.schedule;
+package com.sloppylinux.mchl.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,27 +7,29 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.sloppylinux.mchl.domain.Game;
+import com.sloppylinux.mchl.domain.Player;
+import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.util.Utils;
 
 import java.util.List;
 
-public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickListener{
+public class PlayerListAdapter extends ArrayAdapter<Player> implements View.OnClickListener{
 
-    private List<Game> gameList;
+    private List<Player> playerList;
+    private String numberFormat = "#%d";
     Context mContext;
 
     // View lookup cache
     private static class ViewHolder {
-        TextView gameDate;
-        TextView gameLocation;
-        TextView homeTeam;
-        TextView awayTeam;
+        TextView playerName;
+        TextView playerNumber;
+        TextView playerTeams;
     }
 
-    public GameListAdapter(List<Game> data, Context context) {
-        super(context, R.layout.game_row, data);
-        this.gameList = data;
+    public PlayerListAdapter(List<Player> data, Context context) {
+        super(context, R.layout.player_row, data);
+        this.playerList = data;
         this.mContext = context;
     }
 
@@ -36,7 +38,7 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
 
         int position=(Integer) v.getTag();
         Object object= getItem(position);
-        Game game = (Game) object;
+        Player player = (Player) object;
 
         // Do Stuff
 //        switch (v.getId())
@@ -53,7 +55,7 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        Game gameModel = getItem(position);
+        Player playerModel = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 
@@ -63,11 +65,10 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.game_row, parent, false);
-            viewHolder.gameDate = convertView.findViewById(R.id.gameDate);
-            viewHolder.gameLocation = convertView.findViewById(R.id.gameLocation);
-            viewHolder.homeTeam = convertView.findViewById(R.id.homeTeam);
-            viewHolder.awayTeam = convertView.findViewById(R.id.awayTeam);
+            convertView = inflater.inflate(R.layout.player_lookup_row, parent, false);
+            viewHolder.playerName = convertView.findViewById(R.id.player_row_name);
+            viewHolder.playerNumber = convertView.findViewById(R.id.player_row_number);
+            viewHolder.playerTeams = convertView.findViewById(R.id.player_row_teams);
 
             result=convertView;
 
@@ -81,10 +82,19 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
 //        result.startAnimation(animation);
         lastPosition = position;
 
-        viewHolder.gameDate.setText(gameModel.getDateString());
-        viewHolder.gameLocation.setText(gameModel.getLocation());
-        viewHolder.homeTeam.setText(gameModel.getHomeFormatted(24));
-        viewHolder.awayTeam.setText(gameModel.getAwayFormatted(24));
+        viewHolder.playerName.setText(playerModel.getName());
+        Integer number = playerModel.getNumber();
+        if (number != null) {
+            viewHolder.playerNumber.setText(String.format(numberFormat, number));
+        }
+
+        String playerTeams = "";
+        for (Team team : playerModel.getPlayerTeams())
+        {
+            playerTeams += Utils.convertString(team.getName());
+        }
+        viewHolder.playerTeams.setText(playerTeams);
+
         // Return the completed view to render on screen
         return result;
     }

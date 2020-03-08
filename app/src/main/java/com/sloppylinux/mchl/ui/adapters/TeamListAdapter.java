@@ -1,4 +1,4 @@
-package com.sloppylinux.mchl.ui.home;
+package com.sloppylinux.mchl.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

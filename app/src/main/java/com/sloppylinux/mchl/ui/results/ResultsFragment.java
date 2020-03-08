@@ -8,15 +8,10 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
-import com.sloppylinux.mchl.ui.schedule.GameListAdapter;
+import com.sloppylinux.mchl.ui.adapters.GameListAdapter;
 import com.sloppylinux.mchl.util.Config;
-
-import java.util.List;
 
 public class ResultsFragment extends Fragment {
 

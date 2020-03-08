@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.sloppylinux.mchl.activity.MchlNavigation;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.ui.adapters.PlayerListAdapter;
 import com.sloppylinux.mchl.util.Config;
 
 import java.util.List;
@@ -70,8 +70,10 @@ public class SettingsFragment extends Fragment {
         settingsViewModel.getText(playerName).observe(this, new Observer<List<Player>>() {
             @Override
             public void onChanged(@Nullable List<Player> players) {
-                playerSelectTextView.setText("Select player from list:");
-                ArrayAdapter<Player> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, players);
+                playerSelectTextView.setText(R.string.select_player_text);
+                // TODO: Enable sorting.  Current comparator uses statistics which are not present (nor applicable) here
+//                Collections.sort(players);
+                PlayerListAdapter adapter = new PlayerListAdapter(players, getContext());
                 playerListView.setAdapter(adapter);
                 playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                     @Override

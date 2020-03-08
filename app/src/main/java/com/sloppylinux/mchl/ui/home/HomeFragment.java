@@ -5,16 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.sloppylinux.mchl.ui.R;
-import com.sloppylinux.mchl.ui.schedule.GameListAdapter;
+import com.sloppylinux.mchl.ui.adapters.GameListAdapter;
+import com.sloppylinux.mchl.ui.adapters.TeamListAdapter;
 import com.sloppylinux.mchl.util.Config;
 
 public class HomeFragment extends Fragment {

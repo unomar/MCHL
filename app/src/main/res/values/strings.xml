@@ -50,5 +50,6 @@
     <string name="awayTeam">AWAY</string>
     <string name="upcoming_text">Upcoming Games</string>
     <string name="previous_text">Recent Results</string>
+    <string name="select_player_text">Select player from list:</string>
 
 </resources>

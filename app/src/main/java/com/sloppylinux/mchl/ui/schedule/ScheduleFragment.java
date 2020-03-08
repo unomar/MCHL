@@ -13,9 +13,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.ui.adapters.GameListAdapter;
 import com.sloppylinux.mchl.util.Config;
 
-import java.util.Date;
 import java.util.List;
 
 public class ScheduleFragment extends Fragment {
