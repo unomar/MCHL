@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,8 @@ public class SettingsFragment extends Fragment {
 
     private ListView playerListView;
 
+    private ProgressBar spinner;
+
     private Config config;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -48,6 +51,8 @@ public class SettingsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
         playerSelectTextView = root.findViewById(R.id.player_select_text);
+        spinner=(ProgressBar)root.findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
         EditText editText = root.findViewById(R.id.nameEntry);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -67,10 +72,11 @@ public class SettingsFragment extends Fragment {
 
     public void playerSearch(String playerName)
     {
-
+        spinner.setVisibility(View.VISIBLE);
         settingsViewModel.getText(playerName).observe(this, new Observer<List<Player>>() {
             @Override
             public void onChanged(@Nullable List<Player> players) {
+                spinner.setVisibility(View.GONE);
                 playerSelectTextView.setText(R.string.select_player_text);
                 Collections.sort(players);
                 PlayerListAdapter adapter = new PlayerListAdapter(players, getContext());
@@ -78,12 +84,12 @@ public class SettingsFragment extends Fragment {
                 playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                     @Override
                     public void onItemClick(AdapterView<?>adapter,View v, int pos, long position){
-                        // TODO: Display loading dialog
+                        spinner.setVisibility(View.VISIBLE);
                         Player player = (Player)adapter.getItemAtPosition(pos);
                         settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>() {
                             @Override
                             public void onChanged(String s) {
-                                // TODO: Clear loading dialog
+                                spinner.setVisibility(View.GONE);
                                 Intent home = new Intent(getContext(), MchlNavigation.class);
                                 startActivity(home);
                             }

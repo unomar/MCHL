@@ -78,8 +78,6 @@ public class PlayerListAdapter extends ArrayAdapter<Player> implements View.OnCl
             result=convertView;
         }
 
-//        Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-//        result.startAnimation(animation);
         lastPosition = position;
 
         viewHolder.playerName.setText(playerModel.getName());
