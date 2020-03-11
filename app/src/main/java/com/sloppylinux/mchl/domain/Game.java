@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.sloppylinux.mchl.util.Utils.getFormatted;
-
 public class Game extends Expirable implements Comparable<Game>, Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -162,6 +160,20 @@ public class Game extends Expirable implements Comparable<Game>, Serializable
     public String getShortDateString()
     {
         return shortDateFormat.format(date);
+    }
+
+    /**
+     * Checks if the game has occurred or is in the future.
+     * @return True if the game time is in the future
+     */
+    public boolean isInFuture()
+    {
+        boolean isFuture = true;
+        if (this.date != null)
+        {
+            isFuture = this.date.after(new Date());
+        }
+        return isFuture;
     }
 
     @Override
