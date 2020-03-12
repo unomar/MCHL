@@ -1,5 +1,7 @@
 package com.sloppylinux.mchl.domain;
 
+import android.util.Log;
+
 import com.sloppylinux.mchl.util.Utils;
 
 import java.io.Serializable;
@@ -26,6 +28,7 @@ public class Game extends Expirable implements Comparable<Game>, Serializable
     private int awayScore = 0;
     private String location;
     private Date date;
+    private Result result;
 
     public Game(String home, String away, Date date, int homeScore, int awayScore, String location)
     {
@@ -186,5 +189,39 @@ public class Game extends Expirable implements Comparable<Game>, Serializable
     public String toString()
     {
         return this.home + " vs " + this.away;
+    }
+
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
+    public enum Result {
+        Win("win"),
+        Loss("loss"),
+        Tie("tie");
+
+        private String resultStr;
+
+        Result(String resultStr)
+        {
+            this.resultStr = resultStr;
+        }
+
+        public static Result fromString(String resultStr)
+        {
+            for (Result result : Result.values())
+            {
+                if (result.resultStr.equals(resultStr))
+                {
+                    return result;
+                }
+            }
+            Log.e("MCHL Result Parser", "Unable to determine result from string [" + resultStr + "]");
+            return Result.Tie;
+        }
     }
 }

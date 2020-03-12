@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Event extends ResponseBase
 {
@@ -17,6 +18,8 @@ public class Event extends ResponseBase
     private Date eventDate;
     @SerializedName("status")
     private String status;
+    @SerializedName("outcome")
+    private Map<Long,String> outcome;
 
     public Event()
     {
@@ -71,5 +74,13 @@ public class Event extends ResponseBase
     public void setResults(List<String> results)
     {
         this.results = results;
+    }
+
+    public Map<Long, String> getOutcome() {
+        return outcome;
+    }
+
+    public void setOutcome(Map<Long, String> outcome) {
+        this.outcome = outcome;
     }
 }

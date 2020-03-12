@@ -1,6 +1,7 @@
 package com.sloppylinux.mchl.ui.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import com.sloppylinux.mchl.ui.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
 import java.util.List;
 
 public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickListener {
@@ -27,8 +27,7 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
         TextView gameLocation;
         TextView homeTeam;
         TextView awayTeam;
-        TextView homeScore;
-        TextView awayScore;
+        TextView vsScore;
     }
 
     public GameListAdapter(List<Game> data, Context context) {
@@ -60,20 +59,13 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 
-        final View result;
-
-        if (gameModel != null && gameModel.isInFuture()) {
-            result = getScheduleView(position, convertView, parent, gameModel);
-        } else {
-            // null gameModel is handled in getResult view
-            result = getResultView(position, convertView, parent, gameModel);
-        }
+        final View result = getGameView(position, convertView, parent, gameModel);
         // Return the completed view to render on screen
         return result;
     }
 
     @NotNull
-    private View getScheduleView(int position, View convertView, ViewGroup parent, Game gameModel) {
+    private View getGameView(int position, View convertView, ViewGroup parent, Game gameModel) {
         ViewHolder viewHolder;
         View result;
         if (convertView == null) {
@@ -85,6 +77,7 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
             viewHolder.gameLocation = convertView.findViewById(R.id.scheduleGameLocation);
             viewHolder.homeTeam = convertView.findViewById(R.id.scheduleHomeTeam);
             viewHolder.awayTeam = convertView.findViewById(R.id.scheduleAwayTeam);
+            viewHolder.vsScore = convertView.findViewById(R.id.vsScore);
 
             result = convertView;
 
@@ -101,48 +94,26 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
             viewHolder.gameLocation.setText(gameModel.getLocation());
             viewHolder.homeTeam.setText(gameModel.getHomeFormatted(24));
             viewHolder.awayTeam.setText(gameModel.getAwayFormatted(24));
-        }
-        return result;
-    }
 
-    @NotNull
-    private View getResultView(int position, View convertView, ViewGroup parent, Game gameModel) {
-        ViewHolder viewHolder;
-        View result;
-        if (convertView == null) {
+            if (!gameModel.isInFuture())
+            {
+                viewHolder.vsScore.setText(String.format("%d - %d", gameModel.getHomeScore(), gameModel.getAwayScore()));
+                Drawable scoreWidgit = getContext().getDrawable(R.drawable.score_widget);
+                viewHolder.vsScore.setBackground(scoreWidgit);
 
-            viewHolder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.result_game_row, parent, false);
-            viewHolder.gameDate = convertView.findViewById(R.id.resultGameDate);
-            viewHolder.homeTeam = convertView.findViewById(R.id.resultHomeTeam);
-            viewHolder.awayTeam = convertView.findViewById(R.id.resultAwayTeam);
-            viewHolder.homeScore = convertView.findViewById(R.id.resultHomeScore);
-            viewHolder.awayScore = convertView.findViewById(R.id.resultAwayScore);
-
-            result = convertView;
-
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-            result = convertView;
-        }
-
-        lastPosition = position;
-
-        if (gameModel != null) {
-            viewHolder.gameDate.setText(gameModel.getDateString());
-            viewHolder.homeTeam.setText(gameModel.getHome());
-            viewHolder.awayTeam.setText(gameModel.getAway());
-
-            if (gameModel.getDate().after(new Date())) {
-                viewHolder.homeScore.setVisibility(View.GONE);
-                viewHolder.awayScore.setVisibility(View.GONE);
-            } else {
-                viewHolder.homeScore.setVisibility(View.VISIBLE);
-                viewHolder.awayScore.setVisibility(View.VISIBLE);
-                viewHolder.homeScore.setText(String.format("%d", gameModel.getHomeScore()));
-                viewHolder.awayScore.setText(String.format("%d", gameModel.getAwayScore()));
+                if (gameModel.getResult() != null) {
+                    switch (gameModel.getResult()) {
+                        case Win:
+                            scoreWidgit.setTint(getContext().getResources().getColor(R.color.winColor));
+                            break;
+                        case Loss:
+                            scoreWidgit.setTint(getContext().getResources().getColor(R.color.lossColor));
+                            break;
+                        default:
+                            scoreWidgit.setTint(getContext().getResources().getColor(R.color.tieColor));
+                            break;
+                    }
+                }
             }
         }
         return result;

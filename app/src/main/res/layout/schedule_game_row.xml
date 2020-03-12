@@ -52,7 +52,7 @@ android:orientation="vertical">
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"/>
         <TextView
-            android:id="@+id/vs"
+            android:id="@+id/vsScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/vs"

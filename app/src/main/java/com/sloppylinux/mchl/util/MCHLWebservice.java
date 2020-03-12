@@ -268,7 +268,7 @@ public class MCHLWebservice
             if (teamResponse != null && teamResponse.body() != null)
             {
                 Team team = teamResponse.body();
-                LOG.info("Querying schedule for team: " + team.getName());
+                LOG.info("Querying results for team: " + team.getName());
                 Call<List<Event>> eventCall = mchlService.listTeamResults(team.getName(), team.getCurrentSeason(), team.getCurrentLeague(), getIso8601Date(null));
                 Response<List<Event>> eventResponses = eventCall.execute();
                 List<Event> events = eventResponses.body();
@@ -291,6 +291,7 @@ public class MCHLWebservice
                             }
 
                             Game game = new Game(teamNames[0], teamNames[1], event.getEventDate(), homeScore, awayScore, venueName);
+                            game.setResult(Game.Result.fromString(event.getOutcome().get(teamId)));
                             teamSchedule.getGames().add(game);
                         }
                     }

@@ -9,4 +9,8 @@
         <color name="colorPrimary">#FF656565</color>
     <color name="colorPrimaryDark">#FF232323</color>
     <color name="colorAccent">#FF990000</color>
+
+    <color name="winColor">#FF007700</color>
+    <color name="lossColor">#FF990000</color>
+    <color name="tieColor">#FF565656</color>
 </resources>
