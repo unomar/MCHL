@@ -1,4 +1,4 @@
-package com.sloppylinux.mchl.ui.adapters;
+package com.sloppylinux.mchl.ui.common.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.ui.R;
 

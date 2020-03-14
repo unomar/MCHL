@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.sloppylinux.mchl.activity.MchlNavigation;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.ui.R;
-import com.sloppylinux.mchl.ui.adapters.PlayerListAdapter;
+import com.sloppylinux.mchl.ui.common.adapters.PlayerListAdapter;
 import com.sloppylinux.mchl.util.Config;
 
 import java.util.Collections;

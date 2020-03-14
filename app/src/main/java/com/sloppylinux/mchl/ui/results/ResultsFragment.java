@@ -7,13 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.sloppylinux.mchl.ui.R;
-import com.sloppylinux.mchl.ui.adapters.GameListAdapter;
+import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
+import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
 import com.sloppylinux.mchl.util.Config;
 
-public class ResultsFragment extends Fragment {
+public class ResultsFragment extends RefreshFragment
+{
+    private GameListAdapter adapter;
 
     private ListView resultListView;
 
@@ -21,6 +24,7 @@ public class ResultsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         if (config == null) {
             config = new Config(this.getContext());
         }
@@ -29,16 +33,23 @@ public class ResultsFragment extends Fragment {
 
         resultListView = root.findViewById(R.id.resultList);
 
+        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.resultRefreshView);
+        super.setup(refreshLayout);
+
         if (config.getPlayer() != null)
         {
-            GameListAdapter adapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
+            adapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
             resultListView.setAdapter(adapter);
         }
 
-        else {
-
-        }
-
         return root;
+    }
+
+    @Override
+    public void refreshView()
+    {
+        adapter.clear();
+        adapter.addAll(config.getPlayer().getPlayerResultList());
+        adapter.notifyDataSetChanged();
     }
 }

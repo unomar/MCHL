@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.ui.R;
-import com.sloppylinux.mchl.ui.adapters.GameListAdapter;
-import com.sloppylinux.mchl.ui.adapters.TeamListAdapter;
+import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
+import com.sloppylinux.mchl.ui.common.adapters.TeamListAdapter;
 import com.sloppylinux.mchl.ui.settings.SettingsViewModel;
 import com.sloppylinux.mchl.util.Config;
 

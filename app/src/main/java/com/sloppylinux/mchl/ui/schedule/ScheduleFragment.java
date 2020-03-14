@@ -7,18 +7,16 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
-import com.sloppylinux.mchl.ui.adapters.GameListAdapter;
+import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
+import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
 import com.sloppylinux.mchl.util.Config;
 
-import java.util.List;
-
-public class ScheduleFragment extends Fragment {
+public class ScheduleFragment extends RefreshFragment
+{
+    private GameListAdapter adapter;
 
     private ListView scheduleListView;
 
@@ -30,30 +28,28 @@ public class ScheduleFragment extends Fragment {
             config = new Config(this.getContext());
         }
 
-        ScheduleViewModel scheduleViewModel =
-                new ViewModelProvider(this).get(ScheduleViewModel.class);
-
         View root = inflater.inflate(R.layout.fragment_schedule, container, false);
 
         scheduleListView = root.findViewById(R.id.scheduleList);
 
-        if (config.getPlayer() != null && !config.getPlayer().isExpired())
+        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.scheduleRefreshView);
+        super.setup(refreshLayout);
+
+        if (config.getPlayer() != null)
         {
-            GameListAdapter adapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
+            adapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
             scheduleListView.setAdapter(adapter);
-        }
-
-        else {
-            scheduleViewModel.getTeamScheduleData(config.getPlayer()).observe(getViewLifecycleOwner(), new Observer<List<Game>>() {
-                @Override
-                public void onChanged(List<Game> gameList) {
-
-                    GameListAdapter adapter = new GameListAdapter(gameList, getContext());
-                    scheduleListView.setAdapter(adapter);
-                }
-            });
         }
 
         return root;
     }
+
+    @Override
+    public void refreshView()
+    {
+        adapter.clear();
+        adapter.addAll(config.getPlayer().getPlayerGameList());
+        adapter.notifyDataSetChanged();
+    }
+
 }
