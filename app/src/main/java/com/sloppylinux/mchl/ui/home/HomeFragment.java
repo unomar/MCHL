@@ -20,9 +20,6 @@ import com.sloppylinux.mchl.ui.settings.SettingsViewModel;
 import com.sloppylinux.mchl.util.Config;
 
 public class HomeFragment extends Fragment {
-
-    private HomeViewModel homeViewModel;
-
     private SettingsViewModel settingsViewModel;
 
     private ProgressBar spinner;
@@ -39,8 +36,6 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         config = new Config(getContext());
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         settingsViewModel =
@@ -71,6 +66,10 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Update player info.
+     * @param player The player to update
+     */
     private void updatePlayerInfo(Player player)
     {
         spinner.setVisibility(View.VISIBLE);

@@ -69,4 +69,14 @@ public abstract class ResponseBase extends Expirable
     {
         return this.title == null ? "" : this.title.getRendered();
     }
+
+    protected int parseInt(String string)
+    {
+        int intVal = 0;
+        if (string != null)
+        {
+            intVal = Integer.parseInt(string);
+        }
+        return intVal;
+    }
 }

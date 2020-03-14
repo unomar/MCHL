@@ -112,10 +112,10 @@ public class MCHLWebservice
             for (Long teamId : player.getCurrentTeams())
             {
                 Team team = getTeam(teamId);
+                team.setLeagueTable(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
                 player.getPlayerTeams().add(team);
                 player.getPlayerSchedule().add(this.getSchedule(teamId));
                 player.getPlayerResults().add(this.getResults(teamId));
-                player.getLeagueTables().add(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
             }
 
             player.setExpiration(new Date().getTime() + timeToLive);

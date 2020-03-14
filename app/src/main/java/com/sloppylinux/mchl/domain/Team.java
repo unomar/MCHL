@@ -1,7 +1,10 @@
 package com.sloppylinux.mchl.domain;
 
 import com.google.gson.annotations.SerializedName;
+import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
+import com.sloppylinux.mchl.domain.sportspress.PlayerStatistic;
 import com.sloppylinux.mchl.domain.sportspress.ResponseBase;
+import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
 import com.sloppylinux.mchl.domain.sportspress.TeamTable;
 
 import java.io.Serializable;
@@ -29,6 +32,10 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
     private List<Long> listIds;
 
     private TeamTable teamTable;
+
+    private TeamStatistic teamStatistic;
+
+    private LeagueTable leagueTable;
     // Stats
     private int gamesPlayed;
     private int wins;
@@ -309,6 +316,10 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
     public void setTeamTable(TeamTable teamTable)
     {
         this.teamTable = teamTable;
+        if (teamTable != null)
+        {
+            PlayerStatistic teamData = teamTable.getTableData().get(String.valueOf(this.getId()));
+        }
     }
 
     public long getCurrentSeason()
@@ -337,6 +348,19 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
         return String.format(recordFormat, wins, losses, ties);
     }
 
+    public TeamStatistic getTeamStatistic()
+    {
+        return teamStatistic;
+    }
+
+    public void setTeamStatistic(TeamStatistic teamStatistic)
+    {
+        this.teamStatistic = teamStatistic;
+        this.wins = parseInt(teamStatistic.getWins());
+        this.losses = parseInt(teamStatistic.getLosses());
+        this.ties = parseInt(teamStatistic.getTies());
+    }
+
     @Override
     public int compareTo(Team other)
     {
@@ -358,5 +382,19 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
     public String toString()
     {
         return this.getTitle() != null ? this.getTitle().getRendered() : super.toString();
+    }
+
+    public LeagueTable getLeagueTable()
+    {
+        return leagueTable;
+    }
+
+    public void setLeagueTable(LeagueTable leagueTable)
+    {
+        this.leagueTable = leagueTable;
+        if (leagueTable != null)
+        {
+            this.setTeamStatistic(leagueTable.getTableData().get(String.valueOf(this.getId())));
+        }
     }
 }
