@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TableLayout
+        android:id="@+id/StandingsTab"
+        style="@style/TableBorders"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+
+        <TableRow android:layout_width="fill_parent">
+
+            <TextView
+                android:id="@+id/standingsTeamName"
+                style="@style/CodeFont.Table.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="1px"
+                android:layout_weight=".5"
+                android:background="@color/black"
+                android:text="Team Name" />
+
+            <TextView
+                android:id="@+id/standingsGamesPlayed"
+                style="@style/CodeFont.Table.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".07"
+                android:text="@string/gamesPlayedHeader" />
+
+            <TextView
+				android:id="@+id/standingsWins"
+                style="@style/CodeFont.Table.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".07"
+                android:text="@string/winHeader" />
+
+            <TextView
+				android:id="@+id/standingsLosses"
+                style="@style/CodeFont.Table.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".07"
+                android:text="@string/lossHeader" />
+
+            <TextView
+				android:id="@+id/standingsTies"
+                style="@style/CodeFont.Table.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".07"
+                android:text="@string/tieHeader" />
+
+            <TextView
+				android:id="@+id/standingsPoints"
+                style="@style/CodeFont.Table.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".07"
+                android:text="@string/pointsHeader" />
+
+            <TextView
+				android:id="@+id/standingsGoalsFor"
+                style="@style/CodeFont.Table.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".07"
+                android:text="@string/goalsForHeader" />
+
+            <TextView
+				android:id="@+id/standingsGoalsAgainst"
+                style="@style/CodeFont.Table.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".07"
+                android:text="@string/goalsAgainstHeader" />
+        </TableRow>
+    </TableLayout>
+</ScrollView>

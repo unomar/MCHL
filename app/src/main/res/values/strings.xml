@@ -42,7 +42,7 @@
     <string name="player_search_header">Player Lookup</string>
     <string name="player_search_input">Enter Name</string>
 
-    <!-- Game_Row.xml strings -->
+    <!-- Game Row strings -->
     <string name="vs">vs</string>
     <string name="gameLocation">Motto Mclean Ice Arena</string>
     <string name="gameDate">Sat 27 Mar 2020 7:30PM</string>
@@ -51,5 +51,14 @@
     <string name="upcoming_text">Upcoming Games</string>
     <string name="previous_text">Recent Results</string>
     <string name="select_player_text">Select player from list:</string>
+
+    <!-- Standings Row strings -->
+    <string name="gamesPlayedHeader">GP</string>
+    <string name="winHeader">W</string>
+    <string name="lossHeader">L</string>
+    <string name="tieHeader">T</string>
+    <string name="pointsHeader">P</string>
+    <string name="goalsForHeader">GF</string>
+    <string name="goalsAgainstHeader">GA</string>
 
 </resources>

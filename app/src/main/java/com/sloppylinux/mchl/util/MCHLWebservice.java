@@ -14,6 +14,7 @@ import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.domain.sportspress.Event;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
+import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
 import com.sloppylinux.mchl.domain.sportspress.TeamTable;
 import com.sloppylinux.mchl.domain.sportspress.Venue;
 
@@ -22,8 +23,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import retrofit2.Call;
@@ -111,11 +114,12 @@ public class MCHLWebservice
             player.clear();
             for (Long teamId : player.getCurrentTeams())
             {
-                Team team = getTeam(teamId);
+                Team team = this.getTeam(teamId);
                 team.setLeagueTable(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
                 player.getPlayerTeams().add(team);
                 player.getPlayerSchedule().add(this.getSchedule(teamId));
                 player.getPlayerResults().add(this.getResults(teamId));
+//                List<Team> leagueStandings = convertStandings(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
             }
 
             player.setExpiration(new Date().getTime() + timeToLive);
@@ -123,6 +127,33 @@ public class MCHLWebservice
             config.setPlayer(player);
             config.storeValues();
         }
+    }
+
+    /**
+     * Convert LeagueTable into a list of
+     * @param standings
+     * @return
+     */
+    private List<Team> convertStandings(LeagueTable standings)
+    {
+        List<Team> teamList = new ArrayList<>();
+        for (Map.Entry<String, TeamStatistic> entry : standings.getTableData().entrySet())
+        {
+            String teamName = entry.getKey();
+            TeamStatistic stats = entry.getValue();
+            Team team = new Team(teamName);
+            team.setGamesPlayed(safeParseInt(stats.getGamesPlayed()));
+            team.setWins(safeParseInt(stats.getWins()));
+            team.setLosses(safeParseInt(stats.getLosses()));
+            team.setTies(safeParseInt(stats.getTies()));
+            team.setPoints(safeParseInt(stats.getPoints()));
+            team.setGoalsFor(safeParseInt(stats.getGoalsFor()));
+            team.setGoalsAgainst(safeParseInt(stats.getGoalsAgainst()));
+
+            teamList.add(team);
+        }
+
+        return teamList;
     }
 
     /**
