@@ -3,11 +3,15 @@ package com.sloppylinux.mchl.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,6 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.ui.settings.SettingsViewModel;
 import com.sloppylinux.mchl.util.Config;
 
 import org.apache.log4j.Logger;
@@ -43,12 +48,10 @@ public class MchlNavigation extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-
-
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_schedule, R.id.nav_standings,
+                R.id.nav_home, R.id.nav_schedule, R.id.nav_standings, R.id.nav_results,
                 R.id.nav_settings)
                 .setDrawerLayout(drawer)
                 .build();
@@ -66,11 +69,6 @@ public class MchlNavigation extends AppCompatActivity {
             {
                 Intent settings = new Intent(this.getBaseContext(), InitialSetup.class);
                 startActivity(settings);
-            }
-            else if (player.requiresUpdate())
-            {
-                logger.info("Player info is out of date.  Need to update!");
-                // TODO: Notify or automatic update
             }
         }
     }
@@ -104,10 +102,4 @@ public class MchlNavigation extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
-    /**
-     * Get the Shared config
-     * @return The config
-     */
-    public Config getConfig() { return this.config;}
 }

@@ -108,6 +108,7 @@ public class MCHLWebservice
     {
         if (player != null && player.requiresUpdate())
         {
+            player.clear();
             for (Long teamId : player.getCurrentTeams())
             {
                 Team team = getTeam(teamId);

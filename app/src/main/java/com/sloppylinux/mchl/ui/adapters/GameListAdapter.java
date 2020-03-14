@@ -1,6 +1,7 @@
 package com.sloppylinux.mchl.ui.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,6 +98,7 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
 
             if (!gameModel.isInFuture())
             {
+                viewHolder.vsScore.setTypeface(null, Typeface.BOLD);
                 viewHolder.vsScore.setText(String.format("%d - %d", gameModel.getHomeScore(), gameModel.getAwayScore()));
                 Drawable scoreWidgit = getContext().getDrawable(R.drawable.score_widget);
                 viewHolder.vsScore.setBackground(scoreWidgit);

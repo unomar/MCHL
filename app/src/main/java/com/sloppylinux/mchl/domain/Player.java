@@ -243,4 +243,27 @@ public class Player extends ResponseBase implements Comparable<Player>, Serializ
     {
         return this.isExpired() || this.playerTeams.isEmpty();
     }
+
+    public void clear()
+    {
+        clearList(this.teams);
+        clearList(this.playerResults);
+        clearList(this.playerSchedule);
+        clearList(this.leagueTables);
+        clearList(this.playerResults);
+        clearList(this.playerSchedule);
+        clearList(this.playerTeams);
+    }
+
+    /**
+     * Null-Safe clear operation
+     * @param list The list to clear
+     */
+    private void clearList(List list)
+    {
+        if (list != null)
+        {
+            list.clear();
+        }
+    }
 }
