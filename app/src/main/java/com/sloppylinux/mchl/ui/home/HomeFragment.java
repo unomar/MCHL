@@ -47,20 +47,20 @@ public class HomeFragment extends Fragment {
         scheduleListView = root.findViewById(R.id.homepage_schedule_list);
         resultListView = root.findViewById(R.id.homepage_result_list);
 
-        if (config.getPlayer().requiresUpdate())
+        if (config.getPlayer() != null)
         {
-            updatePlayerInfo(config.getPlayer());
-        }
-        else
-        {
-            TeamListAdapter teamAdapter = new TeamListAdapter(config.getPlayer().getPlayerTeams(), getContext());
-            teamListView.setAdapter(teamAdapter);
+            if (config.getPlayer().requiresUpdate()) {
+                updatePlayerInfo(config.getPlayer());
+            } else {
+                TeamListAdapter teamAdapter = new TeamListAdapter(config.getPlayer().getPlayerTeams(), getContext());
+                teamListView.setAdapter(teamAdapter);
 
-            GameListAdapter scheduleAdapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
-            scheduleListView.setAdapter(scheduleAdapter);
+                GameListAdapter scheduleAdapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
+                scheduleListView.setAdapter(scheduleAdapter);
 
-            GameListAdapter resultAdapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
-            resultListView.setAdapter(resultAdapter);
+                GameListAdapter resultAdapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
+                resultListView.setAdapter(resultAdapter);
+            }
         }
 
         return root;

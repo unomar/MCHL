@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
 import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.util.Config;
+import com.sloppylinux.mchl.util.Utils;
 
 import java.util.List;
 
@@ -16,7 +18,8 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
 {
 
     private List<TeamStatistic> teamList;
-    Context mContext;
+    private Context mContext;
+    private Config config;
 
     private int lastPosition = -1;
 
@@ -38,6 +41,7 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
         super(context, R.layout.standings_row, data);
         this.teamList = data;
         this.mContext = context;
+        this.config = new Config(mContext);
     }
 
 
@@ -73,7 +77,8 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
         }
         lastPosition = position;
 
-        viewHolder.teamName.setText(teamModel.getName());
+        // TODO: highlight row if our team
+        viewHolder.teamName.setText(Utils.getFormatted(teamModel.getName(), 24));
         viewHolder.teamGamesPlayed.setText(teamModel.getGamesPlayed());
         viewHolder.teamWins.setText(teamModel.getWins());
         viewHolder.teamLosses.setText(teamModel.getLosses());

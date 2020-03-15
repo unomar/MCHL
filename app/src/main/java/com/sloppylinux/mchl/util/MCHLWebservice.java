@@ -13,6 +13,7 @@ import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.domain.sportspress.Event;
+import com.sloppylinux.mchl.domain.sportspress.League;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 import com.sloppylinux.mchl.domain.sportspress.TeamTable;
 import com.sloppylinux.mchl.domain.sportspress.Venue;
@@ -22,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -38,6 +40,7 @@ public class MCHLWebservice
      */
     private static final String SOAP_ACTION = "https://ourmchl.com/wp-json/sportspress/v2/";
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss";
+    public static final String ALL_STARS = "all-stars";
 
     private static List<Venue> venues = null;
     private final Logger LOG = Logger.getLogger(MCHLWebservice.class.getName());
@@ -104,25 +107,56 @@ public class MCHLWebservice
      * @param player The player to fetch
      * @param context The application context
      */
-    public void fetchLatestPlayerInfo(Player player, Context context)
+    public void updateConfig(Player player, Context context)
     {
         if (player != null && player.requiresUpdate())
         {
-            player.clear();
-            for (Long teamId : player.getCurrentTeams())
-            {
-                Team team = this.getTeam(teamId);
-                team.setLeagueTable(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
-                player.getPlayerTeams().add(team);
-                player.getPlayerSchedule().add(this.getSchedule(teamId));
-                player.getPlayerResults().add(this.getResults(teamId));
-            }
+            player = fetchPlayer(player);
+
+            List<LeagueTable> leagueTables = fetchLatestLeagueTables(117L, context);
 
             player.setExpiration(new Date().getTime() + timeToLive);
             Config config = new Config(context);
             config.setPlayer(player);
+            config.setLeagueTables(leagueTables);
             config.storeValues();
         }
+    }
+
+    private Player fetchPlayer(Player player)
+    {
+        player.clear();
+        for (Long teamId : player.getCurrentTeams())
+        {
+            Team team = this.getTeam(teamId);
+            team.setLeagueTable(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
+            player.getPlayerTeams().add(team);
+            player.getPlayerSchedule().add(this.getSchedule(teamId));
+            player.getPlayerResults().add(this.getResults(teamId));
+        }
+
+        return player;
+    }
+
+    /**
+     * Fetch and persist league tables
+     * @param context The application context
+     */
+    public List<LeagueTable> fetchLatestLeagueTables(long seasonId, Context context)
+    {
+        List<LeagueTable> leagueTables = new ArrayList<>();
+        for (League league : this.getLeagues())
+        {
+            // Ignore All-Star standings
+            if (!ALL_STARS.equals(league.getSlug())) {
+                LeagueTable standings = getStandings(seasonId, league.getId());
+                standings.setName(league.getName());
+                standings.setExpiration(new Date().getTime() + timeToLive);
+                leagueTables.add(standings);
+            }
+        }
+
+        return leagueTables;
     }
 
     /**
@@ -352,6 +386,25 @@ public class MCHLWebservice
                 LOG.warning("Caught exception querying team schedule." + e.getMessage());
             }
         }
+    }
+
+    /**
+     * Get the list of leagues.
+     * @return A list of Leagues
+     */
+    private List<League> getLeagues()
+    {
+        List<League> leagues = new ArrayList<>();
+        Call<List<League>> leagueCall = mchlService.getLeagues();
+        try {
+            Response<List<League>> venueResponse = leagueCall.execute();
+            if (venueResponse != null) {
+                leagues.addAll(venueResponse.body());
+            }
+        } catch (IOException e) {
+            LOG.warning("Caught exception querying team schedule." + e.getMessage());
+        }
+        return leagues;
     }
 
     /**

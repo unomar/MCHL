@@ -3,6 +3,7 @@ package com.sloppylinux.mchl.util;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.sportspress.Event;
+import com.sloppylinux.mchl.domain.sportspress.League;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 import com.sloppylinux.mchl.domain.sportspress.TeamTable;
 import com.sloppylinux.mchl.domain.sportspress.Venue;
@@ -48,4 +49,7 @@ public interface MCHLService
 
     @GET("tables")
     Call<List<LeagueTable>> getLeagueTable(@Query("seasons") Long seasonId, @Query("leagues") Long leagueId);
+
+    @GET("leagues")
+    Call<List<League>> getLeagues();
 }

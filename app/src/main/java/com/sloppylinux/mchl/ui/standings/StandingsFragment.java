@@ -4,64 +4,52 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
 
-import com.sloppylinux.mchl.domain.Team;
-import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
+import com.google.android.material.tabs.TabLayout;
 import com.sloppylinux.mchl.ui.R;
-import com.sloppylinux.mchl.ui.common.adapters.TeamStatisticListAdapter;
 import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.sloppylinux.mchl.util.Config;
 
 public class StandingsFragment extends RefreshFragment
 {
-    private TeamStatisticListAdapter adapter;
+    private ViewPager viewPager;
 
-    private ListView standingsListView;
+    private StandingsPagerAdapter standingsPagerAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_standings, container, false);
-
-        standingsListView = root.findViewById(R.id.standingsList);
-
-        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.standingsRefreshView);
-        super.setup(refreshLayout);
-
-        if (config.getPlayer() != null)
-        {
-            List<TeamStatistic> stats = getTeamStatistics();
-            adapter = new TeamStatisticListAdapter(stats, getContext());
-            standingsListView.setAdapter(adapter);
-        }
 
         return root;
     }
 
-    @NotNull
-    private List<TeamStatistic> getTeamStatistics()
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
-        Team playerTeam = config.getPlayer().getPlayerTeams().get(0);
-        List<TeamStatistic> stats = new ArrayList<>();
-        playerTeam.getLeagueTable().getTableData().forEach((k,v)->{
-            stats.add(v);
-        });
-        return stats;
+        Config config = new Config(getContext());
+        if (config.getLeagueTables() != null)
+        {
+            standingsPagerAdapter = new StandingsPagerAdapter(config.getLeagueTables(), getChildFragmentManager());
+            viewPager = view.findViewById(R.id.standings_pager);
+            viewPager.setAdapter(standingsPagerAdapter);
+
+            TabLayout tabLayout = view.findViewById(R.id.tab_layout);
+            tabLayout.setupWithViewPager(viewPager);
+        }
     }
 
     @Override
     public void refreshView()
     {
-        adapter.clear();
-        adapter.addAll(getTeamStatistics());
-        adapter.notifyDataSetChanged();
+//        adapter.clear();
+//        adapter.addAll(config.getPlayer().getPlayerTeams());
+//        adapter.notifyDataSetChanged();
     }
 }
+
+

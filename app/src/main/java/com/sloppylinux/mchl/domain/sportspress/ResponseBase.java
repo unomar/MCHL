@@ -70,6 +70,15 @@ public abstract class ResponseBase extends Expirable
         return this.title == null ? "" : this.title.getRendered();
     }
 
+    public void setName(String name)
+    {
+        if (this.title == null)
+        {
+            this.title  = new Title();
+        }
+        title.setRendered(name);
+    }
+
     protected int parseInt(String string)
     {
         int intVal = 0;

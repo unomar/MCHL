@@ -1,24 +1,22 @@
 package com.sloppylinux.mchl.util;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sloppylinux.mchl.domain.Player;
-import com.sloppylinux.mchl.domain.Team;
-import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 public class Config
 {
-    private static final String CONFIG_FILE = "mchl.properties";
     public static final String PLAYER_JSON = "PlayerJSON";
+    private static final String TABLES_JSON = "TablesJSON";
     final String tag = "MCHL Config";
 
     private SharedPreferences pref;
@@ -28,6 +26,8 @@ public class Config
     private Context context;
 
     private Player player;
+
+    private List<LeagueTable> leagueTables;
 
     public Config(Context context)
     {
@@ -51,8 +51,10 @@ public class Config
         Gson gson = new Gson();
 
         String playerJson = gson.toJson(player);
+        String tablesJson = gson.toJson(leagueTables);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(PLAYER_JSON, playerJson);
+        editor.putString(TABLES_JSON, tablesJson);
         editor.apply();
 
         return true;
@@ -68,6 +70,9 @@ public class Config
 
         String playerJson = pref.getString(PLAYER_JSON, "");
         player = gson.fromJson(playerJson, Player.class);
+        String tablesJson = pref.getString(TABLES_JSON, "");
+        Type listType = new TypeToken<ArrayList<LeagueTable>>(){}.getType();
+        leagueTables = gson.fromJson(tablesJson, listType);
         changed = true;
         return true;
     }
@@ -97,5 +102,13 @@ public class Config
     public boolean isLoaded()
     {
         return loaded;
+    }
+
+    public List<LeagueTable> getLeagueTables() {
+        return leagueTables;
+    }
+
+    public void setLeagueTables(List<LeagueTable> leagueTables) {
+        this.leagueTables = leagueTables;
     }
 }

@@ -60,5 +60,6 @@
     <string name="pointsHeader">P</string>
     <string name="goalsForHeader">GF</string>
     <string name="goalsAgainstHeader">GA</string>
+    <string name="team_name">Team Name</string>
 
 </resources>

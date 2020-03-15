@@ -51,7 +51,7 @@ public class RefreshViewModel extends AndroidViewModel {
             }
             else
             {
-                mchlWebservice.fetchLatestPlayerInfo(players[0], getApplication().getBaseContext());
+                mchlWebservice.updateConfig(players[0], getApplication().getBaseContext());
                 playerRetrieveInfo.postValue("Player info retrieved!");
             }
             return null;
