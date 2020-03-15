@@ -1,6 +1,7 @@
 package com.sloppylinux.mchl.domain.sportspress;
 
 import com.google.gson.annotations.SerializedName;
+import com.sloppylinux.mchl.util.Utils;
 
 public class TeamStatistic implements Comparable<TeamStatistic>
 {
@@ -280,6 +281,6 @@ public class TeamStatistic implements Comparable<TeamStatistic>
     @Override
     public int compareTo(TeamStatistic o)
     {
-        return Integer.valueOf(this.position).compareTo(Integer.valueOf(o.getPosition()));
+        return Integer.valueOf(Utils.safeParseInt(this.position)).compareTo(Integer.valueOf(Utils.safeParseInt(o.getPosition())));
     }
 }

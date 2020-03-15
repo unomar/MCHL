@@ -1,7 +1,5 @@
 package com.sloppylinux.mchl.domain;
 
-import android.util.Log;
-
 import com.sloppylinux.mchl.util.Utils;
 
 import java.io.Serializable;
@@ -220,7 +218,6 @@ public class Game extends Expirable implements Comparable<Game>, Serializable
                     return result;
                 }
             }
-            Log.e("MCHL Result Parser", "Unable to determine result from string [" + resultStr + "]");
             return Result.Tie;
         }
     }

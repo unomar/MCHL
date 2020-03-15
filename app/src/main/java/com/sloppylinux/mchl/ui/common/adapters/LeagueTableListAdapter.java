@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
@@ -24,7 +23,6 @@ public class LeagueTableListAdapter extends ArrayAdapter<Team>{
 
     // View lookup cache
     private static class ViewHolder {
-        TextView leagueName;
         ListView leagueTable;
     }
 
@@ -50,7 +48,6 @@ public class LeagueTableListAdapter extends ArrayAdapter<Team>{
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.league_standings_row, parent, false);
-            viewHolder.leagueName = convertView.findViewById(R.id.league_name);
             viewHolder.leagueTable = convertView.findViewById(R.id.league_standings_list);
 
             result=convertView;
@@ -63,7 +60,6 @@ public class LeagueTableListAdapter extends ArrayAdapter<Team>{
 
         lastPosition = position;
 
-        viewHolder.leagueName.setText(teamModel.getLeagueTable().getName());
         TeamStatisticListAdapter adapter = new TeamStatisticListAdapter(getTeamStatistics(teamModel), this.mContext);
         viewHolder.leagueTable.setAdapter(adapter);
         // Return the completed view to render on screen

@@ -3,7 +3,10 @@ package com.sloppylinux.mchl.util;
 
 import org.apache.commons.text.StringEscapeUtils;
 
+import java.util.logging.Logger;
+
 public final class Utils {
+    private static final Logger LOG = Logger.getLogger(Utils.class.getName());
 
     public static String convertString(String value)
     {
@@ -33,5 +36,27 @@ public final class Utils {
         {
             return converted;
         }
+    }
+
+    /**
+     * Safely parse a String value as an integer.
+     * @param string The string to parse
+     * @return The integer value or -1 if invalid
+     */
+    public static int safeParseInt(String string)
+    {
+        int retVal = -1;
+        if (string != null)
+        {
+            try
+            {
+                retVal = Integer.parseInt(string);
+            }
+            catch (NumberFormatException e)
+            {
+                LOG.fine("Unable to parse int from: " + string);
+            }
+        }
+        return retVal;
     }
 }

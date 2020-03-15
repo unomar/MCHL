@@ -7,7 +7,6 @@
 
     <TextView
         android:id="@+id/standingsTeamName"
-        style="@style/CodeFont.Table.Header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="8"
@@ -17,7 +16,6 @@
 
     <TextView
         android:id="@+id/standingsGamesPlayed"
-        style="@style/CodeFont.Table.Header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -27,7 +25,6 @@
 
     <TextView
         android:id="@+id/standingsWins"
-        style="@style/CodeFont.Table.Header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -37,7 +34,6 @@
 
     <TextView
         android:id="@+id/standingsLosses"
-        style="@style/CodeFont.Table.Header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -47,7 +43,6 @@
 
     <TextView
         android:id="@+id/standingsTies"
-        style="@style/CodeFont.Table.Header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -57,17 +52,15 @@
 
     <TextView
         android:id="@+id/standingsPoints"
-        style="@style/CodeFont.Table.Header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
         android:padding="5dp"
         android:text="@string/pointsHeader" />
 
     <TextView
         android:id="@+id/standingsGoalsFor"
-        style="@style/CodeFont.Table.Header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -77,7 +70,6 @@
 
     <TextView
         android:id="@+id/standingsGoalsAgainst"
-        style="@style/CodeFont.Table.Header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

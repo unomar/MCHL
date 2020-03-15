@@ -319,8 +319,8 @@ public class MCHLWebservice
                             int homeScore = 0;
                             int awayScore = 0;
                             if (event.getResults() != null && event.getResults().size() == 2) {
-                                homeScore = safeParseInt(event.getResults().get(0));
-                                awayScore = safeParseInt(event.getResults().get(1));
+                                homeScore = Utils.safeParseInt(event.getResults().get(0));
+                                awayScore = Utils.safeParseInt(event.getResults().get(1));
 
                                 LOG.info("Final score: " + teamNames[0] + " " + homeScore + " - " + awayScore + " " + teamNames[1]);
                             }
@@ -419,27 +419,5 @@ public class MCHLWebservice
             date = new Date();
         }
         return iso8601Formatter.format(date);
-    }
-
-    /**
-     * Safely parse a String value as an integer.
-     * @param string The string to parse
-     * @return The integer value or -1 if invalid
-     */
-    private int safeParseInt(String string)
-    {
-        int retVal = -1;
-        if (string != null)
-        {
-            try
-            {
-                retVal = Integer.parseInt(string);
-            }
-            catch (NumberFormatException e)
-            {
-                LOG.fine("Unable to parse int from: " + string);
-            }
-        }
-        return retVal;
     }
 }
