@@ -28,7 +28,8 @@ import com.sloppylinux.mchl.util.Config;
 import java.util.Collections;
 import java.util.List;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment
+{
 
     private SettingsViewModel settingsViewModel;
 
@@ -41,9 +42,11 @@ public class SettingsFragment extends Fragment {
     private Config config;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             ViewGroup container, Bundle savedInstanceState)
+    {
 
-        if (config == null) {
+        if (config == null)
+        {
             config = new Config(this.getContext());
         }
         settingsViewModel =
@@ -51,13 +54,16 @@ public class SettingsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
         playerSelectTextView = root.findViewById(R.id.player_select_text);
-        spinner=(ProgressBar)root.findViewById(R.id.progressBar);
+        spinner = root.findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
         EditText editText = root.findViewById(R.id.nameEntry);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener()
+        {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH)
+                {
                     playerSearch(v.getText().toString());
                     return true;
                 }
@@ -73,22 +79,28 @@ public class SettingsFragment extends Fragment {
     public void playerSearch(String playerName)
     {
         spinner.setVisibility(View.VISIBLE);
-        settingsViewModel.getText(playerName).observe(this, new Observer<List<Player>>() {
+        settingsViewModel.getText(playerName).observe(this, new Observer<List<Player>>()
+        {
             @Override
-            public void onChanged(@Nullable List<Player> players) {
+            public void onChanged(@Nullable List<Player> players)
+            {
                 spinner.setVisibility(View.GONE);
                 playerSelectTextView.setText(R.string.select_player_text);
                 Collections.sort(players);
                 PlayerListAdapter adapter = new PlayerListAdapter(players, getContext());
                 playerListView.setAdapter(adapter);
-                playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                {
                     @Override
-                    public void onItemClick(AdapterView<?>adapter,View v, int pos, long position){
+                    public void onItemClick(AdapterView<?> adapter, View v, int pos, long position)
+                    {
                         spinner.setVisibility(View.VISIBLE);
-                        Player player = (Player)adapter.getItemAtPosition(pos);
-                        settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>() {
+                        Player player = (Player) adapter.getItemAtPosition(pos);
+                        settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>()
+                        {
                             @Override
-                            public void onChanged(String s) {
+                            public void onChanged(String s)
+                            {
                                 spinner.setVisibility(View.GONE);
                                 Intent home = new Intent(getContext(), MchlNavigation.class);
                                 startActivity(home);

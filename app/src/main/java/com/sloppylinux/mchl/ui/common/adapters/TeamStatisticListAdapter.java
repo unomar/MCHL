@@ -28,19 +28,6 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
 
     private int lastPosition = -1;
 
-    // View lookup cache
-    private static class ViewHolder
-    {
-        TextView teamName;
-        TextView teamGamesPlayed;
-        TextView teamWins;
-        TextView teamLosses;
-        TextView teamTies;
-        TextView teamPoints;
-        TextView teamGoalsFor;
-        TextView teamGoalsAgainst;
-    }
-
     public TeamStatisticListAdapter(List<TeamStatistic> data, Context context)
     {
         super(context, R.layout.standings_row, data);
@@ -56,9 +43,9 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
         }
     }
 
-
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         // Get the data item for this position
         TeamStatistic teamModel = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -67,11 +54,13 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
         final View result;
         List<TextView> textViews = new ArrayList<>();
 
-        if (convertView == null) {
+        if (convertView == null)
+        {
 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.standings_row, parent, false);
+            viewHolder.teamRank = convertView.findViewById(R.id.standingsTeamRank);
             viewHolder.teamName = convertView.findViewById(R.id.standingsTeamName);
             viewHolder.teamGamesPlayed = convertView.findViewById(R.id.standingsGamesPlayed);
             viewHolder.teamWins = convertView.findViewById(R.id.standingsWins);
@@ -81,6 +70,7 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
             viewHolder.teamGoalsFor = convertView.findViewById(R.id.standingsGoalsFor);
             viewHolder.teamGoalsAgainst = convertView.findViewById(R.id.standingsGoalsAgainst);
 
+            textViews.add(viewHolder.teamRank);
             textViews.add(viewHolder.teamName);
             textViews.add(viewHolder.teamGamesPlayed);
             textViews.add(viewHolder.teamWins);
@@ -90,15 +80,18 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
             textViews.add(viewHolder.teamGoalsFor);
             textViews.add(viewHolder.teamGoalsAgainst);
 
-            result=convertView;
+            result = convertView;
 
             convertView.setTag(viewHolder);
-        } else {
+        } else
+        {
             viewHolder = (ViewHolder) convertView.getTag();
-            result=convertView;
+            result = convertView;
         }
         lastPosition = position;
 
+        int pos = Utils.safeParseInt(teamModel.getPosition());
+        viewHolder.teamRank.setText((pos == -1) ? "#" : Integer.toString(pos));
         viewHolder.teamName.setText(Utils.getFormatted(teamModel.getName(), 24));
         viewHolder.teamGamesPlayed.setText(teamModel.getGamesPlayed());
         viewHolder.teamWins.setText(teamModel.getWins());
@@ -112,14 +105,26 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
         boolean isMyTeam = myTeams.contains(teamModel.getName());
         int style = isHeader ? R.style.CodeFont_Table_Header : R.style.CodeFont_Table_Row;
         int color = isMyTeam ? R.color.colorHighlight : R.color.colorStandard;
-//        int typeface = ("Team".equals(teamModel.getName())) ? Typeface.BOLD : Typeface.NORMAL;
-            for (TextView textView : textViews)
-            {
-                textView.setTextAppearance(style);
-                textView.setTextColor(ContextCompat.getColor(getContext(), color));
-//                textView.setTypeface(textView.getTypeface(), typeface);
-            }
+        for (TextView textView : textViews)
+        {
+            textView.setTextAppearance(style);
+            textView.setTextColor(ContextCompat.getColor(getContext(), color));
+        }
         // Return the completed view to render on screen
         return result;
+    }
+
+    // View lookup cache
+    private static class ViewHolder
+    {
+        TextView teamRank;
+        TextView teamName;
+        TextView teamGamesPlayed;
+        TextView teamWins;
+        TextView teamLosses;
+        TextView teamTies;
+        TextView teamPoints;
+        TextView teamGoalsFor;
+        TextView teamGoalsAgainst;
     }
 }

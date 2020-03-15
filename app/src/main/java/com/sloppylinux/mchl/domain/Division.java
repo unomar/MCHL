@@ -14,7 +14,6 @@ public class Division extends Expirable implements Serializable
     // Division info
     private String name;
     private ArrayList<Team> teams = new ArrayList<Team>();
-    ;
 
     public Division(String name)
     {

@@ -19,7 +19,8 @@ import com.sloppylinux.mchl.ui.common.adapters.TeamListAdapter;
 import com.sloppylinux.mchl.ui.settings.SettingsViewModel;
 import com.sloppylinux.mchl.util.Config;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment
+{
     private SettingsViewModel settingsViewModel;
 
     private ProgressBar spinner;
@@ -33,14 +34,15 @@ public class HomeFragment extends Fragment {
     private ListView resultListView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             ViewGroup container, Bundle savedInstanceState)
+    {
 
         config = new Config(getContext());
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         settingsViewModel =
                 new ViewModelProvider(this).get(SettingsViewModel.class);
-        spinner=(ProgressBar)root.findViewById(R.id.homeProgressBar);
+        spinner = root.findViewById(R.id.homeProgressBar);
         spinner.setVisibility(View.GONE);
 
         teamListView = root.findViewById(R.id.homepage_team_list);
@@ -49,9 +51,11 @@ public class HomeFragment extends Fragment {
 
         if (config.getPlayer() != null)
         {
-            if (config.getPlayer().requiresUpdate()) {
+            if (config.getPlayer().requiresUpdate())
+            {
                 updatePlayerInfo(config.getPlayer());
-            } else {
+            } else
+            {
                 TeamListAdapter teamAdapter = new TeamListAdapter(config.getPlayer().getPlayerTeams(), getContext());
                 teamListView.setAdapter(teamAdapter);
 
@@ -68,14 +72,17 @@ public class HomeFragment extends Fragment {
 
     /**
      * Update player info.
+     *
      * @param player The player to update
      */
     private void updatePlayerInfo(Player player)
     {
         spinner.setVisibility(View.VISIBLE);
-        settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>() {
+        settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>()
+        {
             @Override
-            public void onChanged(String s) {
+            public void onChanged(String s)
+            {
                 spinner.setVisibility(View.GONE);
 
                 TeamListAdapter teamAdapter = new TeamListAdapter(config.getPlayer().getPlayerTeams(), getContext());
