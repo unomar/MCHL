@@ -19,19 +19,28 @@ import com.sloppylinux.mchl.ui.common.adapters.TeamListAdapter;
 import com.sloppylinux.mchl.ui.settings.SettingsViewModel;
 import com.sloppylinux.mchl.util.Config;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class HomeFragment extends Fragment
 {
     private SettingsViewModel settingsViewModel;
-
-    private ProgressBar spinner;
-
     private Config config;
+    private Unbinder unbinder;
 
-    private ListView teamListView;
+    @BindView(R.id.homeProgressBar)
+    ProgressBar spinner;
 
-    private ListView scheduleListView;
+    @BindView(R.id.homepage_team_list)
+    ListView teamListView;
 
-    private ListView resultListView;
+    @BindView(R.id.homepage_schedule_list)
+    ListView scheduleListView;
+
+    @BindView(R.id.homepage_result_list)
+    ListView resultListView;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -39,15 +48,13 @@ public class HomeFragment extends Fragment
 
         config = new Config(getContext());
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        ButterKnife.setDebug(true);
+        unbinder = ButterKnife.bind(this, root);
 
         settingsViewModel =
                 new ViewModelProvider(this).get(SettingsViewModel.class);
-        spinner = root.findViewById(R.id.homeProgressBar);
-        spinner.setVisibility(View.GONE);
 
-        teamListView = root.findViewById(R.id.homepage_team_list);
-        scheduleListView = root.findViewById(R.id.homepage_schedule_list);
-        resultListView = root.findViewById(R.id.homepage_result_list);
+        spinner.setVisibility(View.GONE);
 
         if (config.getPlayer() != null)
         {
@@ -68,6 +75,12 @@ public class HomeFragment extends Fragment
         }
 
         return root;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 
     /**
