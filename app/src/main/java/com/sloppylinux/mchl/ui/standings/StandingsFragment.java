@@ -21,6 +21,8 @@ public class StandingsFragment extends RefreshFragment
 {
     @BindView(R.id.standings_pager)
     ViewPager viewPager;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
 
     private StandingsPagerAdapter standingsPagerAdapter;
 
@@ -41,7 +43,6 @@ public class StandingsFragment extends RefreshFragment
             standingsPagerAdapter = new StandingsPagerAdapter(config.getLeagueTables(), getChildFragmentManager());
             viewPager.setAdapter(standingsPagerAdapter);
 
-            TabLayout tabLayout = view.findViewById(R.id.tab_layout);
             tabLayout.setupWithViewPager(viewPager);
         }
     }

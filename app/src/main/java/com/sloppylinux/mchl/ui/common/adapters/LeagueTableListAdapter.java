@@ -16,14 +16,22 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class LeagueTableListAdapter extends ArrayAdapter<Team>{
 
     private List<Team> teamList;
     Context mContext;
 
     // View lookup cache
-    private static class ViewHolder {
+    static class ViewHolder {
+        @BindView(R.id.league_standings_list)
         ListView leagueTable;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     public LeagueTableListAdapter(List<Team> data, Context context) {
@@ -45,10 +53,9 @@ public class LeagueTableListAdapter extends ArrayAdapter<Team>{
 
         if (convertView == null) {
 
-            viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.league_standings_row, parent, false);
-            viewHolder.leagueTable = convertView.findViewById(R.id.league_standings_list);
+            viewHolder = new ViewHolder(convertView);
 
             result=convertView;
 

@@ -3,15 +3,11 @@ package com.sloppylinux.mchl.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,32 +17,36 @@ import com.google.android.material.navigation.NavigationView;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.ui.R;
-import com.sloppylinux.mchl.ui.settings.SettingsViewModel;
 import com.sloppylinux.mchl.util.Config;
 
 import org.apache.log4j.Logger;
 
-import java.util.Date;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MchlNavigation extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-
     private Config config;
-
     private Player player;
-
     private Logger logger = Logger.getLogger(MchlNavigation.class.getName());
+
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         logger.debug("Entering MCHL Navigation");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
