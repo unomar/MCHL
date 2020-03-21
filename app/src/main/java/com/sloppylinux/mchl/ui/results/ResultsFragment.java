@@ -14,13 +14,18 @@ import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
 import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
 import com.sloppylinux.mchl.util.Config;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ResultsFragment extends RefreshFragment
 {
     private GameListAdapter adapter;
 
-    private ListView resultListView;
+    @BindView(R.id.resultList)
+    ListView resultListView;
 
-    private Config config;
+    @BindView(R.id.resultRefreshView)
+    SwipeRefreshLayout refreshLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -30,10 +35,7 @@ public class ResultsFragment extends RefreshFragment
         }
 
         View root = inflater.inflate(R.layout.fragment_results, container, false);
-
-        resultListView = root.findViewById(R.id.resultList);
-
-        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.resultRefreshView);
+        unbinder = ButterKnife.bind(this, root);
         super.setup(refreshLayout);
 
         if (config.getPlayer() != null)

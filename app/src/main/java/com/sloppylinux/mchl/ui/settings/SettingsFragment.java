@@ -28,23 +28,31 @@ import com.sloppylinux.mchl.util.Config;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class SettingsFragment extends Fragment
 {
-
     private SettingsViewModel settingsViewModel;
-
-    private TextView playerSelectTextView;
-
-    private ListView playerListView;
-
-    private ProgressBar spinner;
-
     private Config config;
+    private Unbinder unbinder;
+
+    @BindView(R.id.player_select_text)
+    TextView playerSelectTextView;
+
+    @BindView(R.id.playerList)
+    ListView playerListView;
+
+    @BindView((R.id.progressBar))
+    ProgressBar spinner;
+
+    @BindView(R.id.nameEntry)
+    EditText editText;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
     {
-
         if (config == null)
         {
             config = new Config(this.getContext());
@@ -52,11 +60,10 @@ public class SettingsFragment extends Fragment
         settingsViewModel =
                 new ViewModelProvider(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
+        unbinder = ButterKnife.bind(this, root);
 
-        playerSelectTextView = root.findViewById(R.id.player_select_text);
-        spinner = root.findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
-        EditText editText = root.findViewById(R.id.nameEntry);
+
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener()
         {
             @Override
@@ -70,8 +77,6 @@ public class SettingsFragment extends Fragment
                 return false;
             }
         });
-
-        playerListView = root.findViewById(R.id.playerList);
 
         return root;
     }

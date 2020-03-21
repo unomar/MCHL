@@ -8,6 +8,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.util.Config;
 
+import butterknife.Unbinder;
+
 public abstract class RefreshFragment extends Fragment
 {
     protected SwipeRefreshLayout mySwipeRefreshLayout;
@@ -15,6 +17,8 @@ public abstract class RefreshFragment extends Fragment
     protected RefreshViewModel refreshViewModel;
 
     protected Config config;
+
+    protected Unbinder unbinder;
 
 
     /**
@@ -44,6 +48,12 @@ public abstract class RefreshFragment extends Fragment
                 mySwipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 
     /**

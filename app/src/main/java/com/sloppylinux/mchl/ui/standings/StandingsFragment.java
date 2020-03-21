@@ -14,9 +14,13 @@ import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
 import com.sloppylinux.mchl.util.Config;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class StandingsFragment extends RefreshFragment
 {
-    private ViewPager viewPager;
+    @BindView(R.id.standings_pager)
+    ViewPager viewPager;
 
     private StandingsPagerAdapter standingsPagerAdapter;
 
@@ -24,7 +28,7 @@ public class StandingsFragment extends RefreshFragment
                              ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_standings, container, false);
-
+        unbinder = ButterKnife.bind(this, root);
         return root;
     }
 
@@ -35,7 +39,6 @@ public class StandingsFragment extends RefreshFragment
         if (config.getLeagueTables() != null)
         {
             standingsPagerAdapter = new StandingsPagerAdapter(config.getLeagueTables(), getChildFragmentManager());
-            viewPager = view.findViewById(R.id.standings_pager);
             viewPager.setAdapter(standingsPagerAdapter);
 
             TabLayout tabLayout = view.findViewById(R.id.tab_layout);
