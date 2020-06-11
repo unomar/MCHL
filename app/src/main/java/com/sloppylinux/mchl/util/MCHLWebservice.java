@@ -35,31 +35,26 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MCHLWebservice
 {
+    public static final String ALL_STARS = "all-stars";
+    public static final String NETWORK_ERROR = "Error occurred attempting to contact MCHL website";
     /**
      * Called when the activity is first created.
      */
     private static final String SOAP_ACTION = "https://ourmchl.com/wp-json/sportspress/v2/";
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss";
-    public static final String ALL_STARS = "all-stars";
-
+    private static final long timeToLive = 86400000L; // One day...customizable?
+    private static final MCHLWebservice singleton = new MCHLWebservice();
     private static List<Venue> venues = null;
     private final Logger LOG = Logger.getLogger(MCHLWebservice.class.getName());
     private MCHLService mchlService = null;
-    private static final long timeToLive = 86400000L; // One day...customizable?
-
-    private static final MCHLWebservice singleton = new MCHLWebservice();
-
     private SimpleDateFormat iso8601Formatter = new SimpleDateFormat(DATE_FORMAT);
-
-    public static MCHLWebservice getSingleton() {
-        return singleton;
-    }
 
     private MCHLWebservice()
     {
         GsonBuilder gsonBuilder = new GsonBuilder();
 
-        gsonBuilder.registerTypeAdapter(Integer.class, new JsonDeserializer<Integer>() {
+        gsonBuilder.registerTypeAdapter(Integer.class, new JsonDeserializer<Integer>()
+        {
             @Override
             public Integer deserialize(JsonElement arg0, Type arg1,
                                        JsonDeserializationContext arg2) throws JsonParseException
@@ -97,6 +92,11 @@ public class MCHLWebservice
         mchlService = retrofit.create(MCHLService.class);
     }
 
+    public static MCHLWebservice getSingleton()
+    {
+        return singleton;
+    }
+
     public static String[] getSeasons()
     {
         return new String[0];
@@ -104,10 +104,12 @@ public class MCHLWebservice
 
     /**
      * Fetch and persist player info
-     * @param player The player to fetch
+     *
+     * @param player  The player to fetch
      * @param context The application context
+     * @throws WebserviceException If an error occurs
      */
-    public void updateConfig(Player player, Context context)
+    public void updateConfig(Player player, Context context) throws WebserviceException
     {
         if (player != null && player.requiresUpdate())
         {
@@ -123,16 +125,26 @@ public class MCHLWebservice
         }
     }
 
-    private Player fetchPlayer(Player player)
+    /**
+     * Fetch Player Info from the backend API
+     *
+     * @param player The player object to populate
+     * @return The populated player object
+     * @throws WebserviceException If an error occurs
+     */
+    private Player fetchPlayer(Player player) throws WebserviceException
     {
         player.clear();
         for (Long teamId : player.getCurrentTeams())
         {
             Team team = this.getTeam(teamId);
-            team.setLeagueTable(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
-            player.getPlayerTeams().add(team);
-            player.getPlayerSchedule().add(this.getSchedule(teamId));
-            player.getPlayerResults().add(this.getResults(teamId));
+            if (team != null)
+            {
+                team.setLeagueTable(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
+                player.getPlayerTeams().add(team);
+                player.getPlayerSchedule().add(this.getSchedule(teamId));
+                player.getPlayerResults().add(this.getResults(teamId));
+            }
         }
 
         return player;
@@ -140,6 +152,7 @@ public class MCHLWebservice
 
     /**
      * Fetch and persist league tables
+     *
      * @param context The application context
      */
     public List<LeagueTable> fetchLatestLeagueTables(long seasonId, Context context)
@@ -148,7 +161,8 @@ public class MCHLWebservice
         for (League league : this.getLeagues())
         {
             // Ignore All-Star standings
-            if (!ALL_STARS.equals(league.getSlug())) {
+            if (!ALL_STARS.equals(league.getSlug()))
+            {
                 LeagueTable standings = getStandings(seasonId, league.getId());
                 standings.setName(league.getName());
                 standings.setExpiration(new Date().getTime() + timeToLive);
@@ -161,14 +175,16 @@ public class MCHLWebservice
 
     /**
      * Get a team by id
+     *
      * @param teamId The team id of the team to fetch
      * @return The populated team or null
+     * @throws WebserviceException If a communication error occurs
      */
-    Team getTeam(long teamId)
+    Team getTeam(long teamId) throws WebserviceException
     {
-		Team team = null;
-		    try
-            {
+        Team team = null;
+        try
+        {
             Response<Team> teamResponse = mchlService.getTeam(teamId).execute();
             if (teamResponse != null && teamResponse.body() != null)
             {
@@ -182,17 +198,18 @@ public class MCHLWebservice
                 }
 
             }
-            }
-            catch (IOException e)
-            {
-                LOG.warning("Caught exception performing player search." + e.getMessage());
-            }
+        } catch (IOException e)
+        {
+            LOG.warning("Caught exception performing player search." + e.getMessage());
+            throw new WebserviceException(NETWORK_ERROR, "Caught IOException in getTeams()", e);
+        }
 
-		return team;
+        return team;
     }
 
     /**
      * Get the standings for a season/league
+     *
      * @param seasonId The season ID
      * @param leagueId The league ID
      * @return The standings
@@ -208,10 +225,9 @@ public class MCHLWebservice
             {
                 leagueTable = result.body().get(0);
             }
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
-            LOG.warning("Caught exception attempting to lookup standings for season "+ seasonId + " and league " + leagueId + ".  " + e.getMessage());
+            LOG.warning("Caught exception attempting to lookup standings for season " + seasonId + " and league " + leagueId + ".  " + e.getMessage());
         }
         return leagueTable;
     }
@@ -222,10 +238,11 @@ public class MCHLWebservice
      *
      * @param name The player name to query
      * @return A list of players matching the query
+     * @throws WebserviceException If a communcation error occurs
      */
-    public List<Player> playerLookup(String name)
+    public List<Player> playerLookup(String name) throws WebserviceException
     {
-        List<Player> players = null;
+        List<Player> players = new ArrayList<>();
 
         try
         {
@@ -235,10 +252,10 @@ public class MCHLWebservice
             {
                 players = playerResult.body();
             }
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             LOG.warning("Caught exception performing player search." + e.getMessage());
+            throw new WebserviceException(NETWORK_ERROR, "Caught IOException in playerLookup()", e);
         }
         return players;
     }
@@ -263,12 +280,15 @@ public class MCHLWebservice
                 Call<List<Event>> eventCall = mchlService.listTeamSchedule(team.getName(), team.getCurrentSeason(), team.getCurrentLeague(), getIso8601Date(null));
                 Response<List<Event>> eventResponses = eventCall.execute();
                 List<Event> events = eventResponses.body();
-                if (events != null) {
+                if (events != null)
+                {
                     LOG.info("Got " + events.size() + " events");
                     teamSchedule = new TeamSchedule();
-                    for (Event event : events) {
+                    for (Event event : events)
+                    {
                         String eventString = event.getName();
-                        if (StringUtils.isNotBlank(eventString)) {
+                        if (StringUtils.isNotBlank(eventString))
+                        {
                             String venueName = getVenueName(event.getVenueIds());
                             LOG.info("Creating Game for event [" + event.getId() + "] as " + eventString + " at " + venueName);
                             String[] teamNames = eventString.split(" vs ");
@@ -279,8 +299,7 @@ public class MCHLWebservice
                     }
                 }
             }
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             LOG.warning("Caught exception querying team schedule." + e.getMessage());
         }
@@ -307,18 +326,22 @@ public class MCHLWebservice
                 Call<List<Event>> eventCall = mchlService.listTeamResults(team.getName(), team.getCurrentSeason(), team.getCurrentLeague(), getIso8601Date(null));
                 Response<List<Event>> eventResponses = eventCall.execute();
                 List<Event> events = eventResponses.body();
-                if (events != null) {
+                if (events != null)
+                {
                     LOG.info("Got " + events.size() + " events");
                     teamSchedule = new TeamSchedule();
-                    for (Event event : events) {
+                    for (Event event : events)
+                    {
                         String eventString = event.getName();
-                        if (StringUtils.isNotBlank(eventString)) {
+                        if (StringUtils.isNotBlank(eventString))
+                        {
                             String venueName = getVenueName(event.getVenueIds());
                             LOG.info("Creating Game for event [" + event.getId() + "] as " + eventString + " at " + venueName);
                             String[] teamNames = eventString.split(" vs ");
                             int homeScore = 0;
                             int awayScore = 0;
-                            if (event.getResults() != null && event.getResults().size() == 2) {
+                            if (event.getResults() != null && event.getResults().size() == 2)
+                            {
                                 homeScore = Utils.safeParseInt(event.getResults().get(0));
                                 awayScore = Utils.safeParseInt(event.getResults().get(1));
 
@@ -332,8 +355,7 @@ public class MCHLWebservice
                     }
                 }
             }
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             LOG.warning("Caught exception querying team schedule." + e.getMessage());
         }
@@ -352,15 +374,18 @@ public class MCHLWebservice
         if (venueIds == null || venueIds.size() != 1)
         {
             LOG.warning("Cannot get a single venue name from multiple ids.");
-        }
-        else {
-            if (venues == null) {
+        } else
+        {
+            if (venues == null)
+            {
                 populateVenues();
             }
 
             Long venueId = venueIds.get(0);
-            for (Venue venue : venues) {
-                if (venue.getId() == venueId) {
+            for (Venue venue : venues)
+            {
+                if (venue.getId() == venueId)
+                {
                     return venue.getName();
                 }
             }
@@ -375,14 +400,18 @@ public class MCHLWebservice
      */
     private void populateVenues()
     {
-        if (venues == null) {
+        if (venues == null)
+        {
             Call<List<Venue>> venueCall = mchlService.getVenues();
-            try {
+            try
+            {
                 Response<List<Venue>> venueResponse = venueCall.execute();
-                if (venueResponse != null) {
+                if (venueResponse != null)
+                {
                     venues = venueResponse.body();
                 }
-            } catch (IOException e) {
+            } catch (IOException e)
+            {
                 LOG.warning("Caught exception querying team schedule." + e.getMessage());
             }
         }
@@ -390,18 +419,22 @@ public class MCHLWebservice
 
     /**
      * Get the list of leagues.
+     *
      * @return A list of Leagues
      */
     private List<League> getLeagues()
     {
         List<League> leagues = new ArrayList<>();
         Call<List<League>> leagueCall = mchlService.getLeagues();
-        try {
+        try
+        {
             Response<List<League>> venueResponse = leagueCall.execute();
-            if (venueResponse != null) {
+            if (venueResponse != null)
+            {
                 leagues.addAll(venueResponse.body());
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             LOG.warning("Caught exception querying team schedule." + e.getMessage());
         }
         return leagues;
@@ -409,6 +442,7 @@ public class MCHLWebservice
 
     /**
      * Get an ISO-8601 formatted date string.
+     *
      * @param date The date to format or null for current time
      * @return The ISO-8601 formatted date string
      */

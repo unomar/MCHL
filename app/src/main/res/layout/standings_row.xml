@@ -22,7 +22,7 @@
         android:gravity="left"
         android:padding="5dp"
         android:text="@string/team_name" />
-    
+
     <TextView
         android:id="@+id/standingsGamesPlayed"
         android:layout_width="0dp"

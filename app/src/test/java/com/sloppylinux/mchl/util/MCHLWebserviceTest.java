@@ -33,7 +33,7 @@ public class MCHLWebserviceTest
 
 
     @Test
-    public void testPlayerLookup()
+    public void testPlayerLookup() throws WebserviceException
     {
         List<Player> players = mchlWebservice.playerLookup("Kevin Weiss");
         assertNotNull("Player is null", players);
@@ -71,7 +71,7 @@ public class MCHLWebserviceTest
     }
 
     @Test
-    public void testGetResults()
+    public void testGetResults() throws WebserviceException
     {
         TeamSchedule teamResults = mchlWebservice.getResults(3283L);
         assertNotNull("Team Results was null", teamResults);
@@ -84,12 +84,13 @@ public class MCHLWebserviceTest
     }
 
     @Test
-    public void testGetTeam()
+    public void testGetTeam() throws WebserviceException
+
     {
         Team team = mchlWebservice.getTeam(3283);
         assertNotNull("Team was null", team);
         TeamTable teamTable = team.getTeamTable();
-        for(Map.Entry<String,PlayerStatistic> entry : teamTable.getTableData().entrySet())
+        for (Map.Entry<String, PlayerStatistic> entry : teamTable.getTableData().entrySet())
         {
             assertNotNull("Statistics key is null", entry.getKey());
             assertNotNull("Statistics are null", entry.getValue());
@@ -102,7 +103,7 @@ public class MCHLWebserviceTest
         LeagueTable leagueTable = mchlWebservice.getStandings(117, 115);
         assertNotNull("League table was null", leagueTable);
 
-        for(Map.Entry<String,TeamStatistic> entry : leagueTable.getTableData().entrySet())
+        for (Map.Entry<String, TeamStatistic> entry : leagueTable.getTableData().entrySet())
         {
             assertNotNull("Statistics key is null", entry.getKey());
             assertNotNull("Statistics are null", entry.getValue());

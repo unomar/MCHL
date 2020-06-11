@@ -10,13 +10,15 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.util.MCHLWebservice;
+import com.sloppylinux.mchl.util.WebserviceException;
 
 import java.util.List;
 
 /**
  * The view model for the settings page.  Mainly used for player lookup and selection.
  */
-public class SettingsViewModel extends AndroidViewModel {
+public class SettingsViewModel extends AndroidViewModel
+{
 
     private MutableLiveData<List<Player>> playerListData;
 
@@ -24,7 +26,8 @@ public class SettingsViewModel extends AndroidViewModel {
 
     private MCHLWebservice mchlWebservice = MCHLWebservice.getSingleton();
 
-    public SettingsViewModel(@NonNull Application application) {
+    public SettingsViewModel(@NonNull Application application)
+    {
         super(application);
         playerListData = new MutableLiveData<>();
         playerRetrievelInfo = new MutableLiveData<>();
@@ -32,6 +35,7 @@ public class SettingsViewModel extends AndroidViewModel {
 
     /**
      * Get and/or generate the list of players
+     *
      * @param playerName The name to search for
      * @return A list of matching players
      */
@@ -56,17 +60,23 @@ public class SettingsViewModel extends AndroidViewModel {
     {
         /**
          * Perform retrieve player info asynchronously
+         *
          * @param players The players to search for
          * @return null
          */
         @Override
-        protected Void doInBackground(String... players) {
-            List<Player> playerList = mchlWebservice.playerLookup(players[0]);
-
-            if (playerList != null)
+        protected Void doInBackground(String... players)
+        {
+            List<Player> playerList = null;
+            try
             {
+                playerList = mchlWebservice.playerLookup(players[0]);
                 playerListData.postValue(playerList);
+            } catch (WebserviceException e)
+            {
+                playerListData.postValue(null);
             }
+
             return null;
         }
     }
@@ -78,20 +88,27 @@ public class SettingsViewModel extends AndroidViewModel {
     {
         /**
          * Retrieve and persist player info
+         *
          * @param players The players to query and persist
          * @return null
          */
         @Override
-        protected Void doInBackground(Player... players) {
+        protected Void doInBackground(Player... players)
+        {
 
             if (players.length != 1)
             {
                 playerRetrievelInfo.postValue("Unable to process multiple players");
-            }
-            else
+            } else
             {
-                mchlWebservice.updateConfig(players[0], getApplication().getBaseContext());
-                playerRetrievelInfo.postValue("Player info retrieved!");
+                try
+                {
+                    mchlWebservice.updateConfig(players[0], getApplication().getBaseContext());
+                    playerRetrievelInfo.postValue("Player info retrieved!");
+                } catch (WebserviceException e)
+                {
+                    playerRetrievelInfo.postValue(e.getUserMessage());
+                }
             }
             return null;
         }

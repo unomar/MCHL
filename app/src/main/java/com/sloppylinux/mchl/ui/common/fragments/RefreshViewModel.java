@@ -10,17 +10,20 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.util.MCHLWebservice;
+import com.sloppylinux.mchl.util.WebserviceException;
 
 /**
  * The view model for the settings page.  Mainly used for player lookup and selection.
  */
-public class RefreshViewModel extends AndroidViewModel {
+public class RefreshViewModel extends AndroidViewModel
+{
 
     private MutableLiveData<String> playerRetrieveInfo;
 
     private MCHLWebservice mchlWebservice = MCHLWebservice.getSingleton();
 
-    public RefreshViewModel(@NonNull Application application) {
+    public RefreshViewModel(@NonNull Application application)
+    {
         super(application);
         playerRetrieveInfo = new MutableLiveData<>();
     }
@@ -39,20 +42,28 @@ public class RefreshViewModel extends AndroidViewModel {
     {
         /**
          * Retrieve and persist player info
+         *
          * @param players The players to query and persist
          * @return null
          */
         @Override
-        protected Void doInBackground(Player... players) {
+        protected Void doInBackground(Player... players)
+        {
 
             if (players.length != 1)
             {
                 playerRetrieveInfo.postValue("Unable to process multiple players");
-            }
-            else
+            } else
             {
-                mchlWebservice.updateConfig(players[0], getApplication().getBaseContext());
-                playerRetrieveInfo.postValue("Player info retrieved!");
+                try
+                {
+                    mchlWebservice.updateConfig(players[0], getApplication().getBaseContext());
+                    playerRetrieveInfo.postValue("Player info retrieved!");
+                } catch (WebserviceException e)
+                {
+                    playerRetrieveInfo.postValue(e.getUserMessage());
+                }
+
             }
             return null;
         }
