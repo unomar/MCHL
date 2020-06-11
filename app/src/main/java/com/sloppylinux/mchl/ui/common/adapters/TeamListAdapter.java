@@ -12,15 +12,24 @@ import com.sloppylinux.mchl.ui.R;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TeamListAdapter extends ArrayAdapter<Team>{
 
     private List<Team> teamList;
     Context mContext;
 
     // View lookup cache
-    private static class ViewHolder {
+    static class ViewHolder {
+        @BindView(R.id.homepage_team_name)
         TextView teamName;
+        @BindView(R.id.homepage_team_record)
         TextView teamRecord;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     public TeamListAdapter(List<Team> data, Context context) {
@@ -41,12 +50,9 @@ public class TeamListAdapter extends ArrayAdapter<Team>{
         final View result;
 
         if (convertView == null) {
-
-            viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.homepage_team, parent, false);
-            viewHolder.teamName = convertView.findViewById(R.id.homepage_team_name);
-            viewHolder.teamRecord = convertView.findViewById(R.id.homepage_team_record);
+            viewHolder = new ViewHolder(convertView);
 
             result=convertView;
 

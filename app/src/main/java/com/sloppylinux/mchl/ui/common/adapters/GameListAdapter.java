@@ -17,18 +17,30 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickListener {
 
     private List<Game> gameList;
     Context mContext;
 
     // View lookup cache
-    private static class ViewHolder {
+    static class ViewHolder {
+        @BindView(R.id.scheduleGameDate)
         TextView gameDate;
+        @BindView(R.id.scheduleGameLocation)
         TextView gameLocation;
+        @BindView(R.id.scheduleHomeTeam)
         TextView homeTeam;
+        @BindView(R.id.scheduleAwayTeam)
         TextView awayTeam;
+        @BindView(R.id.vsScore)
         TextView vsScore;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     public GameListAdapter(List<Game> data, Context context) {
@@ -71,15 +83,9 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
         View result;
         if (convertView == null) {
 
-            viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.schedule_game_row, parent, false);
-            viewHolder.gameDate = convertView.findViewById(R.id.scheduleGameDate);
-            viewHolder.gameLocation = convertView.findViewById(R.id.scheduleGameLocation);
-            viewHolder.homeTeam = convertView.findViewById(R.id.scheduleHomeTeam);
-            viewHolder.awayTeam = convertView.findViewById(R.id.scheduleAwayTeam);
-            viewHolder.vsScore = convertView.findViewById(R.id.vsScore);
-
+            viewHolder = new ViewHolder(convertView);
             result = convertView;
 
             convertView.setTag(viewHolder);

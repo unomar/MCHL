@@ -14,6 +14,9 @@ import com.sloppylinux.mchl.util.Utils;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PlayerListAdapter extends ArrayAdapter<Player> implements View.OnClickListener{
 
     private List<Player> playerList;
@@ -21,10 +24,17 @@ public class PlayerListAdapter extends ArrayAdapter<Player> implements View.OnCl
     Context mContext;
 
     // View lookup cache
-    private static class ViewHolder {
+    static class ViewHolder {
+        @BindView(R.id.player_row_name)
         TextView playerName;
+        @BindView(R.id.player_row_number)
         TextView playerNumber;
+        @BindView(R.id.player_row_teams)
         TextView playerTeams;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     public PlayerListAdapter(List<Player> data, Context context) {
@@ -62,13 +72,9 @@ public class PlayerListAdapter extends ArrayAdapter<Player> implements View.OnCl
         final View result;
 
         if (convertView == null) {
-
-            viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.player_lookup_row, parent, false);
-            viewHolder.playerName = convertView.findViewById(R.id.player_row_name);
-            viewHolder.playerNumber = convertView.findViewById(R.id.player_row_number);
-            viewHolder.playerTeams = convertView.findViewById(R.id.player_row_teams);
+            viewHolder = new ViewHolder(convertView);
 
             result=convertView;
 

@@ -19,13 +19,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class LeagueStandingsFragment extends Fragment {
     public static final String ARG_OBJECT = "object";
+    private Unbinder unbinder;
+
+    @BindView(R.id.league_standings_list)
+    ListView leagueStandingsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.league_standings_row, container, false);
+        View root = inflater.inflate(R.layout.league_standings_row, container, false);
+        unbinder = ButterKnife.bind(this, root);
+
+        return root;
     }
 
     @Override
@@ -37,7 +48,12 @@ public class LeagueStandingsFragment extends Fragment {
 
         Collections.sort(teamStats);
         TeamStatisticListAdapter adapter = new TeamStatisticListAdapter(teamStats, getContext());
-        ((ListView) view.findViewById(R.id.league_standings_list))
-                .setAdapter(adapter);
+        leagueStandingsList.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 }

@@ -48,7 +48,6 @@ public class HomeFragment extends Fragment
 
         config = new Config(getContext());
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        ButterKnife.setDebug(true);
         unbinder = ButterKnife.bind(this, root);
 
         settingsViewModel =

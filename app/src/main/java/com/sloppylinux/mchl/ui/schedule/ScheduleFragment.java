@@ -14,13 +14,21 @@ import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
 import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
 import com.sloppylinux.mchl.util.Config;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ScheduleFragment extends RefreshFragment
 {
     private GameListAdapter adapter;
-
-    private ListView scheduleListView;
-
     private Config config;
+
+    @BindView(R.id.scheduleList)
+    ListView scheduleListView;
+
+    @BindView(R.id.scheduleRefreshView)
+    SwipeRefreshLayout refreshLayout;
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -29,10 +37,7 @@ public class ScheduleFragment extends RefreshFragment
         }
 
         View root = inflater.inflate(R.layout.fragment_schedule, container, false);
-
-        scheduleListView = root.findViewById(R.id.scheduleList);
-
-        SwipeRefreshLayout refreshLayout = root.findViewById(R.id.scheduleRefreshView);
+        unbinder = ButterKnife.bind(this, root);
         super.setup(refreshLayout);
 
         if (config.getPlayer() != null)

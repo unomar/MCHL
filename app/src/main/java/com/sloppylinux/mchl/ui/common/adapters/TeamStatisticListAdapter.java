@@ -18,6 +18,9 @@ import com.sloppylinux.mchl.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
 {
 
@@ -56,19 +59,9 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
 
         if (convertView == null)
         {
-
-            viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.standings_row, parent, false);
-            viewHolder.teamRank = convertView.findViewById(R.id.standingsTeamRank);
-            viewHolder.teamName = convertView.findViewById(R.id.standingsTeamName);
-            viewHolder.teamGamesPlayed = convertView.findViewById(R.id.standingsGamesPlayed);
-            viewHolder.teamWins = convertView.findViewById(R.id.standingsWins);
-            viewHolder.teamLosses = convertView.findViewById(R.id.standingsLosses);
-            viewHolder.teamTies = convertView.findViewById(R.id.standingsTies);
-            viewHolder.teamPoints = convertView.findViewById(R.id.standingsPoints);
-            viewHolder.teamGoalsFor = convertView.findViewById(R.id.standingsGoalsFor);
-            viewHolder.teamGoalsAgainst = convertView.findViewById(R.id.standingsGoalsAgainst);
+            viewHolder = new ViewHolder(convertView);
 
             textViews.add(viewHolder.teamRank);
             textViews.add(viewHolder.teamName);
@@ -115,16 +108,29 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
     }
 
     // View lookup cache
-    private static class ViewHolder
+    static class ViewHolder
     {
+        @BindView(R.id.standingsTeamRank)
         TextView teamRank;
+        @BindView(R.id.standingsTeamName)
         TextView teamName;
+        @BindView(R.id.standingsGamesPlayed)
         TextView teamGamesPlayed;
+        @BindView(R.id.standingsWins)
         TextView teamWins;
+        @BindView(R.id.standingsLosses)
         TextView teamLosses;
+        @BindView(R.id.standingsTies)
         TextView teamTies;
+        @BindView(R.id.standingsPoints)
         TextView teamPoints;
+        @BindView(R.id.standingsGoalsFor)
         TextView teamGoalsFor;
+        @BindView(R.id.standingsGoalsAgainst)
         TextView teamGoalsAgainst;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }
