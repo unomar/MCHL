@@ -61,5 +61,6 @@
     <string name="goalsForHeader">GF</string>
     <string name="goalsAgainstHeader">GA</string>
     <string name="team_name">Team Name</string>
+    <string name="result_display">Result</string>
 
 </resources>
