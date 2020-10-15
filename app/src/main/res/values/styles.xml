@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="CodeFont" parent="@android:style/TextAppearance.Medium">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:typeface">monospace</item>
     </style>
+
     <style name="CodeFont.Table">
         <item name="android:textSize">10sp</item>
         <item name="android:background">#000000</item>
@@ -12,40 +14,48 @@
         <item name="android:gravity">center</item>
         <item name="android:padding">1dip</item>
     </style>
+
     <style name="MenuFont">
-    	<item name="android:textSize">24sp</item>
-    	<item name="android:textStyle">bold</item>
-    	<item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#FFFFFF</item>
         <item name="android:layout_margin">1dp</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">20px</item>
     </style>
+
     <style name="CodeFont.Table.Header">
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="CodeFont.Table.Row">
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="TableBorders">
         <item name="android:background">#555555</item>
     </style>
+
     <style name="ScheduleHeader">
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <style name="SelectorLabel">
-    	<item name="android:textSize">24sp</item>
-    	<item name="android:textStyle">bold</item>
-    	<item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#FFFFFF</item>
         <item name="android:layout_margin">1dp</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">5px</item>
     </style>
+
     <style name="SelectorValue">
         <item name="android:layout_margin">1dp</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">5px</item>
     </style>
-    
+
     <style name="TableFont">
-    	<item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:typeface">monospace</item>
         <item name="android:background">#000000</item>
@@ -56,10 +66,23 @@
         <item name="android:gravity">center</item>
         <item name="android:padding">1dip</item>
     </style>
+
     <style name="TableFont.Top">
-    	<item name="android:layout_marginTop">1dp</item>
+        <item name="android:layout_marginTop">1dp</item>
     </style>
+
     <style name="TableFont.Header">
-    	<item name="android:textStyle">bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="NoActionBar" parent="@android:style/Theme.NoTitleBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.AppTheme" parent="Theme.AppCompat.Light"/>
 </resources>

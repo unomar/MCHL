@@ -1,131 +1,114 @@
 package com.sloppylinux.mchl.util;
 
-import java.util.Properties;
-
 import android.content.Context;
-import android.util.Log;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.sloppylinux.mchl.domain.Player;
+import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class Config
 {
-	private static final String SEASON_KEY = "SEASON";
-	private static final String TEAM_KEY = "TEAM";
-	private static final String DIVISION_KEY = "DIVISION";
+    public static final String PLAYER_JSON = "PlayerJSON";
+    private static final String TABLES_JSON = "TablesJSON";
+    final String tag = "MCHL Config";
 
-	private static final String CONFIG_FILE = "mchl.properties";
+    private SharedPreferences pref;
+    private Properties props = new Properties();
+    private boolean loaded;
+    private boolean changed;
+    private Context context;
 
-	private Properties props = new Properties();
-	private boolean loaded;
-	private boolean changed;
-	private Context context;
-	private String season;
-	private String division;
-	private String team;
-	
-	final String tag = "Config";
+    private Player player;
 
-	public Config(Context context)
-	{
-		this.context = context;
-        if (!loadValues(context))
+    private List<LeagueTable> leagueTables;
+
+    public Config(Context context)
+    {
+        this.context = context;
+
+        pref = context.getSharedPreferences(tag, 0); // 0 - for private mode
+
+        loaded = loadValues();
+        if (!loaded)
         {
-            season = "";
-            division = "";
-            team = "";
+            player = null;
         }
-	}
+    }
 
-	public boolean storeValues()
-	{
-		// Store info to the config file
-		props.setProperty(SEASON_KEY, season);
-		props.setProperty(TEAM_KEY, team);
-		props.setProperty(DIVISION_KEY, division);
+    /**
+     * Persist config values to disk.
+     * @return  True if successful
+     */
+    public boolean storeValues()
+    {
+        Gson gson = new Gson();
 
-		try
-		{
-            props.store(context.openFileOutput(CONFIG_FILE,
-                        Context.MODE_PRIVATE), "MCHL Properties");
-		}
-		catch (Exception e)
-		{
-            Log.e(tag, "Failed to write config output: " +
-                    e.getMessage());
-			return false;
-		}
-		return true;
-	}
+        String playerJson = gson.toJson(player);
+        String tablesJson = gson.toJson(leagueTables);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(PLAYER_JSON, playerJson);
+        editor.putString(TABLES_JSON, tablesJson);
+        editor.apply();
 
-	public boolean loadValues(Context context)
-	{
-		try
-		{
-			props.load(context.openFileInput(CONFIG_FILE));
-			season = props.getProperty(SEASON_KEY);
-			team = props.getProperty(TEAM_KEY);
-			division = props.getProperty(DIVISION_KEY);
-			loaded = true;
-		}
-		catch (Exception e)
-		{
-			// Do something
-			Log.d(tag, e.getMessage());
-			return false;
-		}
-		changed = true;
-		return true;
-	}
-	
-	public Config reload(Context context)
-	{
-		loadValues(context);
-		return this;
-	}
-	
-	public boolean isChanged()
-	{
-		return changed;
-	}
-	
-	public void setChanged(boolean changed)
-	{
-		this.changed = changed; 
-	}
+        return true;
+    }
 
-	public String getSeason()
-	{
-		return season;
-	}
+    /**
+     * Load config values from disk.
+     * @return True if successful
+     */
+    public boolean loadValues()
+    {
+        Gson gson = new Gson();
 
-	public void setSeason(String season)
-	{
-		this.season = season;
-		changed = true;
-	}
+        String playerJson = pref.getString(PLAYER_JSON, "");
+        player = gson.fromJson(playerJson, Player.class);
+        String tablesJson = pref.getString(TABLES_JSON, "");
+        Type listType = new TypeToken<ArrayList<LeagueTable>>(){}.getType();
+        leagueTables = gson.fromJson(tablesJson, listType);
+        changed = true;
+        return true;
+    }
 
-	public String getDivision()
-	{
-		return division;
-	}
+    public Config reload()
+    {
+        loadValues();
+        return this;
+    }
 
-	public void setDivision(String division)
-	{
-		changed = true;
-		this.division = division;
-	}
+    public boolean isChanged()
+    {
+        return changed;
+    }
 
-	public String getTeam()
-	{
-		return team;
-	}
+    public void setChanged(boolean changed)
+    {
+        this.changed = changed;
+    }
 
-	public void setTeam(String team)
-	{
-		changed = true;
-		this.team = team;
-	}
+    public Player getPlayer() {
+        return player;
+    }
 
-	public boolean isLoaded()
-	{
-		return loaded;
-	}
+    public void setPlayer(Player player) { this.player = player;}
+
+    public boolean isLoaded()
+    {
+        return loaded;
+    }
+
+    public List<LeagueTable> getLeagueTables() {
+        return leagueTables;
+    }
+
+    public void setLeagueTables(List<LeagueTable> leagueTables) {
+        this.leagueTables = leagueTables;
+    }
 }

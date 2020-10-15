@@ -1,32 +1,55 @@
 package com.sloppylinux.mchl.util;
 
-import com.sloppylinux.mchl.domain.Event;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
+import com.sloppylinux.mchl.domain.sportspress.Event;
+import com.sloppylinux.mchl.domain.sportspress.League;
+import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
+import com.sloppylinux.mchl.domain.sportspress.TeamTable;
+import com.sloppylinux.mchl.domain.sportspress.Venue;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
-public interface MCHLService {
-
+public interface MCHLService
+{
     @GET("teams")
     Call<List<Team>> listTeams();
 
     @GET("teams/{team}")
-    Call<Team> getTeam(@Path(value = "team") int teamId);
+    Call<Team> getTeam(@Path(value = "team") long teamId);
 
-    @GET("events")
-    Call<List<Event>> listEvents();
+    @GET("lists/{listId}")
+    Call<TeamTable> getTeamStats(@Path(value = "listId") long listId);
+
+    @GET("events?order=asc")
+    Call<List<Event>> listAllEvents();
+
+    @GET("events?order=desc")
+    Call<List<Event>> listTeamResults(@Query("search") String teamName, @Query("seasons") Long seasonId, @Query("leagues") Long leagueId, @Query("before") String date);
+
+    @GET("events?order=asc")
+    Call<List<Event>> listTeamSchedule(@Query("search") String teamName, @Query("seasons") Long seasonId, @Query("leagues") Long leagueId, @Query("after") String date);
 
     @GET("events/{event}")
-    Call<Event> getEvent(@Path(value = "event") int eventId);
+    Call<Event> getEvent(@Path(value = "event") long eventId);
+
+    @GET("venues")
+    Call<List<Venue>> getVenues();
 
     @GET("players")
-    Call<List<Player>> listPlayers();
+    Call<List<Player>> lookupPlayer(@Query("search") String lastName);
 
     @GET("players/{player}")
-    Call<Player> getPlayer(@Path(value = "player") int playerId);
+    Call<Player> getPlayer(@Path(value = "player") long playerId);
+
+    @GET("tables")
+    Call<List<LeagueTable>> getLeagueTable(@Query("seasons") Long seasonId, @Query("leagues") Long leagueId);
+
+    @GET("leagues")
+    Call<List<League>> getLeagues();
 }

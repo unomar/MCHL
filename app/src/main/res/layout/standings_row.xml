@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="16">
+
+    <TextView
+        android:id="@+id/standingsTeamRank"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:padding="5dp"
+        android:text="@string/team_name" />
+
+    <TextView
+        android:id="@+id/standingsTeamName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="7"
+        android:gravity="left"
+        android:padding="5dp"
+        android:text="@string/team_name" />
+
+    <TextView
+        android:id="@+id/standingsGamesPlayed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/gamesPlayedHeader" />
+
+    <TextView
+        android:id="@+id/standingsWins"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/winHeader" />
+
+    <TextView
+        android:id="@+id/standingsLosses"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/lossHeader" />
+
+    <TextView
+        android:id="@+id/standingsTies"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/tieHeader" />
+
+    <TextView
+        android:id="@+id/standingsPoints"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/pointsHeader" />
+
+    <TextView
+        android:id="@+id/standingsGoalsFor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/goalsForHeader" />
+
+    <TextView
+        android:id="@+id/standingsGoalsAgainst"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/goalsAgainstHeader" />
+</TableRow>

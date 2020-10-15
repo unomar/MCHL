@@ -2,13 +2,64 @@
 <resources>
     <string name="hello">Hello World, mchl!</string>
     <string name="app_name">MCHL</string>
-<string name="dialog_title">Configure MCHL Info</string>
-<string name="dialog_text">Do it here</string>
-<string name="Name">Name</string>
-<string name="Goals">G</string>
-<string name="Assists">A</string>
-<string name="Points">P</string>
-<string name="SeasonTextDefault">Select a season</string>
-<string name="DivisionTextDefault">Select a division</string>
-<string name="TeamTextDefault">Select a team</string>
+    <string name="app_setup_name">MCHL Setup</string>
+    <string name="dialog_title">Configure MCHL Info</string>
+    <string name="dialog_text">Do it here</string>
+    <string name="Name">Name</string>
+    <string name="Goals">G</string>
+    <string name="Assists">A</string>
+    <string name="Points">P</string>
+    <string name="SeasonTextDefault">Select a season</string>
+    <string name="DivisionTextDefault">Select a division</string>
+    <string name="TeamTextDefault">Select a team</string>
+    <string name="title_activity_navigation">Navigation</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">MCHL Player</string>
+    <string name="nav_header_subtitle">MCHL Division</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+
+    <!-- Toolbar titles for navigation menu -->
+    <string-array name="nav_item_activity_titles">
+        <item>Schedule</item>
+        <item>Standings</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string name="activity_title_schedule">Schedule</string>
+    <string name="activity_title_standings">Standings</string>
+    <string name="activity_title_settings">Player Lookup</string>
+    <string name="mchl_configuration"><b>Settings</b></string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_schedule">Schedule</string>
+    <string name="menu_results">Results</string>
+    <string name="menu_standings">Standings</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="player_search_header">Player Lookup</string>
+    <string name="player_search_input">Enter Name</string>
+
+    <!-- Game Row strings -->
+    <string name="vs">vs</string>
+    <string name="gameLocation">Motto Mclean Ice Arena</string>
+    <string name="gameDate">Sat 27 Mar 2020 7:30PM</string>
+    <string name="homeTeam">HOME</string>
+    <string name="awayTeam">AWAY</string>
+    <string name="upcoming_text">Upcoming Games</string>
+    <string name="previous_text">Recent Results</string>
+    <string name="select_player_text">Select player from list:</string>
+
+    <!-- Standings Row strings -->
+    <string name="gamesPlayedHeader">GP</string>
+    <string name="winHeader">W</string>
+    <string name="lossHeader">L</string>
+    <string name="tieHeader">T</string>
+    <string name="pointsHeader">P</string>
+    <string name="goalsForHeader">GF</string>
+    <string name="goalsAgainstHeader">GA</string>
+    <string name="team_name">Team Name</string>
+
 </resources>
