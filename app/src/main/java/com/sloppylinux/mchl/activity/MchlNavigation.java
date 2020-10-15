@@ -85,6 +85,8 @@ public class MchlNavigation extends AppCompatActivity {
             playerNameView.setText(player.getShortInfo());
             StringBuilder sb = new StringBuilder();
             String sep = "";
+
+            // TODO: Convert this to a dropdown or other multi-choice selector
             for (Team team : player.getPlayerTeams())
             {
                 sb.append(sep);

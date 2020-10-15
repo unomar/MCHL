@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -12,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
@@ -67,9 +70,37 @@ public class HomeFragment extends Fragment
 
                 GameListAdapter scheduleAdapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
                 scheduleListView.setAdapter(scheduleAdapter);
+                scheduleListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View v, int index,
+                                            long arg3)
+                    {
+                        adapterView.callOnClick();
+                        Game game = (Game) adapterView.getItemAtPosition(index);
+                        Snackbar.make(v, "Loading Schedule Info for " + game.getDateString(), Snackbar.LENGTH_LONG)
+                                .setAction("No action", null).show();
+                    }
+
+                });
 
                 GameListAdapter resultAdapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
                 resultListView.setAdapter(resultAdapter);
+                resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View v, int index,
+                                            long arg3)
+                    {
+                        adapterView.callOnClick();
+                        Game game = (Game) adapterView.getItemAtPosition(index);
+                        Snackbar.make(v, "Loading Match Info for " + game.getDateString(), Snackbar.LENGTH_LONG)
+                                .setAction("No action", null).show();
+                    }
+
+                });
             }
         }
 

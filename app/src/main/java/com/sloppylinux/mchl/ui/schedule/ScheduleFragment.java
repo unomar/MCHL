@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
 import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
@@ -44,6 +47,20 @@ public class ScheduleFragment extends RefreshFragment
         {
             adapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
             scheduleListView.setAdapter(adapter);
+            scheduleListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View v, int index,
+                                        long arg3)
+                {
+                    adapterView.callOnClick();
+                    Game game = (Game) adapterView.getItemAtPosition(index);
+                    Snackbar.make(v, "Loading Match Info for " + game.getDateString(), Snackbar.LENGTH_LONG)
+                            .setAction("No action", null).show();
+                }
+
+            });
         }
 
         return root;

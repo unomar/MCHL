@@ -325,7 +325,7 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
     public long getCurrentSeason()
     {
         long seasonId = 0l;
-        if (this.seasonIds != null && this.seasonIds.size() == 1)
+        if (this.seasonIds != null && this.seasonIds.size() >= 1)
         {
             seasonId = this.seasonIds.get(0);
         }
@@ -335,7 +335,7 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
     public long getCurrentLeague()
     {
         long leagueId = 0l;
-        if (this.leagueIds != null && this.leagueIds.size() == 1)
+        if (this.leagueIds != null && this.leagueIds.size() >= 1)
         {
             leagueId = this.leagueIds.get(0);
         }

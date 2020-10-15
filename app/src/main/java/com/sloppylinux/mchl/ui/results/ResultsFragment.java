@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
 import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
@@ -28,9 +31,11 @@ public class ResultsFragment extends RefreshFragment
     SwipeRefreshLayout refreshLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             ViewGroup container, Bundle savedInstanceState)
+    {
 
-        if (config == null) {
+        if (config == null)
+        {
             config = new Config(this.getContext());
         }
 
@@ -42,6 +47,22 @@ public class ResultsFragment extends RefreshFragment
         {
             adapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
             resultListView.setAdapter(adapter);
+            resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View v, int index,
+                                        long arg3)
+                {
+                    adapterView.callOnClick();
+                    Game game = (Game) adapterView.getItemAtPosition(index);
+                    Snackbar.make(v, "Loading Match Info for " + game.getDateString(), Snackbar.LENGTH_LONG)
+                            .setAction("No action", null).show();
+                }
+
+            });
+//            Intent intent = new Intent(context, NewsItemActivity.class);
+//            context.startActivity(intent);
         }
 
         return root;

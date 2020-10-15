@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
 
@@ -20,7 +19,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickListener {
+public class GameListAdapter extends ArrayAdapter<Game> {
 
     private List<Game> gameList;
     Context mContext;
@@ -47,20 +46,6 @@ public class GameListAdapter extends ArrayAdapter<Game> implements View.OnClickL
         super(context, R.layout.schedule_game_row, data);
         this.gameList = data;
         this.mContext = context;
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        int position = (Integer) v.getTag();
-        Object object = getItem(position);
-        Game game = (Game) object;
-
-        // Do Stuff
-
-        Snackbar.make(v, "Loading Match Info for " + game.getDateString(), Snackbar.LENGTH_LONG)
-                .setAction("No action", null).show();
-
     }
 
     private int lastPosition = -1;

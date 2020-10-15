@@ -134,17 +134,28 @@ public class MCHLWebservice
      */
     private Player fetchPlayer(Player player) throws WebserviceException
     {
-        player.clear();
-        for (Long teamId : player.getCurrentTeams())
+        try
         {
-            Team team = this.getTeam(teamId);
-            if (team != null)
+            Response<Player> playerCall = this.mchlService.getPlayer(player.getPlayerId()).execute();
+            if (playerCall != null)
             {
-                team.setLeagueTable(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
-                player.getPlayerTeams().add(team);
-                player.getPlayerSchedule().add(this.getSchedule(teamId));
-                player.getPlayerResults().add(this.getResults(teamId));
+                player = playerCall.body();
             }
+            for (Long teamId : player.getTeams()) //  TODO: Revert to getCurrentTeams())
+            {
+                Team team = this.getTeam(teamId);
+                if (team != null)
+                {
+                    team.setLeagueTable(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
+                    player.getPlayerTeams().add(team);
+                    player.getPlayerSchedule().add(this.getSchedule(teamId));
+                    player.getPlayerResults().add(this.getResults(teamId));
+                }
+            }
+        } catch (IOException e)
+        {
+            LOG.warning("Caught exception performing updating player info." + e.getMessage());
+            throw new WebserviceException(NETWORK_ERROR, "Caught IOException in fetchPlayer()", e);
         }
 
         return player;
