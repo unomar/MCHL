@@ -141,7 +141,7 @@ public class MCHLWebservice
             {
                 player = playerCall.body();
             }
-            for (Long teamId : player.getTeams()) //  TODO: Revert to getCurrentTeams())
+            for (Long teamId : player.getCurrentTeams())
             {
                 Team team = this.getTeam(teamId);
                 if (team != null)
