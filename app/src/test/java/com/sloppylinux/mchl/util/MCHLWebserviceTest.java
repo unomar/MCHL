@@ -60,7 +60,7 @@ public class MCHLWebserviceTest
     }
 
     @Test
-    public void testGetSchedule()
+    public void testGetSchedule() throws WebserviceException
     {
         TeamSchedule teamSchedule = mchlWebservice.getSchedule(3283L);
         assertNotNull("Team Schedule was null", teamSchedule);
@@ -98,7 +98,7 @@ public class MCHLWebserviceTest
     }
 
     @Test
-    public void testGetStandings()
+    public void testGetStandings() throws WebserviceException
     {
         LeagueTable leagueTable = mchlWebservice.getStandings(117, 115);
         assertNotNull("League table was null", leagueTable);
