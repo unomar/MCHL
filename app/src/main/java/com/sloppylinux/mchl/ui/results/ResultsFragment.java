@@ -1,6 +1,5 @@
 package com.sloppylinux.mchl.ui.results;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.sloppylinux.mchl.activity.ResultDisplay;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
@@ -24,13 +22,14 @@ import butterknife.ButterKnife;
 
 public class ResultsFragment extends RefreshFragment
 {
-    private GameListAdapter adapter;
-
     @BindView(R.id.resultList)
     ListView resultListView;
-
     @BindView(R.id.resultRefreshView)
     SwipeRefreshLayout refreshLayout;
+//    @BindView(R.id.nav_view)
+//    NavigationView navigationView;
+
+    private GameListAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -61,11 +60,22 @@ public class ResultsFragment extends RefreshFragment
                     Snackbar.make(v, "Loading Match Info for " + game.getDateString(), Snackbar.LENGTH_LONG)
                             .setAction("No action", null).show();
 
-                    Intent intent = new Intent(getContext(), ResultDisplay.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("game", game);
-                    intent.putExtras(b);
-                    getContext().startActivity(intent);
+//                    Intent intent = new Intent(getContext(), ResultDisplay.class);
+//                    Bundle b = new Bundle();
+//                    b.putSerializable("game", game);
+//                    intent.putExtras(b);
+//                    getContext().startActivity(intent);
+
+                    GameResultFragment gameResultFragment = new GameResultFragment();
+                    gameResultFragment.setGame(game);
+//                    navigationView.getMenu().getItem(3).setChecked(true);
+
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .add(((ViewGroup) getView().getParent()).getId(), gameResultFragment, "gameResultFragment")
+                            .addToBackStack(null)
+                            .commit();
+
+
                 }
             });
         }

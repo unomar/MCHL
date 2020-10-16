@@ -3,8 +3,8 @@
 
     <color name="background_dark">#FF696565</color>
     <color name="black">#ff000000</color>
-	<color name="orange">#FF990000</color>
-	<color name="transparent">#00000000</color>
+    <color name="orange">#FF990000</color>
+    <color name="transparent">#00000000</color>
 
     <color name="colorPrimary">#FF656565</color>
     <color name="colorPrimaryDark">#FF232323</color>
@@ -16,4 +16,9 @@
     <color name="winColor">#FF007700</color>
     <color name="lossColor">#FF990000</color>
     <color name="tieColor">#FF565656</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
 </resources>

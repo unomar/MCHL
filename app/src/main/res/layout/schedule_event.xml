@@ -1,87 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-android:id="@+id/widget29"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget29"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
 
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:background="@color/background_dark"
->
-<LinearLayout
-android:id="@+id/border"
-android:layout_width="fill_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:layout_margin="1px"
-android:background="@color/black"
->
-<RelativeLayout
-android:id="@+id/widget32"
-android:layout_width="fill_parent"
-android:layout_height="wrap_content"
->
-<TextView
-android:id="@+id/date"
-android:layout_width="120px"
-android:layout_height="wrap_content"
-android:text="Fri 21 Feb 2010 05:30 PM"
-android:textStyle="bold"
-android:gravity="center"
-android:layout_alignParentTop="true"
-android:layout_alignParentLeft="true"
-android:paddingRight="2sp"
->
-</TextView>
-<TextView
-android:id="@+id/location"
-android:layout_width="120px"
-android:layout_height="wrap_content"
-android:text="Motto McLean Ice Arena"
-android:textStyle="bold"
-android:gravity="center"
-android:layout_alignParentTop="true"
-android:layout_alignParentRight="true"
-android:paddingLeft="2sp"
->
-</TextView>
-</RelativeLayout>
+    android:background="@color/background_dark"
+    android:orientation="vertical">
 
-<RelativeLayout
-android:id="@+id/widget36"
-android:layout_width="fill_parent"
-android:layout_height="wrap_content"
->
-<TextView
-android:id="@+id/home"
-android:layout_width="80px"
-android:layout_height="wrap_content"
-android:text="Home Team"
-android:gravity="center"
-android:layout_alignParentTop="true"
-android:layout_alignParentLeft="true"
->
-</TextView>
-<TextView
-android:id="@+id/vs"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="vs"
-android:gravity="center"
-android:layout_centerHorizontal="true"
->
-</TextView>
-<TextView
-android:id="@+id/away"
-android:layout_width="80px"
-android:layout_height="wrap_content"
-android:text="Away Team"
-android:gravity="center"
-android:layout_alignParentTop="true"
-android:layout_alignParentRight="true"
->
-</TextView>
+    <LinearLayout
+        android:id="@+id/border"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1px"
+        android:background="@color/black"
+        android:orientation="vertical">
 
-</RelativeLayout>
-</LinearLayout>
+        <RelativeLayout
+            android:id="@+id/widget32"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/gameResultDate"
+                android:layout_width="120px"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:paddingRight="2sp"
+                android:text="Fri 21 Feb 2010 05:30 PM"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:id="@+id/gameResultLocation"
+                android:layout_width="120px"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:paddingLeft="2sp"
+                android:text="Motto McLean Ice Arena"
+                android:textStyle="bold"></TextView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/widget36"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/home"
+                android:layout_width="80px"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:text="Home Team"></TextView>
+
+            <TextView
+                android:id="@+id/vs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="vs"></TextView>
+
+            <TextView
+                android:id="@+id/away"
+                android:layout_width="80px"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:text="Away Team"></TextView>
+
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

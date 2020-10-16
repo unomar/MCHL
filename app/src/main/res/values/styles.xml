@@ -27,6 +27,7 @@
     <style name="CodeFont.Table.Header">
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="CodeFont.Table.Row">
         <item name="android:textStyle">normal</item>
     </style>
@@ -84,5 +85,10 @@
 
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Theme.AppTheme" parent="Theme.AppCompat.Light"/>
+    <style name="Theme.AppTheme" parent="Theme.AppCompat.Light" />
+
+    <style name="Widget.AppTheme.ButtonBar.Fullscreen" parent="">
+        <item name="android:background">@color/black_overlay</item>
+        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+    </style>
 </resources>
