@@ -20,64 +20,59 @@ public class Game extends Expirable implements Comparable<Game>, Serializable
         locationNames.put("Motto McLean Ice Arena", "Motto");
     }
 
-    private String home;
-    private String away;
+    private Team homeTeam;
+    private Team awayTeam;
     private int homeScore = 0;
     private int awayScore = 0;
     private String location;
     private Date date;
     private Result result;
 
-    public Game(String home, String away, Date date, int homeScore, int awayScore, String location)
+    public Game(Team homeTeam, Team awayTeam, Date date, int homeScore, int awayScore, String location)
     {
-        this.home = home;
-        this.away = away;
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
         this.date = date;
         this.homeScore = homeScore;
         this.awayScore = awayScore;
         this.location = location;
     }
 
+    public Team getHomeTeam()
+    {
+        return homeTeam;
+    }
+
+    public Team getAwayTeam()
+    {
+        return awayTeam;
+    }
+
     /**
      * @return the home
      */
-    public String getHome()
+    public String getHomeTeamName()
     {
-        return home;
+        return homeTeam.getName();
     }
 
-    /**
-     * @param home the home to set
-     */
-    public void setHome(String home)
-    {
-        this.home = home;
-    }
 
     public String getHomeFormatted(int maxChars)
     {
-        return Utils.getFormatted(this.home, maxChars);
+        return Utils.getFormatted(this.homeTeam.getName(), maxChars);
     }
 
     /**
      * @return the away
      */
-    public String getAway()
+    public String getAwayTeamName()
     {
-        return away;
-    }
-
-    /**
-     * @param away the away to set
-     */
-    public void setAway(String away)
-    {
-        this.away = away;
+        return awayTeam.getName();
     }
 
     public String getAwayFormatted(int maxChars)
     {
-        return Utils.getFormatted(this.away, maxChars);
+        return Utils.getFormatted(this.awayTeam.getName(), maxChars);
     }
 
     /**
@@ -165,6 +160,7 @@ public class Game extends Expirable implements Comparable<Game>, Serializable
 
     /**
      * Checks if the game has occurred or is in the future.
+     *
      * @return True if the game time is in the future
      */
     public boolean isInFuture()
@@ -186,18 +182,21 @@ public class Game extends Expirable implements Comparable<Game>, Serializable
     @Override
     public String toString()
     {
-        return this.home + " vs " + this.away;
+        return this.homeTeam + " vs " + this.awayTeam;
     }
 
-    public Result getResult() {
+    public Result getResult()
+    {
         return result;
     }
 
-    public void setResult(Result result) {
+    public void setResult(Result result)
+    {
         this.result = result;
     }
 
-    public enum Result {
+    public enum Result
+    {
         Win("win"),
         Loss("loss"),
         Tie("tie");

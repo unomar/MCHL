@@ -33,6 +33,7 @@ public abstract class Expirable implements Serializable
 
     /**
      * Method to determine if the object is expired.
+     *
      * @return True if expired
      */
     public boolean isExpired()
@@ -48,7 +49,7 @@ public abstract class Expirable implements Serializable
      */
     public boolean isExpired(long expirationTime)
     {
-        return ((expiration != null) && (expirationTime > expiration));
+        return ((expiration == null) || (expirationTime > expiration));
     }
 
 }

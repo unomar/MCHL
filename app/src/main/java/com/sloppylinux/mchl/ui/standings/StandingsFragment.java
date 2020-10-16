@@ -27,7 +27,8 @@ public class StandingsFragment extends RefreshFragment
     private StandingsPagerAdapter standingsPagerAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             ViewGroup container, Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_standings, container, false);
         unbinder = ButterKnife.bind(this, root);
@@ -50,7 +51,8 @@ public class StandingsFragment extends RefreshFragment
     @Override
     public void refreshView()
     {
-//        adapter.clear();
+        // TODO: Figure out how to update & refresh content
+//        standingsPagerAdapter.clear();
 //        adapter.addAll(config.getPlayer().getPlayerTeams());
 //        adapter.notifyDataSetChanged();
     }

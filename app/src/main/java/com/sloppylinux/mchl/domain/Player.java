@@ -13,11 +13,15 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Player extends ResponseBase implements Comparable<Player>, Serializable {
-    private static final long serialVersionUID = 1L;
+public class Player extends ResponseBase implements Comparable<Player>, Serializable
+{
     public static final String DEFAULT_SEPARATOR = "-";
+    private static final long serialVersionUID = 1L;
     Statistics currentStats;
-
+    List<Team> playerTeams = new ArrayList<>();
+    List<TeamSchedule> playerSchedule = new ArrayList<>();
+    List<TeamSchedule> playerResults = new ArrayList<>();
+    List<LeagueTable> leagueTables = new ArrayList<>();
     // Player info
     @SerializedName("slug")
     private String firstLast;
@@ -36,136 +40,169 @@ public class Player extends ResponseBase implements Comparable<Player>, Serializ
     @SerializedName("statistics")
     private Map<Long, Statistics> stats;
 
-    List<Team> playerTeams = new ArrayList<>();
-    List<TeamSchedule> playerSchedule = new ArrayList<>();
-    List<TeamSchedule> playerResults = new ArrayList<>();
-    List<LeagueTable> leagueTables = new ArrayList<>();
-
-    public Player() {
+    public Player()
+    {
     }
 
-    public Player(Long playerId, String playerName) {
+    public Player(Long playerId, String playerName)
+    {
         this.setId(playerId);
         this.setFirstLast(playerName);
     }
 
-    public long getPlayerId() {
+    public long getPlayerId()
+    {
         return getId();
     }
 
-    public void setPlayerId(long playerId) {
+    public void setPlayerId(long playerId)
+    {
         this.setId(playerId);
     }
 
-    public String getFirstLast() {
+    public String getFirstLast()
+    {
         return firstLast;
     }
 
-    public void setFirstLast(String firstLast) {
+    public void setFirstLast(String firstLast)
+    {
         this.firstLast = firstLast;
     }
 
-    public List<Long> getLeagues() {
+    public List<Long> getLeagues()
+    {
         return leagues;
     }
 
-    public void setLeagues(List<Long> leagues) {
+    public void setLeagues(List<Long> leagues)
+    {
         this.leagues = leagues;
     }
 
-    public List<Long> getSeasons() {
+    public List<Long> getSeasons()
+    {
         return seasons;
     }
 
-    public void setSeasons(List<Long> seasons) {
+    public void setSeasons(List<Long> seasons)
+    {
         this.seasons = seasons;
     }
 
-    public List<Long> getPositions() {
+    public List<Long> getPositions()
+    {
         return positions;
     }
 
-    public void setPositions(List<Long> positions) {
+    public void setPositions(List<Long> positions)
+    {
         this.positions = positions;
     }
 
-    public int getNumber() {
+    public int getNumber()
+    {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(int number)
+    {
         this.number = number;
     }
 
-    public List<Long> getTeams() {
+    public List<Long> getTeams()
+    {
         return teams;
     }
 
-    public void setTeams(List<Long> teams) {
+    public void setTeams(List<Long> teams)
+    {
         this.teams = teams;
     }
 
-    public List<Long> getCurrentTeams() {
+    public List<Long> getCurrentTeams()
+    {
         return currentTeams;
     }
 
-    public void setCurrentTeams(List<Long> currentTeams) {
+    public void setCurrentTeams(List<Long> currentTeams)
+    {
         this.currentTeams = currentTeams;
     }
 
-    public Map<Long, Statistics> getStats() {
+    public Map<Long, Statistics> getStats()
+    {
         return stats;
     }
 
-    public void setStats(Map<Long, Statistics> stats) {
+    public void setStats(Map<Long, Statistics> stats)
+    {
         this.stats = stats;
     }
 
-    public List<Team> getPlayerTeams() {
+    public List<Team> getPlayerTeams()
+    {
         return playerTeams;
     }
 
-    public void setPlayerTeams(List<Team> playerTeams) {
+    public void setPlayerTeams(List<Team> playerTeams)
+    {
         this.playerTeams = playerTeams;
     }
 
-    public List<TeamSchedule> getPlayerSchedule() {
+    public List<TeamSchedule> getPlayerSchedule()
+    {
         return playerSchedule;
     }
 
-    public void setPlayerSchedule(List<TeamSchedule> playerSchedule) {
+    public void setPlayerSchedule(List<TeamSchedule> playerSchedule)
+    {
         this.playerSchedule = playerSchedule;
     }
 
-    public List<TeamSchedule> getPlayerResults() {
+    public List<TeamSchedule> getPlayerResults()
+    {
         return playerResults;
     }
 
-    public void setPlayerResults(List<TeamSchedule> playerResults) {
+    public void setPlayerResults(List<TeamSchedule> playerResults)
+    {
         this.playerResults = playerResults;
     }
 
-    public List<LeagueTable> getLeagueTables() {
+    public List<LeagueTable> getLeagueTables()
+    {
         return leagueTables;
     }
 
-    public void setLeagueTables(List<LeagueTable> leagueTables) {
+    public void setLeagueTables(List<LeagueTable> leagueTables)
+    {
         this.leagueTables = leagueTables;
     }
 
-    public List<Game> getPlayerGameList() {
+    public List<Game> getPlayerGameList()
+    {
         List<Game> playerGames = new ArrayList<>();
-        for (TeamSchedule teamSchedule : getPlayerSchedule()) {
-            playerGames.addAll(teamSchedule.getGames());
+        for (TeamSchedule teamSchedule : getPlayerSchedule())
+        {
+            if (teamSchedule != null)
+            {
+                playerGames.addAll(teamSchedule.getGames());
+            }
         }
         Collections.sort(playerGames);
         return playerGames;
     }
 
-    public List<Game> getPlayerResultList() {
+    public List<Game> getPlayerResultList()
+    {
         List<Game> playerResults = new ArrayList<>();
-        for (TeamSchedule teamSchedule : getPlayerResults()) {
-            playerResults.addAll(teamSchedule.getGames());
+        for (TeamSchedule teamSchedule : getPlayerResults())
+        {
+            if (teamSchedule != null)
+            {
+                playerResults.addAll(teamSchedule.getGames());
+            }
         }
         Collections.sort(playerResults);
         Collections.reverse(playerResults);
@@ -178,11 +215,14 @@ public class Player extends ResponseBase implements Comparable<Player>, Serializ
      * @param separator The separator to use
      * @return The players name
      */
-    public String getName(String separator) {
+    public String getName(String separator)
+    {
         String name = "";
-        if (StringUtils.isNotEmpty(this.firstLast)) {
+        if (StringUtils.isNotEmpty(this.firstLast))
+        {
             String[] names = this.firstLast.split("-");
-            if (names != null && names.length > 1) {
+            if (names != null && names.length > 1)
+            {
                 String firstName = StringUtils.capitalize(names[0]);
                 String lastName = StringUtils.capitalize(names[1]);
 
@@ -194,12 +234,13 @@ public class Player extends ResponseBase implements Comparable<Player>, Serializ
     }
 
     @Override
-    public int compareTo(Player other) {
+    public int compareTo(Player other)
+    {
         if (this.currentStats == null)
         {
             return this.getName().compareTo((other.getName()));
-        }
-        else {
+        } else
+        {
             // Reverse the sort order so we order from High to Low
             return this.currentStats.compareTo(other.currentStats);
         }
@@ -207,36 +248,44 @@ public class Player extends ResponseBase implements Comparable<Player>, Serializ
 
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return getName(" ");
     }
 
-    public String getShortInfo() {
+    public String getShortInfo()
+    {
         return getName(" ") + " #" + getNumber();
     }
 
-    public int getGamesPlayed() {
+    public int getGamesPlayed()
+    {
         return 0;
     }
 
-    public int getGoals() {
+    public int getGoals()
+    {
         return 0;
     }
 
-    public int getAssists() {
+    public int getAssists()
+    {
         return 0;
     }
 
-    public int getPoints() {
+    public int getPoints()
+    {
         return 0;
     }
 
-    public int getPims() {
+    public int getPims()
+    {
         return 0;
     }
 
     /**
      * Helper method to determine if the player info requires updating.
+     *
      * @return True if we should query remotely for updated data
      */
     public boolean requiresUpdate()
@@ -257,6 +306,7 @@ public class Player extends ResponseBase implements Comparable<Player>, Serializ
 
     /**
      * Null-Safe clear operation
+     *
      * @param list The list to clear
      */
     private void clearList(List list)

@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
+import com.sloppylinux.mchl.ui.common.fragments.GameFragment;
 import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
 import com.sloppylinux.mchl.util.Config;
 
@@ -41,6 +42,13 @@ public class ResultsFragment extends RefreshFragment
         unbinder = ButterKnife.bind(this, root);
         super.setup(refreshLayout);
 
+        return root;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle bundle)
+    {
+        super.onViewCreated(view, bundle);
         if (config.getPlayer() != null)
         {
             adapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
@@ -51,12 +59,10 @@ public class ResultsFragment extends RefreshFragment
                 Game game = (Game) adapterView.getItemAtPosition(index);
 
                 FragmentManager fm = getActivity().getSupportFragmentManager();
-                GameResultFragment gameResultFragment = GameResultFragment.newInstance(game);
+                GameFragment gameResultFragment = GameFragment.newInstance(game);
                 gameResultFragment.show(fm, "fragment_game_result");
             });
         }
-
-        return root;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.sloppylinux.mchl.ui.schedule;
+package com.sloppylinux.mchl.ui.common.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,9 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.ui.common.adapters.GamePagerAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,26 +25,30 @@ import butterknife.Unbinder;
 /**
  * A DialogFragment which displays a single upcoming game.
  */
-public class GameScheduleFragment extends DialogFragment
+public class GameFragment extends DialogFragment
 {
     protected Unbinder unbinder;
-    @BindView(R.id.gameScheduleDate)
-    TextView gameScheduleDate;
-    @BindView(R.id.gameScheduleLocation)
-    TextView gameScheduleLocation;
-    @BindView(R.id.gameScheduleHomeName)
+    @BindView(R.id.gameDate)
+    TextView gameDate;
+    @BindView(R.id.gameLocation)
+    TextView gameLocation;
+    @BindView(R.id.gameHomeName)
     TextView homeTeamName;
-    @BindView(R.id.gameScheduleAwayName)
+    @BindView(R.id.gameAwayName)
     TextView awayTeamName;
+    @BindView(R.id.gamePager)
+    ViewPager viewPager;
+    @BindView(R.id.gameTabs)
+    TabLayout tabLayout;
 
-    public GameScheduleFragment()
+    public GameFragment()
     {
 
     }
 
-    public static GameScheduleFragment newInstance(Game game)
+    public static GameFragment newInstance(Game game)
     {
-        GameScheduleFragment frag = new GameScheduleFragment();
+        GameFragment frag = new GameFragment();
         Bundle args = new Bundle();
         args.putSerializable("game", game);
         frag.setArguments(args);
@@ -56,7 +63,7 @@ public class GameScheduleFragment extends DialogFragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        View root = inflater.inflate(R.layout.fragment_game_schedule, container, false);
+        View root = inflater.inflate(R.layout.fragment_game, container, false);
         unbinder = ButterKnife.bind(this, root);
 
         return root;
@@ -70,12 +77,16 @@ public class GameScheduleFragment extends DialogFragment
 
         if (game != null)
         {
-            gameScheduleDate.setText(game.getShortDateString());
-            gameScheduleLocation.setText(game.getLocation());
-            homeTeamName.setText(game.getHome());
-            awayTeamName.setText(game.getAway());
+            gameDate.setText(game.getDateString());
+            gameLocation.setText(game.getLocation());
+            homeTeamName.setText(game.getHomeTeamName());
+            awayTeamName.setText(game.getAwayTeamName());
 
-            // TODO: Populate team info
+            GamePagerAdapter gamePagerAdapter = new GamePagerAdapter(game, getChildFragmentManager());
+            viewPager.setAdapter(gamePagerAdapter);
+
+            tabLayout.setupWithViewPager(viewPager);
+            tabLayout.selectTab(tabLayout.getTabAt(1));
         }
     }
 

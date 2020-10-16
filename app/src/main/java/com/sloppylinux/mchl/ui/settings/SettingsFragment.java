@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.sloppylinux.mchl.activity.MchlNavigation;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.ui.R;
@@ -39,21 +40,18 @@ import butterknife.Unbinder;
 
 public class SettingsFragment extends Fragment
 {
+    @BindView(R.id.player_select_text)
+    TextView playerSelectTextView;
+    @BindView(R.id.playerList)
+    ListView playerListView;
+    @BindView((R.id.progressBar))
+    ProgressBar spinner;
+    @BindView(R.id.nameEntry)
+    EditText editText;
     private SettingsViewModel settingsViewModel;
     private Config config;
     private Unbinder unbinder;
-
-    @BindView(R.id.player_select_text)
-    TextView playerSelectTextView;
-
-    @BindView(R.id.playerList)
-    ListView playerListView;
-
-    @BindView((R.id.progressBar))
-    ProgressBar spinner;
-
-    @BindView(R.id.nameEntry)
-    EditText editText;
+    private Snackbar snackbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -94,12 +92,15 @@ public class SettingsFragment extends Fragment
 
     public void playerSearch(String playerName)
     {
+        snackbar = Snackbar.make(getView(), "Searching for " + playerName, Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("No action", null).show();
         spinner.setVisibility(View.VISIBLE);
         settingsViewModel.getText(playerName).observe(this, new Observer<List<Player>>()
         {
             @Override
             public void onChanged(@Nullable List<Player> players)
             {
+                snackbar.dismiss();
                 spinner.setVisibility(View.GONE);
                 if (players != null && !players.isEmpty())
                 {
@@ -112,8 +113,11 @@ public class SettingsFragment extends Fragment
                         @Override
                         public void onItemClick(AdapterView<?> adapter, View v, int pos, long position)
                         {
-                            spinner.setVisibility(View.VISIBLE);
                             Player player = (Player) adapter.getItemAtPosition(pos);
+                            snackbar = Snackbar.make(getView(), "Fetching schedule and stats for " + player.getName(), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.setAction("No action", null).show();
+                            spinner.setVisibility(View.VISIBLE);
+
                             settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>()
                             {
                                 @Override
