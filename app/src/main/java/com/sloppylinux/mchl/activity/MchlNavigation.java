@@ -24,12 +24,8 @@ import org.apache.log4j.Logger;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MchlNavigation extends AppCompatActivity {
-
-    private AppBarConfiguration mAppBarConfiguration;
-    private Config config;
-    private Player player;
-    private Logger logger = Logger.getLogger(MchlNavigation.class.getName());
+public class MchlNavigation extends AppCompatActivity
+{
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
@@ -37,9 +33,14 @@ public class MchlNavigation extends AppCompatActivity {
     NavigationView navigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    private AppBarConfiguration mAppBarConfiguration;
+    private Config config;
+    private Player player;
+    private Logger logger = Logger.getLogger(MchlNavigation.class.getName());
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         logger.debug("Entering MCHL Navigation");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
@@ -74,14 +75,16 @@ public class MchlNavigation extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation, menu);
 
         final TextView playerNameView = findViewById(R.id.playerName);
         final TextView playerDivView = findViewById(R.id.playerDivision);
 
-        if (player != null) {
+        if (player != null)
+        {
             playerNameView.setText(player.getShortInfo());
             StringBuilder sb = new StringBuilder();
             String sep = "";
@@ -99,7 +102,8 @@ public class MchlNavigation extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
+    public boolean onSupportNavigateUp()
+    {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();

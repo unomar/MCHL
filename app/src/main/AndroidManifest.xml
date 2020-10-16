@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
         <activity android:name="com.sloppylinux.mchl.activity.InitialSetup" android:label="@string/app_setup_name" android:theme="@style/AppTheme"/>
-        <activity android:name="com.sloppylinux.mchl.activity.ResultDisplay" android:label="@string/result_display" android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>
