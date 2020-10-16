@@ -1,10 +1,9 @@
-package com.sloppylinux.mchl.ui.results;
+package com.sloppylinux.mchl.ui.schedule;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,35 +20,28 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * A DialogFragment which displays a single upcoming game.
  */
-public class GameResultFragment extends DialogFragment
+public class GameScheduleFragment extends DialogFragment
 {
     protected Unbinder unbinder;
-    @BindView(R.id.gameResultView)
-    RelativeLayout gameResultView;
-    @BindView(R.id.gameResultDate)
-    TextView gameResultDate;
-    @BindView(R.id.gameResultLocation)
-    TextView gameResultLocation;
-    @BindView(R.id.gameResultHomeName)
+    @BindView(R.id.gameScheduleDate)
+    TextView gameScheduleDate;
+    @BindView(R.id.gameScheduleLocation)
+    TextView gameScheduleLocation;
+    @BindView(R.id.gameScheduleHomeName)
     TextView homeTeamName;
-    @BindView(R.id.gameResultAwayName)
+    @BindView(R.id.gameScheduleAwayName)
     TextView awayTeamName;
-    @BindView(R.id.gameResultHomeTeamScore)
-    TextView homeTeamScore;
-    @BindView(R.id.gameResultAwayTeamScore)
-    TextView awayTeamScore;
 
-    public GameResultFragment()
+    public GameScheduleFragment()
     {
 
     }
 
-    public static GameResultFragment newInstance(Game game)
+    public static GameScheduleFragment newInstance(Game game)
     {
-        GameResultFragment frag = new GameResultFragment();
+        GameScheduleFragment frag = new GameScheduleFragment();
         Bundle args = new Bundle();
         args.putSerializable("game", game);
         frag.setArguments(args);
@@ -64,7 +56,7 @@ public class GameResultFragment extends DialogFragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        View root = inflater.inflate(R.layout.fragment_game_result, container, false);
+        View root = inflater.inflate(R.layout.fragment_game_schedule, container, false);
         unbinder = ButterKnife.bind(this, root);
 
         return root;
@@ -78,12 +70,10 @@ public class GameResultFragment extends DialogFragment
 
         if (game != null)
         {
-            gameResultDate.setText(game.getShortDateString());
-            gameResultLocation.setText(game.getLocation());
+            gameScheduleDate.setText(game.getShortDateString());
+            gameScheduleLocation.setText(game.getLocation());
             homeTeamName.setText(game.getHome());
-            homeTeamScore.setText(String.valueOf(game.getHomeScore()));
             awayTeamName.setText(game.getAway());
-            awayTeamScore.setText(String.valueOf(game.getAwayScore()));
 
             // TODO: Populate team info
         }

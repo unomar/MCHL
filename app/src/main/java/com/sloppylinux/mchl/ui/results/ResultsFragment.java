@@ -4,13 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
@@ -26,8 +25,6 @@ public class ResultsFragment extends RefreshFragment
     ListView resultListView;
     @BindView(R.id.resultRefreshView)
     SwipeRefreshLayout refreshLayout;
-//    @BindView(R.id.nav_view)
-//    NavigationView navigationView;
 
     private GameListAdapter adapter;
 
@@ -48,35 +45,14 @@ public class ResultsFragment extends RefreshFragment
         {
             adapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
             resultListView.setAdapter(adapter);
-            resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            resultListView.setOnItemClickListener((adapterView, v, index, arg3) ->
             {
+                adapterView.callOnClick();
+                Game game = (Game) adapterView.getItemAtPosition(index);
 
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View v, int index,
-                                        long arg3)
-                {
-                    adapterView.callOnClick();
-                    Game game = (Game) adapterView.getItemAtPosition(index);
-                    Snackbar.make(v, "Loading Match Info for " + game.getDateString(), Snackbar.LENGTH_LONG)
-                            .setAction("No action", null).show();
-
-//                    Intent intent = new Intent(getContext(), ResultDisplay.class);
-//                    Bundle b = new Bundle();
-//                    b.putSerializable("game", game);
-//                    intent.putExtras(b);
-//                    getContext().startActivity(intent);
-
-                    GameResultFragment gameResultFragment = new GameResultFragment();
-                    gameResultFragment.setGame(game);
-//                    navigationView.getMenu().getItem(3).setChecked(true);
-
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .add(((ViewGroup) getView().getParent()).getId(), gameResultFragment, "gameResultFragment")
-                            .addToBackStack(null)
-                            .commit();
-
-
-                }
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                GameResultFragment gameResultFragment = GameResultFragment.newInstance(game);
+                gameResultFragment.show(fm, "fragment_game_result");
             });
         }
 

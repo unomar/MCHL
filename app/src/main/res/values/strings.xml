@@ -63,6 +63,7 @@
     <string name="team_name">Team Name</string>
     <string name="result_display">Result</string>
     <string name="zero">0</string>
+    <string name="home">HOME</string>
     <string name="away">AWAY</string>
     <string name="at_symbol">\@</string>
     <string name="location">Location</string>

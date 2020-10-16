@@ -4,21 +4,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
 import com.sloppylinux.mchl.ui.common.adapters.TeamListAdapter;
+import com.sloppylinux.mchl.ui.results.GameResultFragment;
+import com.sloppylinux.mchl.ui.schedule.GameScheduleFragment;
 import com.sloppylinux.mchl.ui.settings.SettingsViewModel;
 import com.sloppylinux.mchl.util.Config;
 
@@ -70,36 +70,27 @@ public class HomeFragment extends Fragment
 
                 GameListAdapter scheduleAdapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
                 scheduleListView.setAdapter(scheduleAdapter);
-                scheduleListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                scheduleListView.setOnItemClickListener((adapterView, v, index, arg3) ->
                 {
+                    adapterView.callOnClick();
+                    Game game = (Game) adapterView.getItemAtPosition(index);
 
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View v, int index,
-                                            long arg3)
-                    {
-                        adapterView.callOnClick();
-                        Game game = (Game) adapterView.getItemAtPosition(index);
-                        Snackbar.make(v, "Loading Schedule Info for " + game.getDateString(), Snackbar.LENGTH_LONG)
-                                .setAction("No action", null).show();
-                    }
-
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    GameScheduleFragment gameScheduleFragment = GameScheduleFragment.newInstance(game);
+                    gameScheduleFragment.show(fm, "fragment_game_schedule");
                 });
 
                 GameListAdapter resultAdapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
                 resultListView.setAdapter(resultAdapter);
-                resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                resultListView.setOnItemClickListener((adapterView, v, index, arg3) ->
                 {
+                    adapterView.callOnClick();
+                    Game game = (Game) adapterView.getItemAtPosition(index);
 
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View v, int index,
-                                            long arg3)
-                    {
-                        adapterView.callOnClick();
-                        Game game = (Game) adapterView.getItemAtPosition(index);
-                        Snackbar.make(v, "Loading Match Info for " + game.getDateString(), Snackbar.LENGTH_LONG)
-                                .setAction("No action", null).show();
-                    }
-
+                    // Create a GameResultFragment and display the Dialog
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    GameResultFragment gameResultFragment = GameResultFragment.newInstance(game);
+                    gameResultFragment.show(fm, "fragment_game_result");
                 });
             }
         }
@@ -121,22 +112,18 @@ public class HomeFragment extends Fragment
     private void updatePlayerInfo(Player player)
     {
         spinner.setVisibility(View.VISIBLE);
-        settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>()
+        settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), s ->
         {
-            @Override
-            public void onChanged(String s)
-            {
-                spinner.setVisibility(View.GONE);
+            spinner.setVisibility(View.GONE);
 
-                TeamListAdapter teamAdapter = new TeamListAdapter(config.getPlayer().getPlayerTeams(), getContext());
-                teamListView.setAdapter(teamAdapter);
+            TeamListAdapter teamAdapter = new TeamListAdapter(config.getPlayer().getPlayerTeams(), getContext());
+            teamListView.setAdapter(teamAdapter);
 
-                GameListAdapter scheduleAdapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
-                scheduleListView.setAdapter(scheduleAdapter);
+            GameListAdapter scheduleAdapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
+            scheduleListView.setAdapter(scheduleAdapter);
 
-                GameListAdapter resultAdapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
-                resultListView.setAdapter(resultAdapter);
-            }
+            GameListAdapter resultAdapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
+            resultListView.setAdapter(resultAdapter);
         });
     }
 }
