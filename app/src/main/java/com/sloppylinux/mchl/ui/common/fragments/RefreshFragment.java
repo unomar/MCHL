@@ -3,7 +3,6 @@ package com.sloppylinux.mchl.ui.common.fragments;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -46,26 +45,23 @@ public abstract class RefreshFragment extends Fragment
      */
     private void updatePlayerInfo(Player player)
     {
-        refreshViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>()
+        refreshViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), s ->
         {
-            @Override
-            public void onChanged(String s)
+            mySwipeRefreshLayout.setRefreshing(false);
+            if (s.startsWith(WebserviceException.ERROR_PREFIX))
             {
-                mySwipeRefreshLayout.setRefreshing(false);
-                if (s.startsWith(WebserviceException.ERROR_PREFIX))
-                {
-                    Toast toast = Toast.makeText(getContext(), s, Toast.LENGTH_LONG);
-                    toast.show();
-                } else
-                {
-                    refreshView();
-                }
+                Toast toast = Toast.makeText(getContext(), s, Toast.LENGTH_LONG);
+                toast.show();
+            } else
+            {
+                refreshView();
             }
         });
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy()
+    {
         super.onDestroy();
         unbinder.unbind();
     }

@@ -41,6 +41,13 @@ public class ResultsFragment extends RefreshFragment
         unbinder = ButterKnife.bind(this, root);
         super.setup(refreshLayout);
 
+        return root;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle bundle)
+    {
+        super.onViewCreated(view, bundle);
         if (config.getPlayer() != null)
         {
             adapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
@@ -55,8 +62,6 @@ public class ResultsFragment extends RefreshFragment
                 gameResultFragment.show(fm, "fragment_game_result");
             });
         }
-
-        return root;
     }
 
     @Override

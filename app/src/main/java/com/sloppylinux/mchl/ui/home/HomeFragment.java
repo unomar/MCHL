@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.ui.R;
@@ -28,22 +29,18 @@ import butterknife.Unbinder;
 
 public class HomeFragment extends Fragment
 {
+    @BindView(R.id.homeProgressBar)
+    ProgressBar spinner;
+    @BindView(R.id.homepage_team_list)
+    ListView teamListView;
+    @BindView(R.id.homepage_schedule_list)
+    ListView scheduleListView;
+    @BindView(R.id.homepage_result_list)
+    ListView resultListView;
     private SettingsViewModel settingsViewModel;
     private Config config;
     private Unbinder unbinder;
-
-    @BindView(R.id.homeProgressBar)
-    ProgressBar spinner;
-
-    @BindView(R.id.homepage_team_list)
-    ListView teamListView;
-
-    @BindView(R.id.homepage_schedule_list)
-    ListView scheduleListView;
-
-    @BindView(R.id.homepage_result_list)
-    ListView resultListView;
-
+    private Snackbar snackbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -57,6 +54,11 @@ public class HomeFragment extends Fragment
                 new ViewModelProvider(this).get(SettingsViewModel.class);
 
         spinner.setVisibility(View.GONE);
+        return root;
+    }
+
+    public void onViewCreated(View view, Bundle bundle)
+    {
 
         if (config.getPlayer() != null)
         {
@@ -94,12 +96,11 @@ public class HomeFragment extends Fragment
                 });
             }
         }
-
-        return root;
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy()
+    {
         super.onDestroy();
         unbinder.unbind();
     }
@@ -111,10 +112,13 @@ public class HomeFragment extends Fragment
      */
     private void updatePlayerInfo(Player player)
     {
+        snackbar = Snackbar.make(getView(), "Fetching updated schedule and stats for " + config.getPlayer().getName(" "), Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("No action", null).show();
         spinner.setVisibility(View.VISIBLE);
         settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), s ->
         {
             spinner.setVisibility(View.GONE);
+            snackbar.dismiss();
 
             TeamListAdapter teamAdapter = new TeamListAdapter(config.getPlayer().getPlayerTeams(), getContext());
             teamListView.setAdapter(teamAdapter);
