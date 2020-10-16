@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/gameResultView"
+    android:id="@+id/gameView"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
@@ -11,7 +11,7 @@
         android:gravity="center">
 
         <TextView
-            android:id="@+id/gameResultDate"
+            android:id="@+id/gameDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/date" />
@@ -20,11 +20,11 @@
             android:id="@+id/at"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/gameResultDate"
+            android:layout_toEndOf="@id/gameDate"
             android:text="@string/at_symbol" />
 
         <TextView
-            android:id="@+id/gameResultLocation"
+            android:id="@+id/gameLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/at"
@@ -55,14 +55,14 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/gameResultHomeName"
+                android:id="@+id/gameHomeName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/team_name" />
 
             <TextView
-                android:id="@+id/gameResultHomeTeamScore"
+                android:id="@+id/gameHomeTeamScore"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -84,14 +84,14 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/gameResultAwayName"
+                android:id="@+id/gameAwayName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/team_name" />
 
             <TextView
-                android:id="@+id/gameResultAwayTeamScore"
+                android:id="@+id/gameAwayTeamScore"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -101,30 +101,17 @@
 
     </LinearLayout>
 
-    <TabHost
-        android:id="@android:id/tabhost"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/scoreBar"
-        android:layout_alignParentStart="true"
-        android:orientation="vertical">
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/gamePager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/scoreBar">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:padding="5dp">
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/gameTabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:padding="5dp" />
-        </LinearLayout>
-    </TabHost>
+            android:layout_alignParentStart="true" />
+    </androidx.viewpager.widget.ViewPager>
 </RelativeLayout>

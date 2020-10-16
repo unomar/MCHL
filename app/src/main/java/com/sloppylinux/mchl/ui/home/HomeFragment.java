@@ -18,8 +18,7 @@ import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
 import com.sloppylinux.mchl.ui.common.adapters.TeamListAdapter;
-import com.sloppylinux.mchl.ui.results.GameResultFragment;
-import com.sloppylinux.mchl.ui.schedule.GameScheduleFragment;
+import com.sloppylinux.mchl.ui.common.fragments.GameFragment;
 import com.sloppylinux.mchl.ui.settings.SettingsViewModel;
 import com.sloppylinux.mchl.util.Config;
 
@@ -78,8 +77,8 @@ public class HomeFragment extends Fragment
                     Game game = (Game) adapterView.getItemAtPosition(index);
 
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    GameScheduleFragment gameScheduleFragment = GameScheduleFragment.newInstance(game);
-                    gameScheduleFragment.show(fm, "fragment_game_schedule");
+                    GameFragment gameFragment = GameFragment.newInstance(game);
+                    gameFragment.show(fm, "fragment_game_schedule");
                 });
 
                 GameListAdapter resultAdapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
@@ -91,7 +90,7 @@ public class HomeFragment extends Fragment
 
                     // Create a GameResultFragment and display the Dialog
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    GameResultFragment gameResultFragment = GameResultFragment.newInstance(game);
+                    GameFragment gameResultFragment = GameFragment.newInstance(game);
                     gameResultFragment.show(fm, "fragment_game_result");
                 });
             }
@@ -112,7 +111,7 @@ public class HomeFragment extends Fragment
      */
     private void updatePlayerInfo(Player player)
     {
-        snackbar = Snackbar.make(getView(), "Fetching updated schedule and stats for " + config.getPlayer().getName(" "), Snackbar.LENGTH_INDEFINITE);
+        snackbar = Snackbar.make(getView(), "Fetching updated schedule and stats for " + player.getName(" "), Snackbar.LENGTH_INDEFINITE);
         snackbar.setAction("No action", null).show();
         spinner.setVisibility(View.VISIBLE);
         settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), s ->

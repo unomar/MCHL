@@ -277,7 +277,7 @@ public class MCHLWebservice
      * @param teamId The id of the team to query
      * @return The TeamSchedule
      */
-    public TeamSchedule getSchedule(Long teamId)
+    public TeamSchedule getSchedule(Long teamId) throws WebserviceException
     {
         TeamSchedule teamSchedule = null;
         try
@@ -304,7 +304,10 @@ public class MCHLWebservice
                             LOG.info("Creating Game for event [" + event.getId() + "] as " + eventString + " at " + venueName);
                             String[] teamNames = eventString.split(" vs ");
 
-                            Game game = new Game(teamNames[0], teamNames[1], event.getEventDate(), 0, 0, venueName);
+                            // TODO: Revert this and pull Team info on demand
+                            Team homeTeam = getTeam(event.getTeamIds().get(0));
+                            Team awayTeam = getTeam(event.getTeamIds().get(1));
+                            Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
                             teamSchedule.getGames().add(game);
                         }
                     }
@@ -323,7 +326,7 @@ public class MCHLWebservice
      * @param teamId The id of the team to query
      * @return The TeamSchedule
      */
-    TeamSchedule getResults(Long teamId)
+    TeamSchedule getResults(Long teamId) throws WebserviceException
     {
         TeamSchedule teamSchedule = null;
         try
@@ -359,7 +362,10 @@ public class MCHLWebservice
                                 LOG.info("Final score: " + teamNames[0] + " " + homeScore + " - " + awayScore + " " + teamNames[1]);
                             }
 
-                            Game game = new Game(teamNames[0], teamNames[1], event.getEventDate(), homeScore, awayScore, venueName);
+                            // TODO: Revert this and pull Team info on demand
+                            Team homeTeam = getTeam(event.getTeamIds().get(0));
+                            Team awayTeam = getTeam(event.getTeamIds().get(1));
+                            Game game = new Game(homeTeam, awayTeam, event.getEventDate(), homeScore, awayScore, venueName);
                             game.setResult(Game.Result.fromString(event.getOutcome().get(teamId)));
                             teamSchedule.getGames().add(game);
                         }

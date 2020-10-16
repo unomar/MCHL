@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
+import com.sloppylinux.mchl.ui.common.fragments.GameFragment;
 import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
 import com.sloppylinux.mchl.util.Config;
 
@@ -57,8 +58,8 @@ public class ScheduleFragment extends RefreshFragment
                 Game game = (Game) adapterView.getItemAtPosition(index);
 
                 FragmentManager fm = getActivity().getSupportFragmentManager();
-                GameScheduleFragment gameScheduleFragment = GameScheduleFragment.newInstance(game);
-                gameScheduleFragment.show(fm, "fragment_game_schedule");
+                GameFragment gameFragment = GameFragment.newInstance(game);
+                gameFragment.show(fm, "fragment_game_schedule");
             });
         }
     }
