@@ -97,11 +97,6 @@ public class MCHLWebservice
         return singleton;
     }
 
-    public static String[] getSeasons()
-    {
-        return new String[0];
-    }
-
     /**
      * Fetch and persist player info
      *
@@ -115,6 +110,7 @@ public class MCHLWebservice
         {
             player = fetchPlayer(player);
 
+            // TODO: What the fucking fuck?  Why is seasonId hardcoded?
             List<LeagueTable> leagueTables = fetchLatestLeagueTables(117L, context);
 
             player.setExpiration(new Date().getTime() + timeToLive);
@@ -141,7 +137,7 @@ public class MCHLWebservice
             {
                 player = playerCall.body();
             }
-            for (Long teamId : player.getCurrentTeams())
+            for (Long teamId : player.getTeams()) // TODO: Revert getCurrentTeams())
             {
                 Team team = this.getTeam(teamId);
                 if (team != null)
@@ -166,7 +162,7 @@ public class MCHLWebservice
      *
      * @param context The application context
      */
-    public List<LeagueTable> fetchLatestLeagueTables(long seasonId, Context context)
+    public List<LeagueTable> fetchLatestLeagueTables(long seasonId, Context context) throws WebserviceException
     {
         List<LeagueTable> leagueTables = new ArrayList<>();
         for (League league : this.getLeagues())
@@ -225,7 +221,7 @@ public class MCHLWebservice
      * @param leagueId The league ID
      * @return The standings
      */
-    LeagueTable getStandings(long seasonId, long leagueId)
+    public LeagueTable getStandings(long seasonId, long leagueId) throws WebserviceException
     {
         LeagueTable leagueTable = null;
         try
@@ -239,6 +235,7 @@ public class MCHLWebservice
         } catch (IOException e)
         {
             LOG.warning("Caught exception attempting to lookup standings for season " + seasonId + " and league " + leagueId + ".  " + e.getMessage());
+            throw new WebserviceException(NETWORK_ERROR, "Caught IOException retrieving Standings", e);
         }
         return leagueTable;
     }
@@ -269,6 +266,26 @@ public class MCHLWebservice
             throw new WebserviceException(NETWORK_ERROR, "Caught IOException in playerLookup()", e);
         }
         return players;
+    }
+
+    /**
+     * Get Team Statistics.
+     * @param team The team to get statistics for
+     * @return The team statistics
+     * @throws WebserviceException On error
+     */
+    public TeamTable getTeamStats(Team team) throws WebserviceException
+    {
+        try
+        {
+            Response<TeamTable> response = mchlService.getTeamStats(team.getListId()).execute();
+            return response == null ? null : response.body();
+        }
+        catch (IOException e)
+        {
+            LOG.warning("Caught exception querying team statistics. " + e.getMessage());
+            throw new WebserviceException(NETWORK_ERROR, "Caught IOException in getTeamStats()", e);
+        }
     }
 
     /**
@@ -305,8 +322,10 @@ public class MCHLWebservice
                             String[] teamNames = eventString.split(" vs ");
 
                             // TODO: Revert this and pull Team info on demand
-                            Team homeTeam = getTeam(event.getTeamIds().get(0));
-                            Team awayTeam = getTeam(event.getTeamIds().get(1));
+                            Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(0));
+                            homeTeam.setId(event.getTeamIds().get(0));
+                            Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(1));
+                            awayTeam.setId(event.getTeamIds().get(1));
                             Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
                             teamSchedule.getGames().add(game);
                         }
@@ -363,8 +382,10 @@ public class MCHLWebservice
                             }
 
                             // TODO: Revert this and pull Team info on demand
-                            Team homeTeam = getTeam(event.getTeamIds().get(0));
-                            Team awayTeam = getTeam(event.getTeamIds().get(1));
+                            Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(0));
+                            homeTeam.setId(event.getTeamIds().get(0));
+                            Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(1));
+                            awayTeam.setId(event.getTeamIds().get(1));
                             Game game = new Game(homeTeam, awayTeam, event.getEventDate(), homeScore, awayScore, venueName);
                             game.setResult(Game.Result.fromString(event.getOutcome().get(teamId)));
                             teamSchedule.getGames().add(game);

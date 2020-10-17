@@ -12,14 +12,12 @@ import androidx.core.content.ContextCompat;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
 import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.ui.common.viewholders.TeamStatisticViewHolder;
 import com.sloppylinux.mchl.util.Config;
 import com.sloppylinux.mchl.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
 {
@@ -52,7 +50,7 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
         // Get the data item for this position
         TeamStatistic teamModel = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
-        ViewHolder viewHolder; // view lookup cache stored in tag
+        TeamStatisticViewHolder viewHolder; // view lookup cache stored in tag
 
         final View result;
         List<TextView> textViews = new ArrayList<>();
@@ -61,38 +59,38 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
         {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.standings_row, parent, false);
-            viewHolder = new ViewHolder(convertView);
+            viewHolder = new TeamStatisticViewHolder(convertView);
 
-            textViews.add(viewHolder.teamRank);
-            textViews.add(viewHolder.teamName);
-            textViews.add(viewHolder.teamGamesPlayed);
-            textViews.add(viewHolder.teamWins);
-            textViews.add(viewHolder.teamLosses);
-            textViews.add(viewHolder.teamTies);
-            textViews.add(viewHolder.teamPoints);
-            textViews.add(viewHolder.teamGoalsFor);
-            textViews.add(viewHolder.teamGoalsAgainst);
+            textViews.add(viewHolder.getTeamRank());
+            textViews.add(viewHolder.getTeamName());
+            textViews.add(viewHolder.getTeamGamesPlayed());
+            textViews.add(viewHolder.getTeamWins());
+            textViews.add(viewHolder.getTeamLosses());
+            textViews.add(viewHolder.getTeamTies());
+            textViews.add(viewHolder.getTeamPoints());
+            textViews.add(viewHolder.getTeamGoalsFor());
+            textViews.add(viewHolder.getTeamGoalsAgainst());
 
             result = convertView;
 
             convertView.setTag(viewHolder);
         } else
         {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (TeamStatisticViewHolder) convertView.getTag();
             result = convertView;
         }
         lastPosition = position;
 
         int pos = Utils.safeParseInt(teamModel.getPosition());
-        viewHolder.teamRank.setText((pos == -1) ? "#" : Integer.toString(pos));
-        viewHolder.teamName.setText(Utils.getFormatted(teamModel.getName(), 24));
-        viewHolder.teamGamesPlayed.setText(teamModel.getGamesPlayed());
-        viewHolder.teamWins.setText(teamModel.getWins());
-        viewHolder.teamLosses.setText(teamModel.getLosses());
-        viewHolder.teamTies.setText(teamModel.getTies());
-        viewHolder.teamPoints.setText(teamModel.getPoints());
-        viewHolder.teamGoalsFor.setText(teamModel.getGoalsFor());
-        viewHolder.teamGoalsAgainst.setText(teamModel.getGoalsAgainst());
+        viewHolder.getTeamRank().setText((pos == -1) ? "#" : Integer.toString(pos));
+        viewHolder.getTeamName().setText(Utils.getFormatted(teamModel.getName(), 24));
+        viewHolder.getTeamGamesPlayed().setText(teamModel.getGamesPlayed());
+        viewHolder.getTeamWins().setText(teamModel.getWins());
+        viewHolder.getTeamLosses().setText(teamModel.getLosses());
+        viewHolder.getTeamTies().setText(teamModel.getTies());
+        viewHolder.getTeamPoints().setText(teamModel.getPoints());
+        viewHolder.getTeamGoalsFor().setText(teamModel.getGoalsFor());
+        viewHolder.getTeamGoalsAgainst().setText(teamModel.getGoalsAgainst());
 
         boolean isHeader = "Team".equals(teamModel.getName());
         boolean isMyTeam = myTeams.contains(teamModel.getName());
@@ -108,29 +106,5 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
     }
 
     // View lookup cache
-    static class ViewHolder
-    {
-        @BindView(R.id.standingsTeamRank)
-        TextView teamRank;
-        @BindView(R.id.standingsTeamName)
-        TextView teamName;
-        @BindView(R.id.standingsGamesPlayed)
-        TextView teamGamesPlayed;
-        @BindView(R.id.standingsWins)
-        TextView teamWins;
-        @BindView(R.id.standingsLosses)
-        TextView teamLosses;
-        @BindView(R.id.standingsTies)
-        TextView teamTies;
-        @BindView(R.id.standingsPoints)
-        TextView teamPoints;
-        @BindView(R.id.standingsGoalsFor)
-        TextView teamGoalsFor;
-        @BindView(R.id.standingsGoalsAgainst)
-        TextView teamGoalsAgainst;
 
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
 }

@@ -1,22 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableRow xmlns:android="http://schemas.android.com/apk/res/android" android:gravity="center">
-    <TextView android:layout_column="1"
-          android:id="@+id/nameCol"
-          android:text="Player Name"
-          style="@style/TableFont" android:gravity="left" />
-    <TextView android:text="GP"
-          android:id="@+id/gamesPlayedCol"
-          style="@style/TableFont"/>
-    <TextView android:text="G"
-          android:id="@+id/goalsCol"
-          style="@style/TableFont"/>
-    <TextView android:text="A"
-          android:id="@+id/assistsCol"
-          style="@style/TableFont"/>
-    <TextView android:text="P"
-          android:id="@+id/pointsCol"
-          style="@style/TableFont"/>
-    <TextView android:text="PIM"
-          android:id="@+id/pimsCol"
-          style="@style/TableFont"/>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/playerRow"
+    style="@style/TableBorders"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/playerRowName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="1px"
+        android:layout_weight=".5"
+        android:text="@string/Name"
+        android:background="@drawable/colored_grid"/>
+
+    <TextView
+        android:id="@+id/playerGamesPlayed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="1px"
+        android:layout_weight=".07"
+        android:text="@string/gamesPlayedHeader"
+        android:background="@drawable/colored_grid"/>
+
+    <TextView
+        android:id="@+id/playerGoals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="1px"
+        android:layout_weight=".07"
+        android:text="@string/Goals"
+        android:background="@drawable/colored_grid"/>
+
+    <TextView
+        android:id="@+id/playerAssists"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="1px"
+        android:layout_weight=".07"
+        android:text="@string/Assists"
+        android:background="@drawable/colored_grid"/>
+
+    <TextView
+        android:id="@+id/playerPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="1px"
+        android:layout_weight=".07"
+        android:text="@string/pointsHeader"
+        android:background="@drawable/colored_grid"/>
+
+    <TextView
+        android:id="@+id/playerPims"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="1px"
+        android:layout_weight=".07"
+        android:text="@string/pimHeader"
+        android:background="@drawable/colored_grid"/>
 </TableRow>

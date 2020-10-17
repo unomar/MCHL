@@ -9,6 +9,7 @@
     <string name="Goals">G</string>
     <string name="Assists">A</string>
     <string name="Points">P</string>
+    <string name="pimHeader">PIM</string>
     <string name="SeasonTextDefault">Select a season</string>
     <string name="DivisionTextDefault">Select a division</string>
     <string name="TeamTextDefault">Select a team</string>

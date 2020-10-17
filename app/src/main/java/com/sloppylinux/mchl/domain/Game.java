@@ -59,7 +59,7 @@ public class Game extends Expirable implements Comparable<Game>, Serializable
 
     public String getHomeFormatted(int maxChars)
     {
-        return Utils.getFormatted(this.homeTeam.getName(), maxChars);
+        return this.homeTeam == null ? "" : Utils.getFormatted(this.homeTeam.getName(), maxChars);
     }
 
     /**
@@ -72,7 +72,7 @@ public class Game extends Expirable implements Comparable<Game>, Serializable
 
     public String getAwayFormatted(int maxChars)
     {
-        return Utils.getFormatted(this.awayTeam.getName(), maxChars);
+        return this.homeTeam == null ? "" : Utils.getFormatted(this.awayTeam.getName(), maxChars);
     }
 
     /**
