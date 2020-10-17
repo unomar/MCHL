@@ -34,8 +34,12 @@ public class GameFragment extends DialogFragment
     TextView gameLocation;
     @BindView(R.id.gameHomeName)
     TextView homeTeamName;
+    @BindView(R.id.gameHomeTeamScore)
+    TextView homeTeamScore;
     @BindView(R.id.gameAwayName)
     TextView awayTeamName;
+    @BindView(R.id.gameAwayTeamScore)
+    TextView awayTeamScore;
     @BindView(R.id.gamePager)
     ViewPager viewPager;
     @BindView(R.id.gameTabs)
@@ -81,6 +85,16 @@ public class GameFragment extends DialogFragment
             gameLocation.setText(game.getLocation());
             homeTeamName.setText(game.getHomeTeamName());
             awayTeamName.setText(game.getAwayTeamName());
+
+            String homeScore = "";
+            String awayScore = "";
+            if (!game.isInFuture())
+            {
+                homeScore = String.valueOf(game.getHomeScore());
+                awayScore = String.valueOf(game.getHomeScore());
+            }
+            homeTeamScore.setText(homeScore);
+            homeTeamScore.setText(awayScore);
 
             GamePagerAdapter gamePagerAdapter = new GamePagerAdapter(game, getChildFragmentManager());
             viewPager.setAdapter(gamePagerAdapter);

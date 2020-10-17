@@ -4,10 +4,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
@@ -21,7 +18,6 @@ import com.sloppylinux.mchl.domain.sportspress.Venue;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,23 +49,18 @@ public class MCHLWebservice
     {
         GsonBuilder gsonBuilder = new GsonBuilder();
 
-        gsonBuilder.registerTypeAdapter(Integer.class, new JsonDeserializer<Integer>()
+        gsonBuilder.registerTypeAdapter(Integer.class, (JsonDeserializer<Integer>) (arg0, arg1, arg2) ->
         {
-            @Override
-            public Integer deserialize(JsonElement arg0, Type arg1,
-                                       JsonDeserializationContext arg2) throws JsonParseException
+            Integer intVal = null;
+
+            Gson g = new Gson();
+            String intString = g.fromJson(arg0, String.class);
+            if (StringUtils.isNumeric(intString))
             {
-                Integer intVal = null;
-
-                Gson g = new Gson();
-                String intString = g.fromJson(arg0, String.class);
-                if (StringUtils.isNumeric(intString))
-                {
-                    intVal = Integer.valueOf(intString);
-                }
-
-                return intVal;
+                intVal = Integer.valueOf(intString);
             }
+
+            return intVal;
         });
 
         Gson gson = gsonBuilder
@@ -110,8 +101,11 @@ public class MCHLWebservice
         {
             player = fetchPlayer(player);
 
-            // TODO: What the fucking fuck?  Why is seasonId hardcoded?
-            List<LeagueTable> leagueTables = fetchLatestLeagueTables(117L, context);
+            // TODO: Null check and safeguard this better
+            long seasonId = (player.getSeasons() != null && !player.getSeasons().isEmpty())
+                    ? player.getSeasons().get(player.getSeasons().size() - 1)
+                    : getTeam(player.getTeams().get(0)).getCurrentSeason();
+            List<LeagueTable> leagueTables = fetchLatestLeagueTables(seasonId);
 
             player.setExpiration(new Date().getTime() + timeToLive);
             Config config = new Config(context);
@@ -160,9 +154,9 @@ public class MCHLWebservice
     /**
      * Fetch and persist league tables
      *
-     * @param context The application context
+     * @param seasonId The season ID
      */
-    public List<LeagueTable> fetchLatestLeagueTables(long seasonId, Context context) throws WebserviceException
+    public List<LeagueTable> fetchLatestLeagueTables(long seasonId) throws WebserviceException
     {
         List<LeagueTable> leagueTables = new ArrayList<>();
         for (League league : this.getLeagues())
@@ -187,7 +181,7 @@ public class MCHLWebservice
      * @return The populated team or null
      * @throws WebserviceException If a communication error occurs
      */
-    Team getTeam(long teamId) throws WebserviceException
+    public Team getTeam(long teamId) throws WebserviceException
     {
         Team team = null;
         try
@@ -302,9 +296,9 @@ public class MCHLWebservice
                             String[] teamNames = eventString.split(" vs ");
 
                             // TODO: Revert this and pull Team info on demand
-                            Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(0));
+                            Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague());
                             homeTeam.setId(event.getTeamIds().get(0));
-                            Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(1));
+                            Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague());
                             awayTeam.setId(event.getTeamIds().get(1));
                             Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
                             teamSchedule.getGames().add(game);
@@ -314,7 +308,9 @@ public class MCHLWebservice
             }
         } catch (IOException e)
         {
-            LOG.warning("Caught exception querying team schedule." + e.getMessage());
+            String errorMessage = "Caught exception querying team schedule.";
+            LOG.warning(errorMessage + e.getMessage());
+            throw new WebserviceException(NETWORK_ERROR, errorMessage, e);
         }
         return teamSchedule;
     }
@@ -375,7 +371,9 @@ public class MCHLWebservice
             }
         } catch (IOException e)
         {
-            LOG.warning("Caught exception querying team schedule." + e.getMessage());
+            String errorMessage = "Caught exception querying team results.";
+            LOG.warning(errorMessage + e.getMessage());
+            throw new WebserviceException(NETWORK_ERROR, errorMessage, e);
         }
         return teamSchedule;
     }
