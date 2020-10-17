@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.sloppylinux.mchl.domain.Game;
-import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
 import com.sloppylinux.mchl.ui.R;
@@ -86,10 +85,6 @@ public class TeamComparisonFragment extends Fragment
     {
         super.onViewCreated(view, bundle);
         Game game = (Game)getArguments().get(GAME_KEY);
-
-        Team homeTeam = game.getHomeTeam();
-        Team awayTeam = game.getAwayTeam();
-        // TODO: Populate view
 
         getStatistics(game);
     }

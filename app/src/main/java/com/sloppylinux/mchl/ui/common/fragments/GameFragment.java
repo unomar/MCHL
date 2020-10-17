@@ -48,12 +48,12 @@ public class GameFragment extends DialogFragment
 
     public static GameFragment newInstance(Game game)
     {
-        GameFragment frag = new GameFragment();
+        GameFragment gameFragment = new GameFragment();
         Bundle args = new Bundle();
         args.putSerializable("game", game);
-        frag.setArguments(args);
+        gameFragment.setArguments(args);
 
-        return frag;
+        return gameFragment;
     }
 
 

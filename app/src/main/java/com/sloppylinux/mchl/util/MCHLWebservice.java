@@ -269,26 +269,6 @@ public class MCHLWebservice
     }
 
     /**
-     * Get Team Statistics.
-     * @param team The team to get statistics for
-     * @return The team statistics
-     * @throws WebserviceException On error
-     */
-    public TeamTable getTeamStats(Team team) throws WebserviceException
-    {
-        try
-        {
-            Response<TeamTable> response = mchlService.getTeamStats(team.getListId()).execute();
-            return response == null ? null : response.body();
-        }
-        catch (IOException e)
-        {
-            LOG.warning("Caught exception querying team statistics. " + e.getMessage());
-            throw new WebserviceException(NETWORK_ERROR, "Caught IOException in getTeamStats()", e);
-        }
-    }
-
-    /**
      * Get the schedule for a team
      *
      * @param teamId The id of the team to query
