@@ -1,6 +1,7 @@
 package com.sloppylinux.mchl.ui.common.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,11 @@ import butterknife.ButterKnife;
 
 public class TeamPlayersListAdapter extends ArrayAdapter<PlayerStatistic>
 {
-
-    Context mContext;
     private int lastPosition = -1;
 
     public TeamPlayersListAdapter(List<PlayerStatistic> playerStatistics, Context context)
     {
         super(context, R.layout.player_row, playerStatistics);
-
-
-        this.mContext = context;
     }
 
     @Override
@@ -56,15 +52,38 @@ public class TeamPlayersListAdapter extends ArrayAdapter<PlayerStatistic>
 
         lastPosition = position;
 
-        viewHolder.playerName.setText(playerModel.getName());
-        viewHolder.gamesPlayed.setText(String.valueOf(playerModel.getGamesPlayed()));
-        viewHolder.goals.setText(String.valueOf(playerModel.getGoals()));
-        viewHolder.assists.setText(String.valueOf(playerModel.getAssists()));
-        viewHolder.points.setText(String.valueOf(playerModel.getPoints()));
-        viewHolder.pims.setText(String.valueOf(playerModel.getPenaltyMins()));
+        if (!"Player".equals(playerModel.getName()))
+        {
+            viewHolder.playerName.setText(playerModel.getName());
+            viewHolder.gamesPlayed.setText(String.valueOf(playerModel.getGamesPlayed()));
+            viewHolder.goals.setText(String.valueOf(playerModel.getGoals()));
+            viewHolder.assists.setText(String.valueOf(playerModel.getAssists()));
+            viewHolder.points.setText(String.valueOf(playerModel.getPoints()));
+            viewHolder.pims.setText(String.valueOf(playerModel.getPenaltyMins()));
+        }
+        else
+        {
+            setHeader(viewHolder.playerName,getContext().getString(R.string.Name));
+            setHeader(viewHolder.gamesPlayed,getContext().getString(R.string.gamesPlayedHeader));
+            setHeader(viewHolder.goals,getContext().getString(R.string.Goals));
+            setHeader(viewHolder.assists,getContext().getString(R.string.Assists));
+            setHeader(viewHolder.points,getContext().getString(R.string.Points));
+            setHeader(viewHolder.pims,getContext().getString(R.string.pimHeader));
+        }
 
         // Return the completed view to render on screen
         return result;
+    }
+
+    /**
+     * Set Header attributes on the TextView
+     * @param textView The TextView to configure
+     * @param text The text to display
+     */
+    private void setHeader(TextView textView, String text)
+    {
+        textView.setText(text);
+        textView.setTypeface(null, Typeface.BOLD);
     }
 
     // View lookup cache

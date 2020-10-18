@@ -183,26 +183,36 @@ public class MCHLWebservice
      */
     public Team getTeam(long teamId) throws WebserviceException
     {
-        Team team = null;
-        try
+        // Check the Cache first to avoid multiple expensive WebService calls
+        String cacheKey = Constants.TEAM_KEY + teamId;
+        Team team = (Team) TemporaryCache.getInstance().get(cacheKey);
+        if (team == null)
         {
-            Response<Team> teamResponse = mchlService.getTeam(teamId).execute();
-            if (teamResponse != null && teamResponse.body() != null)
+            try
             {
-                team = teamResponse.body();
-
-                // Query team stats
-                Response<TeamTable> statResponse = mchlService.getTeamStats(team.getListId()).execute();
-                if (statResponse != null && statResponse.body() != null)
+                Response<Team> teamResponse = mchlService.getTeam(teamId).execute();
+                if (teamResponse != null && teamResponse.body() != null)
                 {
-                    team.setTeamTable(statResponse.body());
-                }
+                    team = teamResponse.body();
 
+                    // Query team stats
+                    Response<TeamTable> statResponse = mchlService.getTeamStats(team.getListId()).execute();
+                    if (statResponse != null && statResponse.body() != null)
+                    {
+                        team.setTeamTable(statResponse.body());
+                    }
+                    // Store the object in the cache for later retrieval
+                    TemporaryCache.getInstance().put(cacheKey, team);
+                }
+            } catch (IOException e)
+            {
+                LOG.warning("Caught exception performing player search." + e.getMessage());
+                throw new WebserviceException(NETWORK_ERROR, "Caught IOException in getTeams()", e);
             }
-        } catch (IOException e)
+        }
+        else
         {
-            LOG.warning("Caught exception performing player search." + e.getMessage());
-            throw new WebserviceException(NETWORK_ERROR, "Caught IOException in getTeams()", e);
+            LOG.info("Retrieved team from cache!");
         }
 
         return team;
@@ -217,19 +227,30 @@ public class MCHLWebservice
      */
     public LeagueTable getStandings(long seasonId, long leagueId) throws WebserviceException
     {
-        LeagueTable leagueTable = null;
-        try
+        String cacheKey = "leagueTable" + seasonId;
+        // Check the cache first to avoid the expensive WebService call
+        LeagueTable leagueTable = (LeagueTable)TemporaryCache.getInstance().get(cacheKey);
+        if (leagueTable == null)
         {
-            Call<List<LeagueTable>> call = mchlService.getLeagueTable(seasonId, leagueId);
-            Response<List<LeagueTable>> result = call.execute();
-            if (result != null && result.body() != null && result.body().size() == 1)
+            try
             {
-                leagueTable = result.body().get(0);
+                Call<List<LeagueTable>> call = mchlService.getLeagueTable(seasonId, leagueId);
+                Response<List<LeagueTable>> result = call.execute();
+                if (result != null && result.body() != null && result.body().size() == 1)
+                {
+                    leagueTable = result.body().get(0);
+                    // Cache the retrieved LeagueTable
+                    TemporaryCache.getInstance().put(cacheKey, leagueTable);
+                }
+            } catch (IOException e)
+            {
+                LOG.warning("Caught exception attempting to lookup standings for season " + seasonId + " and league " + leagueId + ".  " + e.getMessage());
+                throw new WebserviceException(NETWORK_ERROR, "Caught IOException retrieving Standings", e);
             }
-        } catch (IOException e)
+        }
+        else
         {
-            LOG.warning("Caught exception attempting to lookup standings for season " + seasonId + " and league " + leagueId + ".  " + e.getMessage());
-            throw new WebserviceException(NETWORK_ERROR, "Caught IOException retrieving Standings", e);
+            LOG.info("Retrieved LeagueTable from cache");
         }
         return leagueTable;
     }

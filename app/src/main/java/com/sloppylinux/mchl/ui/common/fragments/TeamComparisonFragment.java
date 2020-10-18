@@ -18,6 +18,7 @@ import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
 import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.util.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +26,6 @@ import butterknife.Unbinder;
 
 public class TeamComparisonFragment extends Fragment
 {
-    public static final String GAME_KEY = "game";
     private Unbinder unbinder;
 
     private View root;
@@ -84,7 +84,7 @@ public class TeamComparisonFragment extends Fragment
     public void onViewCreated(View view, Bundle bundle)
     {
         super.onViewCreated(view, bundle);
-        Game game = (Game)getArguments().get(GAME_KEY);
+        Game game = (Game)getArguments().get(Constants.GAME_KEY);
 
         getStatistics(game);
     }

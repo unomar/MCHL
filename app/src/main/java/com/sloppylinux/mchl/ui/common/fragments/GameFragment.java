@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GamePagerAdapter;
+import com.sloppylinux.mchl.util.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -54,7 +55,7 @@ public class GameFragment extends DialogFragment
     {
         GameFragment gameFragment = new GameFragment();
         Bundle args = new Bundle();
-        args.putSerializable("game", game);
+        args.putSerializable(Constants.GAME_KEY, game);
         gameFragment.setArguments(args);
 
         return gameFragment;
@@ -77,7 +78,7 @@ public class GameFragment extends DialogFragment
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        Game game = (Game) getArguments().get("game");
+        Game game = (Game) getArguments().get(Constants.GAME_KEY);
 
         if (game != null)
         {

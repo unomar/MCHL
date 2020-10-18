@@ -18,6 +18,7 @@ import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.sportspress.PlayerStatistic;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.TeamPlayersListAdapter;
+import com.sloppylinux.mchl.util.Constants;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +31,6 @@ import butterknife.Unbinder;
 
 public class TeamFragment extends Fragment
 {
-    public static final String TEAM_KEY = "team";
     @BindView(R.id.teamPlayerList)
     ListView teamPlayerListView;
 
@@ -52,7 +52,7 @@ public class TeamFragment extends Fragment
     public void onViewCreated(View view, Bundle bundle)
     {
         super.onViewCreated(view, bundle);
-        Team team = (Team) getArguments().get(TEAM_KEY);
+        Team team = (Team) getArguments().get(Constants.TEAM_KEY);
 
         getPlayerStats(team.getId());
     }
@@ -79,10 +79,7 @@ public class TeamFragment extends Fragment
         {
             for (Map.Entry<String, PlayerStatistic> entry : team.getTeamTable().getTableData().entrySet())
             {
-                if (!"Player".equals(entry.getValue().getName()))
-                {
                     playerStatistics.add(entry.getValue());
-                }
             }
         }
         Collections.sort(playerStatistics, Collections.reverseOrder());

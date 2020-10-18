@@ -104,14 +104,13 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/gamePager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/scoreBar">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/gameTabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_alignParentStart="true" />
     </androidx.viewpager.widget.ViewPager>
 </RelativeLayout>
