@@ -31,14 +31,13 @@
 
     <string name="activity_title_schedule">Schedule</string>
     <string name="activity_title_standings">Standings</string>
-    <string name="activity_title_settings">Player Lookup</string>
-    <string name="mchl_configuration"><b>Settings</b></string>
+    <string name="mchl_configuration"><b>Player Lookup</b></string>
 
     <string name="menu_home">Home</string>
     <string name="menu_schedule">Schedule</string>
     <string name="menu_results">Results</string>
     <string name="menu_standings">Standings</string>
-    <string name="menu_settings">Settings</string>
+    <string name="menu_settings">Player Select</string>
 
     <string name="player_search_header">Player Lookup</string>
     <string name="player_search_input">Enter Name</string>
