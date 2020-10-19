@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget29"
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
+
     <TextView
         android:id="@+id/homepage_team_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_weight="70"
+        android:text="@string/team_name"/>
+
     <TextView
-        android:id="@+id/homepage_team_record"
-        android:textSize="20sp"
-        android:gravity="right"
-        android:layout_gravity="right"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        android:id="@+id/homepage_team_wins"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_weight="10"
+        android:text="@string/winHeader"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/homepage_team_losses"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:gravity="center"
+        android:layout_weight="10"
+        android:text="@string/lossHeader"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/homepage_team_ties"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:gravity="center"
+        android:layout_weight="10"
+        android:text="@string/tieHeader"
+        android:textSize="20sp" />
+</TableRow>

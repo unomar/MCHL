@@ -69,6 +69,7 @@
     <string name="at_symbol">\@</string>
     <string name="location">Location</string>
     <string name="date">Date</string>
-    <string name="missingTeamData">Team data not available</string>
+    <string name="missingTeamData">Team data loading…</string>
+    <string name="current_teams">Current Teams</string>
 
 </resources>

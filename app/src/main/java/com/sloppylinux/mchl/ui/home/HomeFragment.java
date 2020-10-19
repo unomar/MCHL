@@ -19,6 +19,7 @@ import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
 import com.sloppylinux.mchl.ui.common.adapters.TeamListAdapter;
 import com.sloppylinux.mchl.ui.common.fragments.GameFragment;
+import com.sloppylinux.mchl.ui.common.views.MchlSnackbar;
 import com.sloppylinux.mchl.ui.settings.SettingsViewModel;
 import com.sloppylinux.mchl.util.Config;
 import com.sloppylinux.mchl.util.Constants;
@@ -42,7 +43,7 @@ public class HomeFragment extends Fragment
     private SettingsViewModel settingsViewModel;
     private Config config;
     private Unbinder unbinder;
-    private Snackbar snackbar;
+    private MchlSnackbar snackbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -131,8 +132,8 @@ public class HomeFragment extends Fragment
      */
     private void updatePlayerInfo(Player player)
     {
-        snackbar = Snackbar.make(getView(), "Fetching updated schedule and stats for " + player.getName(" "), Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction("No action", null).show();
+        snackbar = new MchlSnackbar(getView(), "Fetching updated schedule and stats for " + player.getName(" "), Snackbar.LENGTH_INDEFINITE, getContext());
+        snackbar.show();
         spinner.setVisibility(View.VISIBLE);
         settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), s ->
         {

@@ -1,6 +1,7 @@
 package com.sloppylinux.mchl.ui.common.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,12 @@ public class TeamListAdapter extends ArrayAdapter<Team>{
     static class ViewHolder {
         @BindView(R.id.homepage_team_name)
         TextView teamName;
-        @BindView(R.id.homepage_team_record)
-        TextView teamRecord;
+        @BindView(R.id.homepage_team_wins)
+        TextView wins;
+        @BindView(R.id.homepage_team_losses)
+        TextView losses;
+        @BindView(R.id.homepage_team_ties)
+        TextView ties;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -34,6 +39,7 @@ public class TeamListAdapter extends ArrayAdapter<Team>{
 
     public TeamListAdapter(List<Team> data, Context context) {
         super(context, R.layout.homepage_team, data);
+
         this.teamList = data;
         this.mContext = context;
     }
@@ -64,9 +70,45 @@ public class TeamListAdapter extends ArrayAdapter<Team>{
 
         lastPosition = position;
 
-        viewHolder.teamName.setText(teamModel.getName());
-        viewHolder.teamRecord.setText(teamModel.getRecord());
+        // First entry should be our header
+        if (position == 0)
+        {
+            viewHolder.teamName.setText(getContext().getString(R.string.team_name));
+            viewHolder.wins.setText(getContext().getString(R.string.winHeader));
+            viewHolder.losses.setText(getContext().getString(R.string.lossHeader));
+            viewHolder.ties.setText(getContext().getString(R.string.tieHeader));
+
+            viewHolder.teamName.setTypeface(null, Typeface.BOLD);
+            viewHolder.wins.setTypeface(null, Typeface.BOLD);
+            viewHolder.losses.setTypeface(null, Typeface.BOLD);
+            viewHolder.ties.setTypeface(null, Typeface.BOLD);
+        }
+        else
+        {
+            viewHolder.teamName.setText(teamModel.getName());
+            viewHolder.wins.setText(String.valueOf(teamModel.getWins()));
+            viewHolder.losses.setText(String.valueOf(teamModel.getLosses()));
+            viewHolder.ties.setText(String.valueOf(teamModel.getTies()));
+        }
         // Return the completed view to render on screen
         return result;
+    }
+
+    @Override
+    public Team getItem(int position)
+    {
+        // Inject a null object for a header
+        if (position == 0)
+        {
+            return null;
+        }
+        return teamList.get(position - 1);
+    }
+
+    @Override
+    public int getCount()
+    {
+        // Return 1 greater to generate a header
+        return teamList.size() + 1;
     }
 }

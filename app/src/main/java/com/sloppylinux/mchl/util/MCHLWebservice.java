@@ -22,8 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -40,6 +42,7 @@ public class MCHLWebservice
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss";
     private static final long timeToLive = 86400000L; // One day...customizable?
     private static final MCHLWebservice singleton = new MCHLWebservice();
+    public static final long NETWORK_TIMEOUT_SECONDS = 60l;
     private static List<Venue> venues = null;
     private final Logger LOG = Logger.getLogger(MCHLWebservice.class.getName());
     private MCHLService mchlService = null;
@@ -70,14 +73,15 @@ public class MCHLWebservice
         // Enable this block for DEBUG logging using retrofit
 //		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor((msg)-> { LOG.info(msg); });
 //		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//		OkHttpClient client = new OkHttpClient.Builder()
+		OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
 //				.addInterceptor(interceptor)
-//				.build();
+				.build();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(SOAP_ACTION)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-//				.client(client)
+				.client(client)
                 .build();
 
         mchlService = retrofit.create(MCHLService.class);
@@ -165,9 +169,16 @@ public class MCHLWebservice
             if (!ALL_STARS.equals(league.getSlug()))
             {
                 LeagueTable standings = getStandings(seasonId, league.getId());
-                standings.setName(league.getName());
-                standings.setExpiration(new Date().getTime() + timeToLive);
-                leagueTables.add(standings);
+                if (standings != null)
+                {
+                    standings.setName(league.getName());
+                    standings.setExpiration(new Date().getTime() + timeToLive);
+                    leagueTables.add(standings);
+                }
+                else
+                {
+                    LOG.info("Skipping league table for " + league.getName());
+                }
             }
         }
 
@@ -227,7 +238,7 @@ public class MCHLWebservice
      */
     public LeagueTable getStandings(long seasonId, long leagueId) throws WebserviceException
     {
-        String cacheKey = "leagueTable" + seasonId;
+        String cacheKey = "leagueTable-S" + seasonId + "L" + leagueId;
         // Check the cache first to avoid the expensive WebService call
         LeagueTable leagueTable = (LeagueTable)TemporaryCache.getInstance().get(cacheKey);
         if (leagueTable == null)

@@ -29,10 +29,10 @@ public interface MCHLService
     @GET("events?order=asc")
     Call<List<Event>> listAllEvents();
 
-    @GET("events?order=desc")
+    @GET("events?order=desc&per_page=100")
     Call<List<Event>> listTeamResults(@Query("search") String teamName, @Query("seasons") Long seasonId, @Query("leagues") Long leagueId, @Query("before") String date);
 
-    @GET("events?order=asc")
+    @GET("events?order=asc&per_page=100")
     Call<List<Event>> listTeamSchedule(@Query("search") String teamName, @Query("seasons") Long seasonId, @Query("leagues") Long leagueId, @Query("after") String date);
 
     @GET("events/{event}")
