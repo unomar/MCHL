@@ -27,12 +27,14 @@ import com.sloppylinux.mchl.activity.MchlNavigation;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.PlayerListAdapter;
+import com.sloppylinux.mchl.ui.common.views.MchlSnackbar;
 import com.sloppylinux.mchl.util.Config;
 import com.sloppylinux.mchl.util.MCHLWebservice;
 import com.sloppylinux.mchl.util.WebserviceException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,10 +50,12 @@ public class SettingsFragment extends Fragment
     ProgressBar spinner;
     @BindView(R.id.nameEntry)
     EditText editText;
+
+    private final Logger LOG = Logger.getLogger(SettingsFragment.class.getName());
     private SettingsViewModel settingsViewModel;
     private Config config;
     private Unbinder unbinder;
-    private Snackbar snackbar;
+    private MchlSnackbar snackbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -92,8 +96,8 @@ public class SettingsFragment extends Fragment
 
     public void playerSearch(String playerName)
     {
-        snackbar = Snackbar.make(getView(), "Searching for " + playerName, Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction("No action", null).show();
+        snackbar = new MchlSnackbar(getView(), "Searching for " + playerName, Snackbar.LENGTH_INDEFINITE, getContext());
+        snackbar.show();
         spinner.setVisibility(View.VISIBLE);
         settingsViewModel.getText(playerName).observe(this, new Observer<List<Player>>()
         {
@@ -114,8 +118,8 @@ public class SettingsFragment extends Fragment
                         public void onItemClick(AdapterView<?> adapter, View v, int pos, long position)
                         {
                             Player player = (Player) adapter.getItemAtPosition(pos);
-                            snackbar = Snackbar.make(getView(), "Fetching schedule and stats for " + player.getName(), Snackbar.LENGTH_INDEFINITE);
-                            snackbar.setAction("No action", null).show();
+                            snackbar.setText("Fetching schedule and stats for " + player.getName());
+                            snackbar.show();
                             spinner.setVisibility(View.VISIBLE);
 
                             settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>()
@@ -126,6 +130,7 @@ public class SettingsFragment extends Fragment
                                     spinner.setVisibility(View.GONE);
                                     if (s.startsWith(WebserviceException.ERROR_PREFIX))
                                     {
+                                        LOG.warning("Webservice returned error: " + s);
                                         Toast toast = Toast.makeText(getContext(), s, Toast.LENGTH_LONG);
                                         toast.show();
                                     } else
@@ -143,6 +148,7 @@ public class SettingsFragment extends Fragment
                     playerSelectTextView.setText(message);
                 } else // Null response means network error
                 {
+                    LOG.warning("Got a null playerList");
                     Toast toast = Toast.makeText(getContext(), MCHLWebservice.NETWORK_ERROR, Toast.LENGTH_LONG);
                     toast.show();
                 }

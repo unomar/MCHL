@@ -18,6 +18,7 @@ import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
 import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.ui.common.views.MchlSnackbar;
 import com.sloppylinux.mchl.util.Constants;
 
 import butterknife.BindView;
@@ -64,7 +65,7 @@ public class TeamComparisonFragment extends Fragment
     @BindView(R.id.awayGA)
     TextView awayGoalsAgainst;
 
-    private Snackbar snackbar;
+    private MchlSnackbar snackbar;
     private TeamComparisonViewModel teamComparisonViewModel;
 
     @Override
@@ -91,8 +92,8 @@ public class TeamComparisonFragment extends Fragment
 
     private void getStatistics(Game game)
     {
-        snackbar = Snackbar.make(getView(), "Fetching stats...", Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction("No action", null).show();
+        snackbar = new MchlSnackbar(getView(), "Fetching stats...", Snackbar.LENGTH_INDEFINITE, getContext());
+        snackbar.show();
         teamComparisonViewModel.getTeamTable(game.getHomeTeam()).observe((LifecycleOwner) this, new Observer<LeagueTable>()
         {
             @Override

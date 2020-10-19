@@ -5,25 +5,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.sportspress.PlayerStatistic;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.TeamPlayersListAdapter;
 import com.sloppylinux.mchl.util.Constants;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,10 +34,12 @@ public class TeamFragment extends Fragment
 {
     @BindView(R.id.teamPlayerList)
     ListView teamPlayerListView;
+    @BindView(R.id.missingTeamData)
+    TextView missingTeamData;
 
     private TeamViewModel teamViewModel;
-    private Snackbar snackbar;
     private Unbinder unbinder;
+    private final Logger LOG = Logger.getLogger(TeamFragment.class.getName());
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -49,37 +52,40 @@ public class TeamFragment extends Fragment
         return root;
     }
 
-    public void onViewCreated(View view, Bundle bundle)
+    public void onViewCreated(@NotNull View view, Bundle bundle)
     {
         super.onViewCreated(view, bundle);
-        Team team = (Team) getArguments().get(Constants.TEAM_KEY);
+        if (getArguments() != null)
+        {
+            Team team = (Team) getArguments().get(Constants.TEAM_KEY);
 
-        getPlayerStats(team.getId());
+            getPlayerStats(team.getId());
+        }
+        else
+        {
+            LOG.warning("Null arguments passed into TeamFragment.onViewCreated()");
+        }
     }
 
     private void getPlayerStats(long teamId)
     {
-        snackbar = Snackbar.make(getView(), "Fetching team stats...", Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction("No action", null).show();
-        teamViewModel.getTeam(teamId).observe((LifecycleOwner) this, new Observer<Team>()
-        {
-            @Override
-            public void onChanged(@Nullable Team team)
-            {
-                snackbar.dismiss();
-                updateTeamStats(team);
-            }
-        });
+        teamViewModel.getTeam(teamId).observe((LifecycleOwner) this, team -> updateTeamStats(team));
     }
 
     private void updateTeamStats(Team team)
     {
         List<PlayerStatistic> playerStatistics = new ArrayList<>();
+        boolean hasData = false;
         if (team != null && team.getTeamTable() != null)
         {
             for (Map.Entry<String, PlayerStatistic> entry : team.getTeamTable().getTableData().entrySet())
             {
                     playerStatistics.add(entry.getValue());
+                    hasData = true;
+            }
+            if (hasData)
+            {
+                missingTeamData.setVisibility(View.GONE);
             }
         }
         Collections.sort(playerStatistics, Collections.reverseOrder());
