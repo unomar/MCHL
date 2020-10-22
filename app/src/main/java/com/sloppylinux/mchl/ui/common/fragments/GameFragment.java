@@ -92,10 +92,10 @@ public class GameFragment extends DialogFragment
             if (!game.isInFuture())
             {
                 homeScore = String.valueOf(game.getHomeScore());
-                awayScore = String.valueOf(game.getHomeScore());
+                awayScore = String.valueOf(game.getAwayScore());
             }
             homeTeamScore.setText(homeScore);
-            homeTeamScore.setText(awayScore);
+            awayTeamScore.setText(awayScore);
 
             GamePagerAdapter gamePagerAdapter = new GamePagerAdapter(game, getChildFragmentManager());
             viewPager.setAdapter(gamePagerAdapter);
