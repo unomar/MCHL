@@ -10,10 +10,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="1px"
-        android:gravity="start"
-        android:text="@string/Name"
         android:layout_weight="50"
-        android:background="@drawable/colored_grid"/>
+        android:gravity="start"
+        android:text="@string/Name" />
 
     <TextView
         android:id="@+id/playerGamesPlayed"
@@ -21,9 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="1px"
         android:layout_weight="10"
-        android:gravity="end"
-        android:text="@string/gamesPlayedHeader"
-        android:background="@drawable/colored_grid"/>
+        android:gravity="center"
+        android:text="@string/gamesPlayedHeader" />
 
     <TextView
         android:id="@+id/playerGoals"
@@ -31,9 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="1px"
         android:layout_weight="10"
-        android:gravity="end"
-        android:text="@string/Goals"
-        android:background="@drawable/colored_grid"/>
+        android:gravity="center"
+        android:text="@string/Goals" />
 
     <TextView
         android:id="@+id/playerAssists"
@@ -41,9 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="1px"
         android:layout_weight="10"
-        android:gravity="end"
-        android:text="@string/Assists"
-        android:background="@drawable/colored_grid"/>
+        android:gravity="center"
+        android:text="@string/Assists" />
 
     <TextView
         android:id="@+id/playerPoints"
@@ -51,9 +47,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="1px"
         android:layout_weight="10"
-        android:gravity="end"
-        android:text="@string/pointsHeader"
-        android:background="@drawable/colored_grid"/>
+        android:gravity="center"
+        android:text="@string/pointsHeader" />
 
     <TextView
         android:id="@+id/playerPims"
@@ -61,7 +56,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="1px"
         android:layout_weight="10"
-        android:gravity="end"
-        android:text="@string/pimHeader"
-        android:background="@drawable/colored_grid"/>
+        android:gravity="center"
+        android:text="@string/pimHeader" />
 </TableRow>

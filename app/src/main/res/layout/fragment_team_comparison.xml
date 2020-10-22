@@ -21,8 +21,8 @@
                 android:id="@+id/homeRank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="end"
+                android:text="@string/zero" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -30,14 +30,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text=" Rank " />
+                android:text="@string/comparison_rank" />
 
             <TextView
                 android:id="@+id/awayRank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="0" />
+                android:gravity="start"
+                android:text="@string/zero" />
         </TableRow>
 
         <TableRow
@@ -49,8 +49,8 @@
                 android:id="@+id/homeGP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="end"
+                android:text="@string/zero" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,14 +58,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text=" Games Played " />
+                android:text="@string/comparison_games_played" />
 
             <TextView
                 android:id="@+id/awayGP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="0" />
+                android:gravity="start"
+                android:text="@string/zero" />
         </TableRow>
 
         <TableRow
@@ -77,8 +77,8 @@
                 android:id="@+id/homeWins"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="end"
+                android:text="@string/zero" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,14 +86,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text=" Wins " />
+                android:text="@string/comparison_wins" />
 
             <TextView
                 android:id="@+id/awayWins"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="0" />
+                android:gravity="start"
+                android:text="@string/zero" />
         </TableRow>
 
         <TableRow
@@ -105,8 +105,8 @@
                 android:id="@+id/homeLosses"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="end"
+                android:text="@string/zero" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -114,14 +114,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text=" Losses " />
+                android:text="@string/comparison_losses" />
 
             <TextView
                 android:id="@+id/awayLosses"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="0" />
+                android:gravity="start"
+                android:text="@string/zero" />
         </TableRow>
 
         <TableRow
@@ -133,8 +133,8 @@
                 android:id="@+id/homeTies"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="end"
+                android:text="@string/zero" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -142,14 +142,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text=" Ties " />
+                android:text="@string/comparison_ties" />
 
             <TextView
                 android:id="@+id/awayTies"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="0" />
+                android:gravity="start"
+                android:text="@string/zero" />
         </TableRow>
 
         <TableRow
@@ -161,8 +161,8 @@
                 android:id="@+id/homePoints"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="end"
+                android:text="@string/zero" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -170,14 +170,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text=" Points " />
+                android:text="@string/comparison_points" />
 
             <TextView
                 android:id="@+id/awayPoints"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="0" />
+                android:gravity="start"
+                android:text="@string/zero" />
         </TableRow>
 
         <TableRow
@@ -189,8 +189,8 @@
                 android:id="@+id/homeGF"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="end"
+                android:text="@string/zero" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -198,14 +198,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text=" Goals For " />
+                android:text="@string/comparison_goals_for" />
 
             <TextView
                 android:id="@+id/awayGF"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="0" />
+                android:gravity="start"
+                android:text="@string/zero" />
         </TableRow>
 
         <TableRow
@@ -217,8 +217,8 @@
                 android:id="@+id/homeGA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="0" />
+                android:gravity="end"
+                android:text="@string/zero" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -226,14 +226,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text=" Goals Against " />
+                android:text="@string/comparison_goals_against" />
 
             <TextView
                 android:id="@+id/awayGA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="0" />
+                android:gravity="start"
+                android:text="@string/zero" />
         </TableRow>
     </TableLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

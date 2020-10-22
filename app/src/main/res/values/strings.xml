@@ -6,9 +6,9 @@
     <string name="dialog_title">Configure MCHL Info</string>
     <string name="dialog_text">Do it here</string>
     <string name="Name">Name</string>
-    <string name="Goals">G </string>
-    <string name="Assists">A </string>
-    <string name="Points">P </string>
+    <string name="Goals">G</string>
+    <string name="Assists">A</string>
+    <string name="Points">P</string>
     <string name="pimHeader">PIM</string>
     <string name="SeasonTextDefault">Select a season</string>
     <string name="DivisionTextDefault">Select a division</string>
@@ -23,12 +23,6 @@
     <string name="action_logout">Logout</string>
 
     <!-- Toolbar titles for navigation menu -->
-    <string-array name="nav_item_activity_titles">
-        <item>Schedule</item>
-        <item>Standings</item>
-        <item>Settings</item>
-    </string-array>
-
     <string name="activity_title_schedule">Schedule</string>
     <string name="activity_title_standings">Standings</string>
     <string name="mchl_configuration"><b>Player Lookup</b></string>
@@ -70,5 +64,15 @@
     <string name="date">Date</string>
     <string name="missingTeamData">Team data loading…</string>
     <string name="current_teams">Current Teams</string>
+    <string name="comparison_rank">Rank</string>
+
+    <!-- fragment_team_comparison strings -->
+    <string name="comparison_games_played">Games Played</string>
+    <string name="comparison_wins">Wins</string>
+    <string name="comparison_losses">Losses</string>
+    <string name="comparison_ties">Ties</string>
+    <string name="comparison_points">Points</string>
+    <string name="comparison_goals_for">Goals For</string>
+    <string name="comparison_goals_against">Goals Against</string>
 
 </resources>
