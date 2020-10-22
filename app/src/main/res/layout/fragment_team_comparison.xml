@@ -1,116 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="wrap_content">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-	<TableRow android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:gravity="center">
-		<TextView android:id="@+id/homeRank" android:gravity="right"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-		<TextView android:layout_width="wrap_content"
-			android:gravity="center" android:layout_height="wrap_content"
-			android:text=" Rank " android:layout_marginRight="10dp"
-			android:layout_marginLeft="10dp" />
-		<TextView android:id="@+id/awayRank" android:gravity="left"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-	</TableRow>
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-	<TableRow android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:gravity="center">
-		<TextView android:id="@+id/homeGP" android:gravity="right"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-		<TextView android:layout_width="wrap_content"
-			android:gravity="center" android:layout_height="wrap_content"
-			android:text=" Games Played " android:layout_marginRight="10dp"
-			android:layout_marginLeft="10dp" />
-		<TextView android:id="@+id/awayGP" android:gravity="left"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-	</TableRow>
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
-	<TableRow android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:gravity="center">
-		<TextView android:id="@+id/homeWins" android:gravity="right"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-		<TextView android:layout_width="wrap_content"
-			android:gravity="center" android:layout_height="wrap_content"
-			android:text=" Wins " android:layout_marginRight="10dp"
-			android:layout_marginLeft="10dp" />
-		<TextView android:id="@+id/awayWins" android:gravity="left"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-	</TableRow>
+            <TextView
+                android:id="@+id/homeRank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/zero" />
 
-	<TableRow android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:gravity="center">
-		<TextView android:id="@+id/homeLosses" android:gravity="right"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-		<TextView android:layout_width="wrap_content"
-			android:gravity="center" android:layout_height="wrap_content"
-			android:text=" Losses " android:layout_marginRight="10dp"
-			android:layout_marginLeft="10dp" />
-		<TextView android:id="@+id/awayLosses" android:gravity="left"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-	</TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="@string/comparison_rank" />
 
-	<TableRow android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:gravity="center">
-		<TextView android:id="@+id/homeTies" android:gravity="right"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-		<TextView android:layout_width="wrap_content"
-			android:gravity="center" android:layout_height="wrap_content"
-			android:text=" Ties " android:layout_marginRight="10dp"
-			android:layout_marginLeft="10dp" />
-		<TextView android:id="@+id/awayTies" android:gravity="left"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-	</TableRow>
+            <TextView
+                android:id="@+id/awayRank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/zero" />
+        </TableRow>
 
-	<TableRow android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:gravity="center">
-		<TextView android:id="@+id/homePoints" android:gravity="right"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-		<TextView android:layout_width="wrap_content"
-			android:gravity="center" android:layout_height="wrap_content"
-			android:text=" Points " android:layout_marginRight="10dp"
-			android:layout_marginLeft="10dp" />
-		<TextView android:id="@+id/awayPoints" android:gravity="left"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-	</TableRow>
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
-	<TableRow android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:gravity="center">
-		<TextView android:id="@+id/homeGF" android:gravity="right"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-		<TextView android:layout_width="wrap_content"
-			android:gravity="center" android:layout_height="wrap_content"
-			android:text=" Goals For " android:layout_marginRight="10dp"
-			android:layout_marginLeft="10dp" />
-		<TextView android:id="@+id/awayGF" android:gravity="left"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-	</TableRow>
+            <TextView
+                android:id="@+id/homeGP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/zero" />
 
-	<TableRow android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:gravity="center">
-		<TextView android:id="@+id/homeGA" android:gravity="right"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-		<TextView android:layout_width="wrap_content"
-			android:gravity="center" android:layout_height="wrap_content"
-			android:text=" Goals Against " android:layout_marginRight="10dp"
-			android:layout_marginLeft="10dp" />
-		<TextView android:id="@+id/awayGA" android:gravity="left"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="0" />
-	</TableRow>
-</TableLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="@string/comparison_games_played" />
+
+            <TextView
+                android:id="@+id/awayGP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/zero" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/homeWins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/zero" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="@string/comparison_wins" />
+
+            <TextView
+                android:id="@+id/awayWins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/zero" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/homeLosses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/zero" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="@string/comparison_losses" />
+
+            <TextView
+                android:id="@+id/awayLosses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/zero" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/homeTies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/zero" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="@string/comparison_ties" />
+
+            <TextView
+                android:id="@+id/awayTies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/zero" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/homePoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/zero" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="@string/comparison_points" />
+
+            <TextView
+                android:id="@+id/awayPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/zero" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/homeGF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/zero" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="@string/comparison_goals_for" />
+
+            <TextView
+                android:id="@+id/awayGF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/zero" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/homeGA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/zero" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="@string/comparison_goals_against" />
+
+            <TextView
+                android:id="@+id/awayGA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/zero" />
+        </TableRow>
+    </TableLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

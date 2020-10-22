@@ -16,7 +16,7 @@ public class StandingsPagerAdapter extends FragmentStatePagerAdapter
 
     public StandingsPagerAdapter(List<LeagueTable> leagueTables, FragmentManager fm)
     {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.leagueTables = leagueTables;
     }
 
@@ -25,7 +25,6 @@ public class StandingsPagerAdapter extends FragmentStatePagerAdapter
         LeagueTable leagueTable = leagueTables.get(i);
         Fragment fragment = new LeagueStandingsFragment();
         Bundle args = new Bundle();
-        // Our object is just an integer :-P
         args.putParcelable(LeagueStandingsFragment.ARG_OBJECT, leagueTable);
         fragment.setArguments(args);
         return fragment;

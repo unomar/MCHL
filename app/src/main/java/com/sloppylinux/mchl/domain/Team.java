@@ -25,9 +25,9 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
     private String alternate2;
 
     @SerializedName("seasons")
-    private List<Long> seasonIds;
+    private List<Long> seasonIds = new ArrayList<>();
     @SerializedName("leagues")
-    private List<Long> leagueIds;
+    private List<Long> leagueIds = new ArrayList<>();
     @SerializedName("lists")
     private List<Long> listIds;
 
@@ -53,11 +53,14 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
         goalie = new Goalie();
     }
 
-    public Team(String name)
+    public Team(String name, long seasonId, long leagueId)
     {
         players = new ArrayList<Player>();
         schedule = new ArrayList<Game>();
         goalie = new Goalie();
+        this.setName(name);
+        this.seasonIds.add(seasonId);
+        this.leagueIds.add(leagueId);
     }
 
     public void addPlayer(Player player)

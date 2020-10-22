@@ -4,13 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/homepage_current_teams"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_gravity="center"
+        android:text="@string/current_teams"
+        android:textStyle="bold"
+        android:textColor="@color/colorHighlight"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+         />
     <ListView
         android:id="@+id/homepage_team_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/homepage_current_teams"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/upcoming_games"
@@ -20,6 +37,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/upcoming_text"
+        android:textStyle="bold"
+        android:textColor="@color/colorHighlight"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/homepage_team_list" />
@@ -38,6 +57,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/previous_text"
+        android:textStyle="bold"
+        android:textColor="@color/colorHighlight"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/homepage_schedule_list" />

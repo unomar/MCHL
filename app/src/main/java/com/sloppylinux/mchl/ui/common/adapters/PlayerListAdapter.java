@@ -17,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlayerListAdapter extends ArrayAdapter<Player> implements View.OnClickListener{
+public class PlayerListAdapter extends ArrayAdapter<Player>{
 
     private List<Player> playerList;
     private String numberFormat = "#%d";
@@ -41,23 +41,6 @@ public class PlayerListAdapter extends ArrayAdapter<Player> implements View.OnCl
         super(context, R.layout.player_row, data);
         this.playerList = data;
         this.mContext = context;
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        int position=(Integer) v.getTag();
-        Object object= getItem(position);
-        Player player = (Player) object;
-
-        // Do Stuff
-//        switch (v.getId())
-//        {
-//            case R.id.item_info:
-//                Snackbar.make(v, "Release date " +dataModel.getFeature(), Snackbar.LENGTH_LONG)
-//                        .setAction("No action", null).show();
-//                break;
-//        }
     }
 
     private int lastPosition = -1;

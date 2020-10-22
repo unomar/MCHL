@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.common.fragments.TeamComparisonFragment;
 import com.sloppylinux.mchl.ui.common.fragments.TeamFragment;
+import com.sloppylinux.mchl.util.Constants;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,15 +36,15 @@ public class GamePagerAdapter extends FragmentStatePagerAdapter
         {
             case 0: // Home Team
                 fragment = new TeamFragment();
-                bundle.putSerializable(TeamFragment.TEAM_KEY, game.getHomeTeam());
+                bundle.putSerializable(Constants.TEAM_KEY, game.getHomeTeam());
                 break;
             case 2: // Away Team
                 fragment = new TeamFragment();
-                bundle.putSerializable(TeamFragment.TEAM_KEY, game.getAwayTeam());
+                bundle.putSerializable(Constants.TEAM_KEY, game.getAwayTeam());
                 break;
             default: // Comparison
                 fragment = new TeamComparisonFragment();
-                bundle.putSerializable(TeamComparisonFragment.GAME_KEY, game);
+                bundle.putSerializable(Constants.GAME_KEY, game);
                 break;
         }
 

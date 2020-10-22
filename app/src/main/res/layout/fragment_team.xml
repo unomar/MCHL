@@ -1,60 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="wrap_content">
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:orientation="vertical">
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:id="@+id/teamName"
-			android:text="Team Name" android:gravity="center" />
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-		<TableLayout android:id="@+id/goalieTable" android:gravity="center"
-			android:layout_width="fill_parent" android:layout_height="wrap_content">
-			<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center">
-				<TextView android:layout_column="1" android:id="@+id/nameCol"
-					android:text="Goalie Name" style="@style/TableFont.Header" />
-				<TextView android:text="GP" android:id="@+id/gamesPlayedCol"
-					style="@style/TableFont.Header" />
-				<TextView android:text="GA" android:id="@+id/goalsCol"
-					style="@style/TableFont.Header" />
-				<TextView android:text="Shots" android:id="@+id/assistsCol"
-					style="@style/TableFont.Header" />
-				<TextView android:text="GAA" android:id="@+id/pointsCol"
-					style="@style/TableFont.Header" />
-				<TextView android:text="Save %" android:id="@+id/pimsCol"
-					style="@style/TableFont.Header" />
-			</TableRow>
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/teamView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context="com.sloppylinux.mchl.activity.MchlNavigation" />
 
-			<TableRow android:id="@+id/goalieRow" android:gravity="center"
-				xmlns:android="http://schemas.android.com/apk/res/android"
-				android:layout_width="fill_parent">
-				<TextView android:layout_column="1" android:id="@+id/nameCol"
-					android:text="Goalie Name" style="@style/TableFont" android:gravity="left"/>
-				<TextView android:text="0" android:id="@+id/gpCol" style="@style/TableFont" />
-				<TextView android:text="0" android:id="@+id/gaCol" style="@style/TableFont" />
-				<TextView android:text="0" android:id="@+id/sCol" style="@style/TableFont" />
-				<TextView android:text="0" android:id="@+id/gaaCol" style="@style/TableFont" />
-				<TextView android:text="0%" android:id="@+id/spCol" style="@style/TableFont" />
-			</TableRow>
-		</TableLayout>
 
-		<TableLayout android:id="@+id/playerTable" android:gravity="center" android:layout_marginTop="10dp"
-			android:layout_width="fill_parent" android:layout_height="wrap_content">
-			<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-				android:layout_width="fill_parent" android:gravity="center">
-				<TextView android:layout_column="1" android:id="@+id/nameCol"
-					android:text="Player Name" style="@style/TableFont.Header" android:gravity="left" />
-				<TextView android:text="GP" android:id="@+id/gamesPlayedCol"
-					style="@style/TableFont.Header" />
-				<TextView android:text="G" android:id="@+id/goalsCol"
-					style="@style/TableFont.Header" />
-				<TextView android:text="A" android:id="@+id/assistsCol"
-					style="@style/TableFont.Header" />
-				<TextView android:text="P" android:id="@+id/pointsCol"
-					style="@style/TableFont.Header" />
-				<TextView android:text="PIM" android:id="@+id/pimsCol"
-					style="@style/TableFont.Header" />
-			</TableRow>
-		</TableLayout>
-	</LinearLayout>
-</ScrollView>
+    <ListView
+        android:id="@+id/teamPlayerList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/missingTeamData"
+        android:gravity="center"
+        android:text="@string/missingTeamData"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

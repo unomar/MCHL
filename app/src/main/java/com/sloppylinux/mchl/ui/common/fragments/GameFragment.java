@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GamePagerAdapter;
+import com.sloppylinux.mchl.util.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,8 +35,12 @@ public class GameFragment extends DialogFragment
     TextView gameLocation;
     @BindView(R.id.gameHomeName)
     TextView homeTeamName;
+    @BindView(R.id.gameHomeTeamScore)
+    TextView homeTeamScore;
     @BindView(R.id.gameAwayName)
     TextView awayTeamName;
+    @BindView(R.id.gameAwayTeamScore)
+    TextView awayTeamScore;
     @BindView(R.id.gamePager)
     ViewPager viewPager;
     @BindView(R.id.gameTabs)
@@ -48,12 +53,12 @@ public class GameFragment extends DialogFragment
 
     public static GameFragment newInstance(Game game)
     {
-        GameFragment frag = new GameFragment();
+        GameFragment gameFragment = new GameFragment();
         Bundle args = new Bundle();
-        args.putSerializable("game", game);
-        frag.setArguments(args);
+        args.putSerializable(Constants.GAME_KEY, game);
+        gameFragment.setArguments(args);
 
-        return frag;
+        return gameFragment;
     }
 
 
@@ -73,7 +78,7 @@ public class GameFragment extends DialogFragment
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        Game game = (Game) getArguments().get("game");
+        Game game = (Game) getArguments().get(Constants.GAME_KEY);
 
         if (game != null)
         {
@@ -81,6 +86,16 @@ public class GameFragment extends DialogFragment
             gameLocation.setText(game.getLocation());
             homeTeamName.setText(game.getHomeTeamName());
             awayTeamName.setText(game.getAwayTeamName());
+
+            String homeScore = "";
+            String awayScore = "";
+            if (!game.isInFuture())
+            {
+                homeScore = String.valueOf(game.getHomeScore());
+                awayScore = String.valueOf(game.getHomeScore());
+            }
+            homeTeamScore.setText(homeScore);
+            homeTeamScore.setText(awayScore);
 
             GamePagerAdapter gamePagerAdapter = new GamePagerAdapter(game, getChildFragmentManager());
             viewPager.setAdapter(gamePagerAdapter);

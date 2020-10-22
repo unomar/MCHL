@@ -294,6 +294,15 @@ public class PlayerStatistic implements Comparable<PlayerStatistic>
     @Override
     public int compareTo(PlayerStatistic o)
     {
+        // Handle null value for header row
+        if (this.points == null)
+        {
+            return 1;
+        }
+        else if (o.getPoints() == null)
+        {
+            return -1;
+        }
         return Integer.valueOf(this.points).compareTo(Integer.valueOf(o.getPoints()));
     }
 }

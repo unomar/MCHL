@@ -19,8 +19,12 @@ import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
 import com.sloppylinux.mchl.ui.common.adapters.TeamListAdapter;
 import com.sloppylinux.mchl.ui.common.fragments.GameFragment;
+import com.sloppylinux.mchl.ui.common.views.MchlSnackbar;
 import com.sloppylinux.mchl.ui.settings.SettingsViewModel;
 import com.sloppylinux.mchl.util.Config;
+import com.sloppylinux.mchl.util.Constants;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +43,7 @@ public class HomeFragment extends Fragment
     private SettingsViewModel settingsViewModel;
     private Config config;
     private Unbinder unbinder;
-    private Snackbar snackbar;
+    private MchlSnackbar snackbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -69,7 +73,9 @@ public class HomeFragment extends Fragment
                 TeamListAdapter teamAdapter = new TeamListAdapter(config.getPlayer().getPlayerTeams(), getContext());
                 teamListView.setAdapter(teamAdapter);
 
-                GameListAdapter scheduleAdapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
+                List<Game> playerGameList = trimGames(config.getPlayer().getPlayerGameList());
+
+                GameListAdapter scheduleAdapter = new GameListAdapter(playerGameList, getContext());
                 scheduleListView.setAdapter(scheduleAdapter);
                 scheduleListView.setOnItemClickListener((adapterView, v, index, arg3) ->
                 {
@@ -81,7 +87,8 @@ public class HomeFragment extends Fragment
                     gameFragment.show(fm, "fragment_game_schedule");
                 });
 
-                GameListAdapter resultAdapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
+                List<Game> playerResultList = trimGames(config.getPlayer().getPlayerResultList());
+                GameListAdapter resultAdapter = new GameListAdapter(playerResultList, getContext());
                 resultListView.setAdapter(resultAdapter);
                 resultListView.setOnItemClickListener((adapterView, v, index, arg3) ->
                 {
@@ -105,14 +112,28 @@ public class HomeFragment extends Fragment
     }
 
     /**
+     * Trim the list of games (Schedule & Results) to the defined max
+     * @param gameList The list to trim
+     * @return The trimmed list
+     */
+    private List<Game> trimGames(List<Game> gameList)
+    {
+        if (gameList.size() > Constants.MAX_GAMES_HOME)
+        {
+            gameList = gameList.subList(0,Constants.MAX_GAMES_HOME);
+        }
+        return gameList;
+    }
+
+    /**
      * Update player info.
      *
      * @param player The player to update
      */
     private void updatePlayerInfo(Player player)
     {
-        snackbar = Snackbar.make(getView(), "Fetching updated schedule and stats for " + player.getName(" "), Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction("No action", null).show();
+        snackbar = new MchlSnackbar(getView(), "Fetching updated schedule and stats for " + player.getName(" "), Snackbar.LENGTH_INDEFINITE, getContext());
+        snackbar.show();
         spinner.setVisibility(View.VISIBLE);
         settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), s ->
         {
@@ -122,10 +143,12 @@ public class HomeFragment extends Fragment
             TeamListAdapter teamAdapter = new TeamListAdapter(config.getPlayer().getPlayerTeams(), getContext());
             teamListView.setAdapter(teamAdapter);
 
-            GameListAdapter scheduleAdapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
+            List<Game> playerGameList = trimGames(config.getPlayer().getPlayerGameList());
+            GameListAdapter scheduleAdapter = new GameListAdapter(playerGameList, getContext());
             scheduleListView.setAdapter(scheduleAdapter);
 
-            GameListAdapter resultAdapter = new GameListAdapter(config.getPlayer().getPlayerResultList(), getContext());
+            List<Game> playerResultList = trimGames(config.getPlayer().getPlayerResultList());
+            GameListAdapter resultAdapter = new GameListAdapter(playerResultList, getContext());
             resultListView.setAdapter(resultAdapter);
         });
     }
