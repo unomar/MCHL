@@ -1,8 +1,19 @@
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Java class files
+*.class
+
+# IntelliJ
+*.iml
 .idea
 build
 local.properties
 gen
 
-*.class
-
+# Gradle files
 .gradle/
+build/
