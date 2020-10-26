@@ -20,6 +20,7 @@
                 android:layout_margin="1px"
                 android:layout_weight=".5"
                 android:background="@color/black"
+                android:textColor="@color/textPrimary"
                 android:text="Team Name" />
 
             <TextView
@@ -28,6 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".07"
+                android:textColor="@color/textPrimary"
                 android:text="@string/gamesPlayedHeader" />
 
             <TextView
@@ -36,6 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".07"
+                android:textColor="@color/textPrimary"
                 android:text="@string/winHeader" />
 
             <TextView
@@ -44,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".07"
+                android:textColor="@color/textPrimary"
                 android:text="@string/lossHeader" />
 
             <TextView
@@ -52,6 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".07"
+                android:textColor="@color/textPrimary"
                 android:text="@string/tieHeader" />
 
             <TextView
@@ -60,6 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".07"
+                android:textColor="@color/textPrimary"
                 android:text="@string/pointsHeader" />
 
             <TextView
@@ -68,6 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".07"
+                android:textColor="@color/textPrimary"
                 android:text="@string/goalsForHeader" />
 
             <TextView
@@ -76,6 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".07"
+                android:textColor="@color/textPrimary"
                 android:text="@string/goalsAgainstHeader" />
         </TableRow>
     </TableLayout>

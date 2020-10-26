@@ -29,6 +29,7 @@
                 android:gravity="center"
                 android:paddingRight="2sp"
                 android:text="Fri 21 Feb 2010 05:30 PM"
+                android:textColor="@color/textPrimary"
                 android:textStyle="bold"></TextView>
 
             <TextView
@@ -40,6 +41,7 @@
                 android:gravity="center"
                 android:paddingLeft="2sp"
                 android:text="Motto McLean Ice Arena"
+                android:textColor="@color/textPrimary"
                 android:textStyle="bold"></TextView>
         </RelativeLayout>
 
@@ -55,6 +57,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:gravity="center"
+                android:textColor="@color/textPrimary"
                 android:text="Home Team"></TextView>
 
             <TextView
@@ -63,6 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
+                android:textColor="@color/textPrimary"
                 android:text="vs"></TextView>
 
             <TextView
@@ -72,6 +76,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:gravity="center"
+                android:textColor="@color/textPrimary"
                 android:text="Away Team"></TextView>
 
         </RelativeLayout>
