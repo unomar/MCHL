@@ -27,5 +27,6 @@
         android:layout_height="match_parent"
         android:id="@+id/missingTeamData"
         android:gravity="center"
+        android:textColor="@color/textPrimary"
         android:text="@string/missingTeamData"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

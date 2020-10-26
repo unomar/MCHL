@@ -24,6 +24,7 @@ android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 android:gravity="left"
 android:text="Label:"
+android:textColor="@color/textPrimary"
 style="@style/SelectorLabel"/>
 <TextView android:id="@+id/selectorValue"
 android:layout_width="fill_parent"
@@ -36,6 +37,7 @@ style="@style/SelectorValue"/>
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:layout_weight="1"
+android:textColor="@color/textPrimary"
 />
 <ImageView android:layout_width="wrap_content"
 android:layout_height="wrap_content" 

@@ -3,20 +3,26 @@
     <TextView android:layout_column="1"
               android:id="@+id/name"
               android:text="Goalie Name"
+              android:textColor="@color/textPrimary"
               style="@style/CodeFont.Table" />
     <TextView android:text="GP"
+              android:textColor="@color/textPrimary"
               android:id="@+id/gamesPlayed"
               style="@style/CodeFont.Table"/>
     <TextView android:text="GA"
+              android:textColor="@color/textPrimary"
               android:id="@+id/goalsAgainst"
               style="@style/CodeFont.Table"/>
     <TextView android:text="S"
+              android:textColor="@color/textPrimary"
               android:id="@+id/shots"
               style="@style/CodeFont.Table"/>
     <TextView android:text="GAA"
+              android:textColor="@color/textPrimary"
               android:id="@+id/gAA"
               style="@style/CodeFont.Table"/>
     <TextView android:text="S%"
+              android:textColor="@color/textPrimary"
               android:id="@+id/savePercentage"
               style="@style/CodeFont.Table"/>
 </TableRow>

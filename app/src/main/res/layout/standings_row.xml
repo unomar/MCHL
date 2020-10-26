@@ -12,6 +12,7 @@
         android:layout_weight="1"
         android:gravity="start"
         android:padding="5dp"
+        android:textColor="@color/textPrimary"
         android:text="@string/team_name" />
 
     <TextView
@@ -21,6 +22,7 @@
         android:layout_weight="7"
         android:gravity="start"
         android:padding="5dp"
+        android:textColor="@color/textPrimary"
         android:text="@string/team_name" />
 
     <TextView
@@ -30,6 +32,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
+        android:textColor="@color/textPrimary"
         android:text="@string/gamesPlayedHeader" />
 
     <TextView
@@ -39,6 +42,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
+        android:textColor="@color/textPrimary"
         android:text="@string/winHeader" />
 
     <TextView
@@ -48,6 +52,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
+        android:textColor="@color/textPrimary"
         android:text="@string/lossHeader" />
 
     <TextView
@@ -57,6 +62,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
+        android:textColor="@color/textPrimary"
         android:text="@string/tieHeader" />
 
     <TextView
@@ -66,6 +72,7 @@
         android:layout_weight="2"
         android:gravity="center"
         android:padding="5dp"
+        android:textColor="@color/textPrimary"
         android:text="@string/pointsHeader" />
 
     <TextView
@@ -75,6 +82,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
+        android:textColor="@color/textPrimary"
         android:text="@string/goalsForHeader" />
 
     <TextView
@@ -84,5 +92,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
+        android:textColor="@color/textPrimary"
         android:text="@string/goalsAgainstHeader" />
 </TableRow>

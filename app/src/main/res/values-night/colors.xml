@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="white">#FFFFFFFF</color>
+
     <color name="background_dark">#FF696565</color>
     <color name="black">#ff000000</color>
     <color name="orange">#FF990000</color>
     <color name="transparent">#00000000</color>
 
-    <color name="colorPrimary">#FF232323</color>
-    <color name="colorPrimaryDark">#FF121212</color>
+    <color name="colorPrimary">#FF656565</color>
+    <color name="colorPrimaryDark">#FF232323</color>
     <color name="colorAccent">#FF990000</color>
 
-    <color name="textPrimary">#FF232323</color>
-    <color name="textSecondary">#FF222222</color>
+    <color name="textPrimary">#FFFFFF</color>
+    <color name="textSecondary">#CCCCCC</color>
 
-    <color name="colorStandard">#FF222222</color>
-    <color name="colorHighlight">#FF000000</color>
+    <color name="colorStandard">#FFAAAAAA</color>
+    <color name="colorHighlight">#FFFFFFFF</color>
 
     <color name="winColor">#FF007700</color>
     <color name="lossColor">#FF990000</color>

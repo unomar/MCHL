@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
     tools:openDrawer="start">
 
     <include
@@ -21,6 +20,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_navigation"
-        app:menu="@menu/activity_navigation_drawer" />
+        app:menu="@menu/activity_navigation_drawer"
+        app:itemTextColor="@color/textPrimary"
+        app:itemIconTint="@color/textPrimary" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
