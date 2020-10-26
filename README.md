@@ -11,7 +11,7 @@ MCHL app for simplified access to scores, stats, schedules & more from the updat
 - Author: Kevin M. Weiss
 
 
-<img src="Screenshots/MCHL_menu" alt="Menu" width="48">
+<img src="/Screenshots/MCHL_menu" alt="Menu" width="48">
 ![Menu](/Screenshots/MCHL_menu.png | width=100)
 ![Home](/Screenshots/MCHL_home.png)
 ![Results](/Screenshots/MCHL_results.png)
