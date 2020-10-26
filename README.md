@@ -10,7 +10,9 @@ MCHL app for simplified access to scores, stats, schedules & more from the updat
 - Package: com.sloppylinux.mchl.gui
 - Author: Kevin M. Weiss
 
-![Menu](/Screenshots/MCHL_menu.png)
+
+<img src="Screenshots/MCHL_menu" alt="Menu" width="48">
+![Menu](/Screenshots/MCHL_menu.png | width=100)
 ![Home](/Screenshots/MCHL_home.png)
 ![Results](/Screenshots/MCHL_results.png)
 ![Schedule](/Screenshots/MCHL_schedule.png)
