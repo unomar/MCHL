@@ -7,27 +7,43 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.sloppylinux.mchl.domain.Game;
+import com.sloppylinux.mchl.domain.Player;
+import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
 import com.sloppylinux.mchl.ui.common.fragments.GameFragment;
-import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
+import com.sloppylinux.mchl.ui.common.views.MchlSnackbar;
 import com.sloppylinux.mchl.util.Config;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-public class ScheduleFragment extends RefreshFragment
+public class ScheduleFragment extends Fragment
 {
     @BindView(R.id.scheduleList)
     ListView scheduleListView;
     @BindView(R.id.scheduleRefreshView)
     SwipeRefreshLayout refreshLayout;
+
+    private RefreshScheduleViewModel refreshScheduleViewModel;
+    private Unbinder unbinder;
     private GameListAdapter adapter;
     private Config config;
+    private MchlSnackbar snackbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -39,13 +55,17 @@ public class ScheduleFragment extends RefreshFragment
 
         View root = inflater.inflate(R.layout.fragment_schedule, container, false);
         unbinder = ButterKnife.bind(this, root);
-        super.setup(refreshLayout);
+
+        refreshScheduleViewModel = new ViewModelProvider(this).get(RefreshScheduleViewModel.class);
+        refreshLayout.setOnRefreshListener(
+                () -> updateSchedule(config.getPlayer())
+        );
 
         return root;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle bundle)
+    public void onViewCreated(@NotNull View view, Bundle bundle)
     {
         super.onViewCreated(view, bundle);
         if (config.getPlayer() != null)
@@ -65,11 +85,49 @@ public class ScheduleFragment extends RefreshFragment
     }
 
     @Override
-    public void refreshView()
+    public void onDestroy()
     {
-        adapter.clear();
-        adapter.addAll(config.getPlayer().getPlayerGameList());
-        adapter.notifyDataSetChanged();
+        super.onDestroy();
+        unbinder.unbind();
     }
 
+    /**
+     * Update player schedule.
+     *
+     * @param player The player to update
+     */
+    private void updateSchedule(Player player)
+    {
+        snackbar = new MchlSnackbar(getView(), "Updating schedule...", Snackbar.LENGTH_INDEFINITE, getContext());
+        snackbar.show();
+        refreshScheduleViewModel.getPlayerSchedule(player).observe(getViewLifecycleOwner(), s ->
+        {
+            refreshLayout.setRefreshing(false);
+            snackbar.dismiss();
+
+            adapter.clear();
+            adapter.addAll(buildSchedule(s));
+            adapter.notifyDataSetChanged();
+
+            // Store the updated schedule to the cache/config
+            config.getPlayer().setPlayerSchedule(s);
+            config.storeValues();
+        });
+    }
+
+    /**
+     * Translate one to many team schedules into a unified list.
+     * @param schedules The schedules to merge
+     * @return A unified list of games
+     */
+    private List<Game> buildSchedule(List<TeamSchedule> schedules)
+    {
+        List<Game> gameList = new ArrayList<>();
+        for (TeamSchedule schedule : schedules)
+        {
+            gameList.addAll(schedule.getGames());
+        }
+        Collections.sort(gameList);
+        return gameList;
+    }
 }

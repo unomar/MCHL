@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.sloppylinux.mchl.domain.Player;
+import com.sloppylinux.mchl.ui.common.views.MchlSnackbar;
 import com.sloppylinux.mchl.util.Config;
 import com.sloppylinux.mchl.util.WebserviceException;
 
@@ -17,11 +19,9 @@ public abstract class RefreshFragment extends Fragment
     protected SwipeRefreshLayout mySwipeRefreshLayout;
 
     protected RefreshViewModel refreshViewModel;
-
     protected Config config;
-
     protected Unbinder unbinder;
-
+    private MchlSnackbar snackbar;
 
     /**
      * Setup the swipe refresh layout components
@@ -45,9 +45,12 @@ public abstract class RefreshFragment extends Fragment
      */
     private void updatePlayerInfo(Player player)
     {
+        snackbar = new MchlSnackbar(getView(), "Updating player info...", Snackbar.LENGTH_INDEFINITE, getContext());
+        snackbar.show();
         refreshViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), s ->
         {
             mySwipeRefreshLayout.setRefreshing(false);
+            snackbar.dismiss();
             if (s.startsWith(WebserviceException.ERROR_PREFIX))
             {
                 Toast toast = Toast.makeText(getContext(), s, Toast.LENGTH_LONG);

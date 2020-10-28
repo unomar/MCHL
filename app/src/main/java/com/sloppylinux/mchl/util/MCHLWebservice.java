@@ -104,6 +104,21 @@ public class MCHLWebservice
         if (player != null && player.requiresUpdate())
         {
             player = fetchPlayer(player);
+            List<TeamSchedule> schedule = new ArrayList<>();
+            List<TeamSchedule> results = new ArrayList<>();
+            for (Long teamId : player.getCurrentTeams())
+            {
+                Team team = this.getTeam(teamId);
+                if (team != null)
+                {
+                    team.setLeagueTable(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
+                    player.getPlayerTeams().add(team);
+                    schedule.add(this.getSchedule(teamId));
+                    results.add(this.getResults(teamId));
+                }
+            }
+            player.setPlayerSchedule(schedule);
+            player.setPlayerResults(results);
 
             // TODO: Null check and safeguard this better
             long seasonId = (player.getSeasons() != null && !player.getSeasons().isEmpty())
@@ -134,17 +149,6 @@ public class MCHLWebservice
             if (playerCall != null)
             {
                 player = playerCall.body();
-            }
-            for (Long teamId : player.getCurrentTeams())
-            {
-                Team team = this.getTeam(teamId);
-                if (team != null)
-                {
-                    team.setLeagueTable(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
-                    player.getPlayerTeams().add(team);
-                    player.getPlayerSchedule().add(this.getSchedule(teamId));
-                    player.getPlayerResults().add(this.getResults(teamId));
-                }
             }
         } catch (IOException e)
         {
@@ -350,7 +354,7 @@ public class MCHLWebservice
      * @param teamId The id of the team to query
      * @return The TeamSchedule
      */
-    TeamSchedule getResults(Long teamId) throws WebserviceException
+    public TeamSchedule getResults(Long teamId) throws WebserviceException
     {
         TeamSchedule teamSchedule = null;
         try

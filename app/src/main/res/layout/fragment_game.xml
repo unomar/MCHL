@@ -117,9 +117,11 @@
         android:layout_below="@id/scoreBar">
 
         <com.google.android.material.tabs.TabLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/gameTabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            app:tabIndicatorColor="@color/colorAccent"/>
     </androidx.viewpager.widget.ViewPager>
 </RelativeLayout>
