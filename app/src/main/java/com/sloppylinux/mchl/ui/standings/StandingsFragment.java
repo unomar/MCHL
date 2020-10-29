@@ -7,22 +7,25 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.sloppylinux.mchl.ui.R;
-import com.sloppylinux.mchl.ui.common.fragments.RefreshFragment;
 import com.sloppylinux.mchl.util.Config;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-public class StandingsFragment extends RefreshFragment
+public class StandingsFragment extends Fragment
 {
     @BindView(R.id.standings_pager)
     ViewPager viewPager;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
+
+    private Unbinder unbinder;
 
     private StandingsPagerAdapter standingsPagerAdapter;
 
@@ -49,12 +52,10 @@ public class StandingsFragment extends RefreshFragment
     }
 
     @Override
-    public void refreshView()
+    public void onDestroy()
     {
-        // TODO: Figure out how to update & refresh content
-//        standingsPagerAdapter.clear();
-//        adapter.addAll(config.getPlayer().getPlayerTeams());
-//        adapter.notifyDataSetChanged();
+        super.onDestroy();
+        unbinder.unbind();
     }
 }
 

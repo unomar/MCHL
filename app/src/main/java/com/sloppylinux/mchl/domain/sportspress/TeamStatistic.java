@@ -3,7 +3,9 @@ package com.sloppylinux.mchl.domain.sportspress;
 import com.google.gson.annotations.SerializedName;
 import com.sloppylinux.mchl.util.Utils;
 
-public class TeamStatistic implements Comparable<TeamStatistic>
+import java.io.Serializable;
+
+public class TeamStatistic implements Comparable<TeamStatistic>, Serializable
 {
     @SerializedName("pos")
     private String position;

@@ -101,6 +101,7 @@ public class MCHLWebservice
      */
     public void updateConfig(Player player, Context context) throws WebserviceException
     {
+        long startTime = new Date().getTime();
         if (player != null && player.requiresUpdate())
         {
             player = fetchPlayer(player);
@@ -113,7 +114,7 @@ public class MCHLWebservice
                 {
                     team.setLeagueTable(this.getStandings(team.getCurrentSeason(), team.getCurrentLeague()));
                     player.getPlayerTeams().add(team);
-                    schedule.add(this.getSchedule(teamId));
+                    schedule.add(this.getScheduleByTeamId(teamId));
                     results.add(this.getResults(teamId));
                 }
             }
@@ -132,6 +133,9 @@ public class MCHLWebservice
             config.setLeagueTables(leagueTables);
             config.storeValues();
         }
+        long endTime = new Date().getTime();
+        long processTime = (endTime - startTime);
+        LOG.info("Finished updateConfig in " + processTime + " millis");
     }
 
     /**
@@ -143,6 +147,7 @@ public class MCHLWebservice
      */
     private Player fetchPlayer(Player player) throws WebserviceException
     {
+        long startTime = new Date().getTime();
         try
         {
             Response<Player> playerCall = this.mchlService.getPlayer(player.getPlayerId()).execute();
@@ -155,6 +160,9 @@ public class MCHLWebservice
             LOG.warning("Caught exception performing updating player info." + e.getMessage());
             throw new WebserviceException(NETWORK_ERROR, "Caught IOException in fetchPlayer()", e);
         }
+        long endTime = new Date().getTime();
+        long processTime = (endTime - startTime);
+        LOG.info("Finished fetchPlayer in " + processTime + " millis");
 
         return player;
     }
@@ -166,6 +174,7 @@ public class MCHLWebservice
      */
     public List<LeagueTable> fetchLatestLeagueTables(long seasonId) throws WebserviceException
     {
+        long startTime = new Date().getTime();
         List<LeagueTable> leagueTables = new ArrayList<>();
         for (League league : this.getLeagues())
         {
@@ -184,6 +193,9 @@ public class MCHLWebservice
                 }
             }
         }
+        long endTime = new Date().getTime();
+        long processTime = (endTime - startTime);
+        LOG.info("Finished fetchLatestLeagueTables in " + processTime + " millis");
 
         return leagueTables;
     }
@@ -197,6 +209,7 @@ public class MCHLWebservice
      */
     public Team getTeam(long teamId) throws WebserviceException
     {
+        long startTime = new Date().getTime();
         // Check the Cache first to avoid multiple expensive WebService calls
         String cacheKey = Constants.TEAM_KEY + teamId;
         Team team = (Team) TemporaryCache.getInstance().get(cacheKey);
@@ -227,6 +240,9 @@ public class MCHLWebservice
         {
             LOG.info("Retrieved team from cache!");
         }
+        long endTime = new Date().getTime();
+        long processTime = (endTime - startTime);
+        LOG.info("Finished getTeam in " + processTime + " millis");
 
         return team;
     }
@@ -240,6 +256,7 @@ public class MCHLWebservice
      */
     public LeagueTable getStandings(long seasonId, long leagueId) throws WebserviceException
     {
+        long startTime = new Date().getTime();
         String cacheKey = "leagueTable-S" + seasonId + "L" + leagueId;
         // Check the cache first to avoid the expensive WebService call
         LeagueTable leagueTable = (LeagueTable) TemporaryCache.getInstance().get(cacheKey);
@@ -264,6 +281,9 @@ public class MCHLWebservice
         {
             LOG.info("Retrieved LeagueTable from cache");
         }
+        long endTime = new Date().getTime();
+        long processTime = (endTime - startTime);
+        LOG.info("Finished getStandings in " + processTime + " millis");
         return leagueTable;
     }
 
@@ -301,50 +321,67 @@ public class MCHLWebservice
      * @param teamId The id of the team to query
      * @return The TeamSchedule
      */
-    public TeamSchedule getSchedule(Long teamId) throws WebserviceException
+    public TeamSchedule getScheduleByTeamId(Long teamId) throws WebserviceException
     {
+        long startTime = new Date().getTime();
         TeamSchedule teamSchedule = null;
+
+        Team team = getTeam(teamId);
+        LOG.info("Querying schedule for team: " + team.getName());
+        teamSchedule = getScheduleByTeam(team);
+
+        long endTime = new Date().getTime();
+        long processTime = (endTime - startTime);
+        LOG.info("Finished getSchedule in " + processTime + " millis");
+        return teamSchedule;
+    }
+
+    /**
+     * Retrieve a team schedule using a populate Team object.
+     *
+     * @param team The team to retrieve the schedule for
+     * @return The TeamSchedule
+     * @throws WebserviceException on error
+     */
+    public TeamSchedule getScheduleByTeam(Team team) throws WebserviceException
+    {
+        TeamSchedule teamSchedule = new TeamSchedule();
+        long startTime = new Date().getTime();
         try
         {
-            Call<Team> teamCall = mchlService.getTeam(teamId);
-            Response<Team> teamResponse = teamCall.execute();
-            if (teamResponse != null && teamResponse.body() != null)
+            Call<List<Event>> eventCall = mchlService.listTeamSchedule(team.getName(), team.getCurrentSeason(), team.getCurrentLeague(), getIso8601Date(null));
+            Response<List<Event>> eventResponses = eventCall.execute();
+            List<Event> events = eventResponses.body();
+            if (events != null)
             {
-                Team team = teamResponse.body();
-                LOG.info("Querying schedule for team: " + team.getName());
-                Call<List<Event>> eventCall = mchlService.listTeamSchedule(team.getName(), team.getCurrentSeason(), team.getCurrentLeague(), getIso8601Date(null));
-                Response<List<Event>> eventResponses = eventCall.execute();
-                List<Event> events = eventResponses.body();
-                if (events != null)
+                LOG.info("Got " + events.size() + " events");
+                for (Event event : events)
                 {
-                    LOG.info("Got " + events.size() + " events");
-                    teamSchedule = new TeamSchedule();
-                    for (Event event : events)
+                    String eventString = event.getName();
+                    if (StringUtils.isNotBlank(eventString))
                     {
-                        String eventString = event.getName();
-                        if (StringUtils.isNotBlank(eventString))
-                        {
-                            String venueName = getVenueName(event.getVenueIds());
-                            LOG.info("Creating Game for event [" + event.getId() + "] as " + eventString + " at " + venueName);
-                            String[] teamNames = eventString.split(" vs ");
+                        String venueName = getVenueName(event.getVenueIds());
+                        LOG.info("Creating Game for event [" + event.getId() + "] as " + eventString + " at " + venueName);
+                        String[] teamNames = eventString.split(" vs ");
 
-                            // TODO: Revert this and pull Team info on demand
-                            Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague());
-                            homeTeam.setId(event.getTeamIds().get(0));
-                            Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague());
-                            awayTeam.setId(event.getTeamIds().get(1));
-                            Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
-                            teamSchedule.getGames().add(game);
-                        }
+                        Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague());
+                        homeTeam.setId(event.getTeamIds().get(0));
+                        Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague());
+                        awayTeam.setId(event.getTeamIds().get(1));
+                        Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
+                        teamSchedule.getGames().add(game);
                     }
                 }
             }
         } catch (IOException e)
         {
-            String errorMessage = "Caught exception querying team schedule.";
+            String errorMessage = "Caught exception querying team schedule by team.";
             LOG.warning(errorMessage + e.getMessage());
             throw new WebserviceException(NETWORK_ERROR, errorMessage, e);
         }
+        long endTime = new Date().getTime();
+        long processTime = (endTime - startTime);
+        LOG.info("Finished getScheuleByTeam in " + processTime + " millis");
         return teamSchedule;
     }
 
@@ -356,49 +393,65 @@ public class MCHLWebservice
      */
     public TeamSchedule getResults(Long teamId) throws WebserviceException
     {
+        long startTime = new Date().getTime();
         TeamSchedule teamSchedule = null;
+
+        Team team = getTeam(teamId);
+        teamSchedule = getResultsByTeam(team);
+
+        long endTime = new Date().getTime();
+        long processTime = (endTime - startTime);
+        LOG.info("Finished getResults in " + processTime + " millis");
+        return teamSchedule;
+    }
+
+    /**
+     * Get Results by Team.
+     *
+     * @param team The team to retrieve results for
+     * @return The results
+     * @throws WebserviceException on error
+     */
+    public TeamSchedule getResultsByTeam(Team team) throws WebserviceException
+    {
+        TeamSchedule teamSchedule = new TeamSchedule();
+        long startTime = new Date().getTime();
+        LOG.info("Querying results for team: " + team.getName());
         try
         {
-            Call<Team> teamCall = mchlService.getTeam(teamId);
-            Response<Team> teamResponse = teamCall.execute();
-            if (teamResponse != null && teamResponse.body() != null)
+            Call<List<Event>> eventCall = mchlService.listTeamResults(team.getName(), team.getCurrentSeason(), team.getCurrentLeague(), getIso8601Date(null));
+            Response<List<Event>> eventResponses = eventCall.execute();
+            List<Event> events = eventResponses.body();
+            if (events != null)
             {
-                Team team = teamResponse.body();
-                LOG.info("Querying results for team: " + team.getName());
-                Call<List<Event>> eventCall = mchlService.listTeamResults(team.getName(), team.getCurrentSeason(), team.getCurrentLeague(), getIso8601Date(null));
-                Response<List<Event>> eventResponses = eventCall.execute();
-                List<Event> events = eventResponses.body();
-                if (events != null)
+                LOG.info("Got " + events.size() + " events");
+
+                for (Event event : events)
                 {
-                    LOG.info("Got " + events.size() + " events");
-                    teamSchedule = new TeamSchedule();
-                    for (Event event : events)
+                    String eventString = event.getName();
+                    if (StringUtils.isNotBlank(eventString))
                     {
-                        String eventString = event.getName();
-                        if (StringUtils.isNotBlank(eventString))
+                        String venueName = getVenueName(event.getVenueIds());
+                        LOG.info("Creating Game for event [" + event.getId() + "] as " + eventString + " at " + venueName);
+                        String[] teamNames = eventString.split(" vs ");
+                        int homeScore = 0;
+                        int awayScore = 0;
+                        if (event.getResults() != null && event.getResults().size() == 2)
                         {
-                            String venueName = getVenueName(event.getVenueIds());
-                            LOG.info("Creating Game for event [" + event.getId() + "] as " + eventString + " at " + venueName);
-                            String[] teamNames = eventString.split(" vs ");
-                            int homeScore = 0;
-                            int awayScore = 0;
-                            if (event.getResults() != null && event.getResults().size() == 2)
-                            {
-                                homeScore = Utils.safeParseInt(event.getResults().get(0));
-                                awayScore = Utils.safeParseInt(event.getResults().get(1));
+                            homeScore = Utils.safeParseInt(event.getResults().get(0));
+                            awayScore = Utils.safeParseInt(event.getResults().get(1));
 
-                                LOG.info("Final score: " + teamNames[0] + " " + homeScore + " - " + awayScore + " " + teamNames[1]);
-                            }
-
-                            // TODO: Revert this and pull Team info on demand
-                            Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(0));
-                            homeTeam.setId(event.getTeamIds().get(0));
-                            Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(1));
-                            awayTeam.setId(event.getTeamIds().get(1));
-                            Game game = new Game(homeTeam, awayTeam, event.getEventDate(), homeScore, awayScore, venueName);
-                            game.setResult(Game.Result.fromString(event.getOutcome().get(teamId)));
-                            teamSchedule.getGames().add(game);
+                            LOG.info("Final score: " + teamNames[0] + " " + homeScore + " - " + awayScore + " " + teamNames[1]);
                         }
+
+                        // TODO: Revert this and pull Team info on demand
+                        Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(0));
+                        homeTeam.setId(event.getTeamIds().get(0));
+                        Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(1));
+                        awayTeam.setId(event.getTeamIds().get(1));
+                        Game game = new Game(homeTeam, awayTeam, event.getEventDate(), homeScore, awayScore, venueName);
+                        game.setResult(Game.Result.fromString(event.getOutcome().get(team.getId())));
+                        teamSchedule.getGames().add(game);
                     }
                 }
             }
@@ -408,6 +461,9 @@ public class MCHLWebservice
             LOG.warning(errorMessage + e.getMessage());
             throw new WebserviceException(NETWORK_ERROR, errorMessage, e);
         }
+        long endTime = new Date().getTime();
+        long processTime = (endTime - startTime);
+        LOG.info("Finished getResultsByTeam in " + processTime + " millis");
         return teamSchedule;
     }
 

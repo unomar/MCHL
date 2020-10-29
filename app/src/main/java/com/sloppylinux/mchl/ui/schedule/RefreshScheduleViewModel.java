@@ -64,7 +64,7 @@ public class RefreshScheduleViewModel extends AndroidViewModel
 
                     for (Long teamId : player.getCurrentTeams())
                     {
-                        schedule.add(mchlWebservice.getSchedule(teamId));
+                        schedule.add(mchlWebservice.getScheduleByTeamId(teamId));
                     }
                     playerSchedule.postValue(schedule);
                 } catch (WebserviceException e)
