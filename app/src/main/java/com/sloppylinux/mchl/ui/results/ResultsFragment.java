@@ -58,6 +58,7 @@ public class ResultsFragment extends Fragment
         unbinder = ButterKnife.bind(this, root);
 
         refreshResultsViewModel = new ViewModelProvider(this).get(RefreshResultsViewModel.class);
+        refreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimaryDark);
         refreshLayout.setOnRefreshListener(
                 () -> updateResults(config.getPlayer())
         );
@@ -117,6 +118,7 @@ public class ResultsFragment extends Fragment
 
     /**
      * Translate one to many team results into a unified list.
+     *
      * @param resultsList The results to merge
      * @return A unified list of games
      */
