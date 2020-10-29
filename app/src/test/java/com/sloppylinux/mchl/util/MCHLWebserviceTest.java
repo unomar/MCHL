@@ -62,7 +62,7 @@ public class MCHLWebserviceTest
     @Test
     public void testGetSchedule() throws WebserviceException
     {
-        TeamSchedule teamSchedule = mchlWebservice.getSchedule(3283L);
+        TeamSchedule teamSchedule = mchlWebservice.getScheduleByTeamId(3283L);
         assertNotNull("Team Schedule was null", teamSchedule);
         for (Game game : teamSchedule.getGames())
         {
