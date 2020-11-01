@@ -57,6 +57,7 @@ public class ScheduleFragment extends Fragment
         unbinder = ButterKnife.bind(this, root);
 
         refreshScheduleViewModel = new ViewModelProvider(this).get(RefreshScheduleViewModel.class);
+        refreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimaryDark);
         refreshLayout.setOnRefreshListener(
                 () -> updateSchedule(config.getPlayer())
         );
@@ -117,6 +118,7 @@ public class ScheduleFragment extends Fragment
 
     /**
      * Translate one to many team schedules into a unified list.
+     *
      * @param schedules The schedules to merge
      * @return A unified list of games
      */

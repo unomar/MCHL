@@ -8,11 +8,11 @@
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/MCHLTheme">
         <activity
             android:name="com.sloppylinux.mchl.activity.MchlNavigation"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+            android:theme="@style/MCHLTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -21,7 +21,7 @@
         <activity
             android:name="com.sloppylinux.mchl.activity.InitialSetup"
             android:label="@string/app_setup_name"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/MCHLTheme" />
     </application>
 
 </manifest>
