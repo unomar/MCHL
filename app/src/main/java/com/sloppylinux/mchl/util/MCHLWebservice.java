@@ -223,10 +223,17 @@ public class MCHLWebservice
                     team = teamResponse.body();
 
                     // Query team stats
-                    Response<TeamTable> statResponse = mchlService.getTeamStats(team.getListId()).execute();
+                    Response<List<TeamTable>> statResponse = mchlService.searchTeamStats(team.getName(), team.getCurrentSeason(), team.getCurrentLeague()).execute();
                     if (statResponse != null && statResponse.body() != null)
                     {
-                        team.setTeamTable(statResponse.body());
+                        List<TeamTable> tables = statResponse.body();
+                        if (tables != null && !tables.isEmpty())
+                        {
+                            team.setTeamTable(tables.get(0));
+                        } else
+                        {
+                            LOG.warning("Team stats could not be found for " + team.getName());
+                        }
                     }
                     // Store the object in the cache for later retrieval
                     TemporaryCache.getInstance().put(cacheKey, team);
@@ -362,14 +369,42 @@ public class MCHLWebservice
                     {
                         String venueName = getVenueName(event.getVenueIds());
                         LOG.info("Creating Game for event [" + event.getId() + "] as " + eventString + " at " + venueName);
-                        String[] teamNames = eventString.split(" vs ");
 
-                        Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague());
-                        homeTeam.setId(event.getTeamIds().get(0));
-                        Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague());
-                        awayTeam.setId(event.getTeamIds().get(1));
-                        Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
-                        teamSchedule.getGames().add(game);
+                        String[] teamNames = eventString.split(" vs ");
+                        // Normal case "Team A vs Team B"
+                        if (teamNames.length > 1)
+                        {
+
+
+                            Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague());
+                            homeTeam.setId(event.getTeamIds().get(0));
+                            Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague());
+                            awayTeam.setId(event.getTeamIds().get(1));
+                            Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
+                            teamSchedule.getGames().add(game);
+                        }
+                        // Home team not present " vs Team B"
+                        else if (eventString.startsWith(" vs "))
+                        {
+                            Team homeTeam = new Team("TBD", team.getCurrentSeason(), team.getCurrentLeague());
+                            homeTeam.setId(event.getTeamIds().get(0));
+
+                            Team awayTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague());
+                            awayTeam.setId(event.getTeamIds().get(1));
+                            Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
+                            teamSchedule.getGames().add(game);
+                        }
+                        // Away team not present "Team A vs "
+                        else
+                        {
+                            Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague());
+                            homeTeam.setId(event.getTeamIds().get(0));
+
+                            Team awayTeam = new Team("TBD", team.getCurrentSeason(), team.getCurrentLeague());
+                            awayTeam.setId(event.getTeamIds().get(1));
+                            Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
+                            teamSchedule.getGames().add(game);
+                        }
                     }
                 }
             }

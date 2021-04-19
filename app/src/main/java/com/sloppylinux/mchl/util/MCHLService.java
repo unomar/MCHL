@@ -26,6 +26,9 @@ public interface MCHLService
     @GET("lists/{listId}")
     Call<TeamTable> getTeamStats(@Path(value = "listId") long listId);
 
+    @GET("lists")
+    Call<List<TeamTable>> searchTeamStats(@Query("search") String teamName, @Query("seasons") Long seasonId, @Query("leagues") Long leagueId);
+
     @GET("events?order=asc")
     Call<List<Event>> listAllEvents();
 

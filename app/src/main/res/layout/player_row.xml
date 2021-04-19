@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/playerRow"
-    style="@style/TableBorders"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
@@ -12,8 +11,8 @@
         android:layout_margin="1px"
         android:layout_weight="50"
         android:gravity="start"
-        android:textColor="@color/textPrimary"
-        android:text="@string/Name" />
+        android:text="@string/Name"
+        android:textColor="@color/textPrimary" />
 
     <TextView
         android:id="@+id/playerGamesPlayed"
@@ -22,8 +21,8 @@
         android:layout_margin="1px"
         android:layout_weight="10"
         android:gravity="center"
-        android:textColor="@color/textPrimary"
-        android:text="@string/gamesPlayedHeader" />
+        android:text="@string/gamesPlayedHeader"
+        android:textColor="@color/textPrimary" />
 
     <TextView
         android:id="@+id/playerGoals"
@@ -32,8 +31,8 @@
         android:layout_margin="1px"
         android:layout_weight="10"
         android:gravity="center"
-        android:textColor="@color/textPrimary"
-        android:text="@string/Goals" />
+        android:text="@string/Goals"
+        android:textColor="@color/textPrimary" />
 
     <TextView
         android:id="@+id/playerAssists"
@@ -42,8 +41,8 @@
         android:layout_margin="1px"
         android:layout_weight="10"
         android:gravity="center"
-        android:textColor="@color/textPrimary"
-        android:text="@string/Assists" />
+        android:text="@string/Assists"
+        android:textColor="@color/textPrimary" />
 
     <TextView
         android:id="@+id/playerPoints"
@@ -52,8 +51,8 @@
         android:layout_margin="1px"
         android:layout_weight="10"
         android:gravity="center"
-        android:textColor="@color/textPrimary"
-        android:text="@string/pointsHeader" />
+        android:text="@string/pointsHeader"
+        android:textColor="@color/textPrimary" />
 
     <TextView
         android:id="@+id/playerPims"
@@ -62,6 +61,6 @@
         android:layout_margin="1px"
         android:layout_weight="10"
         android:gravity="center"
-        android:textColor="@color/textPrimary"
-        android:text="@string/pimHeader" />
+        android:text="@string/pimHeader"
+        android:textColor="@color/textPrimary" />
 </TableRow>

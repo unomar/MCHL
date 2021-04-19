@@ -7,18 +7,18 @@
         android:id="@+id/homepage_team_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:layout_weight="70"
+        android:text="@string/team_name"
         android:textColor="@color/textPrimary"
-        android:text="@string/team_name"/>
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/homepage_team_wins"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
+        android:layout_gravity="end"
         android:layout_weight="10"
+        android:gravity="center"
         android:text="@string/winHeader"
         android:textColor="@color/textPrimary"
         android:textSize="20sp" />
@@ -28,8 +28,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:gravity="center"
         android:layout_weight="10"
+        android:gravity="center"
         android:text="@string/lossHeader"
         android:textColor="@color/textPrimary"
         android:textSize="20sp" />
@@ -39,8 +39,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:gravity="center"
         android:layout_weight="10"
+        android:gravity="center"
         android:text="@string/tieHeader"
         android:textColor="@color/textPrimary"
         android:textSize="20sp" />

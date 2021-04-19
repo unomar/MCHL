@@ -108,11 +108,15 @@ public class HomeFragment extends Fragment
     public void onDestroy()
     {
         super.onDestroy();
-        unbinder.unbind();
+        if (unbinder != null)
+        {
+            unbinder.unbind();
+        }
     }
 
     /**
      * Trim the list of games (Schedule & Results) to the defined max
+     *
      * @param gameList The list to trim
      * @return The trimmed list
      */
@@ -120,7 +124,7 @@ public class HomeFragment extends Fragment
     {
         if (gameList.size() > Constants.MAX_GAMES_HOME)
         {
-            gameList = gameList.subList(0,Constants.MAX_GAMES_HOME);
+            gameList = gameList.subList(0, Constants.MAX_GAMES_HOME);
         }
         return gameList;
     }
