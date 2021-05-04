@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -370,41 +371,15 @@ public class MCHLWebservice
                         String venueName = getVenueName(event.getVenueIds());
                         LOG.info("Creating Game for event [" + event.getId() + "] as " + eventString + " at " + venueName);
 
-                        String[] teamNames = eventString.split(" vs ");
-                        // Normal case "Team A vs Team B"
-                        if (teamNames.length > 1)
-                        {
+                        List<String> teamNames = getTeamsFromEvent(eventString);
 
+                        Team homeTeam = new Team(teamNames.get(0), team.getCurrentSeason(), team.getCurrentLeague());
+                        homeTeam.setId(event.getTeamIds().get(0));
+                        Team awayTeam = new Team(teamNames.get(1), team.getCurrentSeason(), team.getCurrentLeague());
+                        awayTeam.setId(event.getTeamIds().get(1));
+                        Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
+                        teamSchedule.getGames().add(game);
 
-                            Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague());
-                            homeTeam.setId(event.getTeamIds().get(0));
-                            Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague());
-                            awayTeam.setId(event.getTeamIds().get(1));
-                            Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
-                            teamSchedule.getGames().add(game);
-                        }
-                        // Home team not present " vs Team B"
-                        else if (eventString.startsWith(" vs "))
-                        {
-                            Team homeTeam = new Team("TBD", team.getCurrentSeason(), team.getCurrentLeague());
-                            homeTeam.setId(event.getTeamIds().get(0));
-
-                            Team awayTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague());
-                            awayTeam.setId(event.getTeamIds().get(1));
-                            Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
-                            teamSchedule.getGames().add(game);
-                        }
-                        // Away team not present "Team A vs "
-                        else
-                        {
-                            Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague());
-                            homeTeam.setId(event.getTeamIds().get(0));
-
-                            Team awayTeam = new Team("TBD", team.getCurrentSeason(), team.getCurrentLeague());
-                            awayTeam.setId(event.getTeamIds().get(1));
-                            Game game = new Game(homeTeam, awayTeam, event.getEventDate(), 0, 0, venueName);
-                            teamSchedule.getGames().add(game);
-                        }
                     }
                 }
             }
@@ -416,7 +391,7 @@ public class MCHLWebservice
         }
         long endTime = new Date().getTime();
         long processTime = (endTime - startTime);
-        LOG.info("Finished getScheuleByTeam in " + processTime + " millis");
+        LOG.info("Finished getScheduleByTeam in " + processTime + " millis");
         return teamSchedule;
     }
 
@@ -468,7 +443,7 @@ public class MCHLWebservice
                     {
                         String venueName = getVenueName(event.getVenueIds());
                         LOG.info("Creating Game for event [" + event.getId() + "] as " + eventString + " at " + venueName);
-                        String[] teamNames = eventString.split(" vs ");
+                        List<String> teamNames = getTeamsFromEvent(eventString);
                         int homeScore = 0;
                         int awayScore = 0;
                         if (event.getResults() != null && event.getResults().size() == 2)
@@ -476,13 +451,13 @@ public class MCHLWebservice
                             homeScore = Utils.safeParseInt(event.getResults().get(0));
                             awayScore = Utils.safeParseInt(event.getResults().get(1));
 
-                            LOG.info("Final score: " + teamNames[0] + " " + homeScore + " - " + awayScore + " " + teamNames[1]);
+                            LOG.info("Final score: " + teamNames.get(0) + " " + homeScore + " - " + awayScore + " " + teamNames.get(1));
                         }
 
                         // TODO: Revert this and pull Team info on demand
-                        Team homeTeam = new Team(teamNames[0], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(0));
+                        Team homeTeam = new Team(teamNames.get(0), team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(0));
                         homeTeam.setId(event.getTeamIds().get(0));
-                        Team awayTeam = new Team(teamNames[1], team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(1));
+                        Team awayTeam = new Team(teamNames.get(1), team.getCurrentSeason(), team.getCurrentLeague()); //getTeam(event.getTeamIds().get(1));
                         awayTeam.setId(event.getTeamIds().get(1));
                         Game game = new Game(homeTeam, awayTeam, event.getEventDate(), homeScore, awayScore, venueName);
                         game.setResult(Game.Result.fromString(event.getOutcome().get(team.getId())));
@@ -500,6 +475,32 @@ public class MCHLWebservice
         long processTime = (endTime - startTime);
         LOG.info("Finished getResultsByTeam in " + processTime + " millis");
         return teamSchedule;
+    }
+
+    /**
+     * Safely get a list of team names from an event.  In the event one team name is missing, return "TBD" in that place.
+     *
+     * @param eventString The event string
+     * @return A list of two team names
+     */
+    private List<String> getTeamsFromEvent(String eventString)
+    {
+        List<String> teams = new ArrayList<>();
+        if (StringUtils.isNotEmpty(eventString) && eventString.contains("vs"))
+        {
+            teams.addAll(Arrays.asList(eventString.split(" vs ")));
+        }
+        while (teams.size() < 2)
+        {
+            if (eventString.startsWith(" vs "))
+            {
+                teams.add(0, "TBD");
+            } else
+            {
+                teams.add("TBD");
+            }
+        }
+        return teams;
     }
 
     /**
