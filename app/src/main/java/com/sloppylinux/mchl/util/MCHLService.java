@@ -7,6 +7,7 @@ import com.sloppylinux.mchl.domain.sportspress.League;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 import com.sloppylinux.mchl.domain.sportspress.TeamTable;
 import com.sloppylinux.mchl.domain.sportspress.Venue;
+import com.sloppylinux.mchl.domain.sportspress.Season;
 
 import java.util.List;
 
@@ -20,11 +21,14 @@ public interface MCHLService
     @GET("teams")
     Call<List<Team>> listTeams();
 
-    @GET("teams/{team}")
-    Call<Team> getTeam(@Path(value = "team") long teamId);
+    @GET("teams")
+    Call<List<Team>> getTeams(@Query("include") List<Long> teamIds);
 
-    @GET("lists/{listId}")
-    Call<TeamTable> getTeamStats(@Path(value = "listId") long listId);
+//    @GET("lists/{listId}")
+//    Call<TeamTable> getTeamStats(@Path(value = "listId") long listId);
+
+    @GET("lists")
+    Call<List<TeamTable>> getTeamStats(@Query("seasons") Long seasonId, @Query("leagues") Long leagueId, @Query("search") String teamName);
 
     @GET("events?order=asc")
     Call<List<Event>> listAllEvents();
@@ -52,4 +56,7 @@ public interface MCHLService
 
     @GET("leagues")
     Call<List<League>> getLeagues();
+
+    @GET("seasons?orderby=id&order=desc")
+    Call<List<Season>> getSeasons();
 }

@@ -12,14 +12,17 @@ import com.sloppylinux.mchl.domain.TeamSchedule;
 import com.sloppylinux.mchl.domain.sportspress.Event;
 import com.sloppylinux.mchl.domain.sportspress.League;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
+import com.sloppylinux.mchl.domain.sportspress.Season;
 import com.sloppylinux.mchl.domain.sportspress.TeamTable;
 import com.sloppylinux.mchl.domain.sportspress.Venue;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -121,11 +124,7 @@ public class MCHLWebservice
             player.setPlayerSchedule(schedule);
             player.setPlayerResults(results);
 
-            // TODO: Null check and safeguard this better
-            long seasonId = (player.getSeasons() != null && !player.getSeasons().isEmpty())
-                    ? player.getSeasons().get(player.getSeasons().size() - 1)
-                    : getTeam(player.getTeams().get(0)).getCurrentSeason();
-            List<LeagueTable> leagueTables = fetchLatestLeagueTables(seasonId);
+            List<LeagueTable> leagueTables = getLeagueTables();
 
             player.setExpiration(new Date().getTime() + timeToLive);
             Config config = new Config(context);
@@ -136,6 +135,37 @@ public class MCHLWebservice
         long endTime = new Date().getTime();
         long processTime = (endTime - startTime);
         LOG.info("Finished updateConfig in " + processTime + " millis");
+    }
+
+    @Nullable
+    private List<LeagueTable> getLeagueTables() throws WebserviceException
+    {
+        List<LeagueTable> leagueTables = Collections.emptyList();
+        try
+        {
+            Call<List<Season>> seasonsCall = mchlService.getSeasons();
+            Response<List<Season>> seasonsResponse = seasonsCall.execute();
+            if (seasonsResponse != null && seasonsResponse.body() != null) {
+                List<Season> seasons = seasonsResponse.body();
+                if (seasons != null && seasons.size() > 0) {
+                    for (Season season : seasons) {
+                        long seasonId = season.getId();
+                        leagueTables = fetchLatestLeagueTables(seasonId);
+                        if (leagueTables != null && leagueTables.size() > 0) {
+                            return leagueTables;
+                        }
+                    }
+                    LOG.warning("Unable to look up the latest league tables.");
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            LOG.warning("Caught exception performing player search." + e.getMessage());
+            throw new WebserviceException(NETWORK_ERROR, "Caught IOException in getTeams()", e);
+        }
+
+        return leagueTables;
     }
 
     /**
@@ -217,16 +247,17 @@ public class MCHLWebservice
         {
             try
             {
-                Response<Team> teamResponse = mchlService.getTeam(teamId).execute();
-                if (teamResponse != null && teamResponse.body() != null)
+                Call<List<Team>> teamCall = mchlService.getTeams(Collections.singletonList(teamId));
+                Response<List<Team>> teamResponse = teamCall.execute();
+                if (teamResponse != null && teamResponse.body() != null && teamResponse.body().size() > 0)
                 {
-                    team = teamResponse.body();
+                    team = teamResponse.body().get(0);
 
                     // Query team stats
-                    Response<TeamTable> statResponse = mchlService.getTeamStats(team.getListId()).execute();
-                    if (statResponse != null && statResponse.body() != null)
+                    Response<List<TeamTable>> statResponse = mchlService.getTeamStats(team.getCurrentSeason(), team.getCurrentLeague(), team.getName()).execute();
+                    if (statResponse != null && statResponse.body() != null && statResponse.body().size() > 0)
                     {
-                        team.setTeamTable(statResponse.body());
+                        team.setTeamTable(statResponse.body().get(0));
                     }
                     // Store the object in the cache for later retrieval
                     TemporaryCache.getInstance().put(cacheKey, team);
@@ -559,4 +590,5 @@ public class MCHLWebservice
         }
         return iso8601Formatter.format(date);
     }
+
 }
