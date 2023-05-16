@@ -13,7 +13,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.navigation.NavigationView;
+import com.sloppylinux.mchl.databinding.ActivityNavigationBinding;
+import com.sloppylinux.mchl.databinding.AppBarNavigationBinding;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.ui.R;
@@ -21,17 +22,15 @@ import com.sloppylinux.mchl.util.Config;
 
 import org.apache.log4j.Logger;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class MchlNavigation extends AppCompatActivity
 {
-
-    @BindView(R.id.drawer_layout)
+    private ActivityNavigationBinding activityNavigationBinding;
+    private AppBarNavigationBinding appBarBinding;
+//    @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
-    @BindView(R.id.toolbar)
+//    @BindView(R.id.nav_view)
+//    NavigationView navigationView;
+//    @BindView(R.id.toolbar)
     Toolbar toolbar;
     private AppBarConfiguration mAppBarConfiguration;
     private Config config;
@@ -45,7 +44,13 @@ public class MchlNavigation extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        ButterKnife.bind(this);
+//        ButterKnife.bind(this);
+        activityNavigationBinding = ActivityNavigationBinding.inflate(getLayoutInflater());
+        appBarBinding = AppBarNavigationBinding.inflate(getLayoutInflater());
+
+        drawer = activityNavigationBinding.drawerLayout;
+        toolbar = appBarBinding.toolbar;
+
 
         setSupportActionBar(toolbar);
 
@@ -58,7 +63,7 @@ public class MchlNavigation extends AppCompatActivity
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        NavigationUI.setupWithNavController(activityNavigationBinding.navView, navController);
 
         config = new Config(this.getBaseContext());
 
