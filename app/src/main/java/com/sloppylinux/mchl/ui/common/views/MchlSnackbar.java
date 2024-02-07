@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.R;
 
 /**
  * An MCHL themed Snackbar to display loading statuses.

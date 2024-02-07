@@ -7,38 +7,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
+
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.viewbinding.ViewBinding;
 
 import com.sloppylinux.mchl.domain.Game;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.R;
+import com.sloppylinux.mchl.databinding.ScheduleGameRowBinding;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.skia.impl.Log;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class GameListAdapter extends ArrayAdapter<Game> {
-
+//    private ViewBinding binding;
     private List<Game> gameList;
     Context mContext;
 
     // View lookup cache
     static class ViewHolder {
-        @BindView(R.id.scheduleGameDate)
-        TextView gameDate;
-        @BindView(R.id.scheduleGameLocation)
-        TextView gameLocation;
-        @BindView(R.id.scheduleHomeTeam)
-        TextView homeTeam;
-        @BindView(R.id.scheduleAwayTeam)
-        TextView awayTeam;
-        @BindView(R.id.vsScore)
-        TextView vsScore;
+        ScheduleGameRowBinding binding;
 
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
+        public ViewHolder(View view, ScheduleGameRowBinding binding) {
+            this.binding = binding;
         }
     }
 
@@ -69,8 +62,10 @@ public class GameListAdapter extends ArrayAdapter<Game> {
         if (convertView == null) {
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.schedule_game_row, parent, false);
-            viewHolder = new ViewHolder(convertView);
+            ScheduleGameRowBinding binding = ScheduleGameRowBinding.inflate(inflater, parent, false);
+            convertView = binding.getRoot();
+            viewHolder = new ViewHolder(convertView, binding);
+
             result = convertView;
 
             convertView.setTag(viewHolder);
@@ -82,17 +77,17 @@ public class GameListAdapter extends ArrayAdapter<Game> {
         lastPosition = position;
 
         if (gameModel != null) {
-            viewHolder.gameDate.setText(gameModel.getDateString());
-            viewHolder.gameLocation.setText(gameModel.getLocation());
-            viewHolder.homeTeam.setText(gameModel.getHomeFormatted(24));
-            viewHolder.awayTeam.setText(gameModel.getAwayFormatted(24));
+            viewHolder.binding.scheduleGameDate.setText(gameModel.getDateString());
+            viewHolder.binding.scheduleGameLocation.setText(gameModel.getLocation());
+            viewHolder.binding.scheduleHomeTeam.setText(gameModel.getHomeFormatted(24));
+            viewHolder.binding.scheduleAwayTeam.setText(gameModel.getAwayFormatted(24));
 
-            if (!gameModel.isInFuture())
-            {
-                viewHolder.vsScore.setTypeface(null, Typeface.BOLD);
-                viewHolder.vsScore.setText(String.format("%d - %d", gameModel.getHomeScore(), gameModel.getAwayScore()));
-                Drawable scoreWidgit = getContext().getDrawable(R.drawable.score_widget);
-                viewHolder.vsScore.setBackground(scoreWidgit);
+
+            if (!gameModel.isInFuture()) {
+                viewHolder.binding.vsScore.setTypeface(null, Typeface.BOLD);
+                viewHolder.binding.vsScore.setText(String.format("%d - %d", gameModel.getHomeScore(), gameModel.getAwayScore()));
+                Drawable scoreWidgit = AppCompatResources.getDrawable(getContext(), R.drawable.score_widget);
+                viewHolder.binding.vsScore.setBackground(scoreWidgit);
 
                 if (gameModel.getResult() != null) {
                     switch (gameModel.getResult()) {

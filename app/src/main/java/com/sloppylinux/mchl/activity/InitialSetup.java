@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.sloppylinux.mchl.domain.Player;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.R;
 import com.sloppylinux.mchl.util.Config;
 
 import org.apache.log4j.Logger;

@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +20,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.sloppylinux.mchl.R;
 import com.sloppylinux.mchl.activity.MchlNavigation;
+import com.sloppylinux.mchl.databinding.PlayerLookupRowBinding;
 import com.sloppylinux.mchl.domain.Player;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.databinding.FragmentSettingsBinding;
 import com.sloppylinux.mchl.ui.common.adapters.PlayerListAdapter;
 import com.sloppylinux.mchl.ui.common.views.MchlSnackbar;
 import com.sloppylinux.mchl.util.Config;
@@ -36,25 +35,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 public class SettingsFragment extends Fragment
 {
-    @BindView(R.id.player_select_text)
-    TextView playerSelectTextView;
-    @BindView(R.id.playerList)
-    ListView playerListView;
-    @BindView((R.id.progressBar))
-    ProgressBar spinner;
-    @BindView(R.id.nameEntry)
-    EditText editText;
-
+    private FragmentSettingsBinding binding;
+    private PlayerLookupRowBinding playerLookupBinding;
     private final Logger LOG = Logger.getLogger(SettingsFragment.class.getName());
     private SettingsViewModel settingsViewModel;
     private Config config;
-    private Unbinder unbinder;
     private MchlSnackbar snackbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,12 +53,11 @@ public class SettingsFragment extends Fragment
         }
         settingsViewModel =
                 new ViewModelProvider(this).get(SettingsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_settings, container, false);
-        unbinder = ButterKnife.bind(this, root);
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
+        playerLookupBinding = PlayerLookupRowBinding.inflate(inflater, container, false);
+        binding.progressBar.setVisibility(View.GONE);
 
-        spinner.setVisibility(View.GONE);
-
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener()
+        binding.nameEntry.setOnEditorActionListener(new TextView.OnEditorActionListener()
         {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
@@ -79,9 +65,9 @@ public class SettingsFragment extends Fragment
                 if (actionId == EditorInfo.IME_ACTION_SEARCH)
                 {
                     // Close the on-screen keyboard
-                    editText.clearFocus();
+                    binding.nameEntry.clearFocus();
                     InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    in.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                    in.hideSoftInputFromWindow(binding.nameEntry.getWindowToken(), 0);
 
                     // Then issue the search
                     playerSearch(v.getText().toString());
@@ -91,28 +77,28 @@ public class SettingsFragment extends Fragment
             }
         });
 
-        return root;
+        return binding.getRoot();
     }
 
     public void playerSearch(String playerName)
     {
         snackbar = new MchlSnackbar(getView(), "Searching for " + playerName, Snackbar.LENGTH_INDEFINITE, getContext());
         snackbar.show();
-        spinner.setVisibility(View.VISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
         settingsViewModel.getText(playerName).observe(this, new Observer<List<Player>>()
         {
             @Override
             public void onChanged(@Nullable List<Player> players)
             {
                 snackbar.dismiss();
-                spinner.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(View.GONE);
                 if (players != null && !players.isEmpty())
                 {
-                    playerSelectTextView.setText(R.string.select_player_text);
+                    binding.playerSelectText.setText(R.string.select_player_text);
                     Collections.sort(players);
-                    PlayerListAdapter adapter = new PlayerListAdapter(players, getContext());
-                    playerListView.setAdapter(adapter);
-                    playerListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                    PlayerListAdapter adapter = new PlayerListAdapter(players, playerLookupBinding, getContext());
+                    binding.playerList.setAdapter(adapter);
+                    binding.playerList.setOnItemClickListener(new AdapterView.OnItemClickListener()
                     {
                         @Override
                         public void onItemClick(AdapterView<?> adapter, View v, int pos, long position)
@@ -120,14 +106,14 @@ public class SettingsFragment extends Fragment
                             Player player = (Player) adapter.getItemAtPosition(pos);
                             snackbar.setText("Fetching schedule and stats for " + player.getName());
                             snackbar.show();
-                            spinner.setVisibility(View.VISIBLE);
+                            binding.progressBar.setVisibility(View.VISIBLE);
 
                             settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), new Observer<String>()
                             {
                                 @Override
                                 public void onChanged(String s)
                                 {
-                                    spinner.setVisibility(View.GONE);
+                                    binding.progressBar.setVisibility(View.GONE);
                                     if (s.startsWith(WebserviceException.ERROR_PREFIX))
                                     {
                                         LOG.warning("Webservice returned error: " + s);
@@ -145,7 +131,7 @@ public class SettingsFragment extends Fragment
                 } else if (players != null) // Empty response means player query unsuccessful
                 {
                     String message = "Unable to find any matching players";
-                    playerSelectTextView.setText(message);
+                    binding.playerSelectText.setText(message);
                 } else // Null response means network error
                 {
                     LOG.warning("Got a null playerList");

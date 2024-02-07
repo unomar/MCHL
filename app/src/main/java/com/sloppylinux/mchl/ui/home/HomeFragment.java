@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,9 +11,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.sloppylinux.mchl.databinding.HomepageTeamBinding;
+import com.sloppylinux.mchl.databinding.ResultGameRowBinding;
+import com.sloppylinux.mchl.databinding.ScheduleGameRowBinding;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.databinding.FragmentHomeBinding;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
 import com.sloppylinux.mchl.ui.common.adapters.TeamListAdapter;
 import com.sloppylinux.mchl.ui.common.fragments.GameFragment;
@@ -26,23 +27,16 @@ import com.sloppylinux.mchl.util.Constants;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class HomeFragment extends Fragment
 {
-    @BindView(R.id.homeProgressBar)
-    ProgressBar spinner;
-    @BindView(R.id.homepage_team_list)
-    ListView teamListView;
-    @BindView(R.id.homepage_schedule_list)
-    ListView scheduleListView;
-    @BindView(R.id.homepage_result_list)
-    ListView resultListView;
+    private FragmentHomeBinding binding;
+    private ScheduleGameRowBinding scheduleBinding;
+    private ResultGameRowBinding resultBinding;
+
+    private HomepageTeamBinding homepageTeamBinding;
     private SettingsViewModel settingsViewModel;
     private Config config;
-    private Unbinder unbinder;
     private MchlSnackbar snackbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -50,14 +44,12 @@ public class HomeFragment extends Fragment
     {
 
         config = new Config(getContext());
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        unbinder = ButterKnife.bind(this, root);
-
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
         settingsViewModel =
                 new ViewModelProvider(this).get(SettingsViewModel.class);
 
-        spinner.setVisibility(View.GONE);
-        return root;
+        binding.homeProgressBar.setVisibility(View.GONE);
+        return binding.getRoot();
     }
 
     public void onViewCreated(View view, Bundle bundle)
@@ -71,13 +63,13 @@ public class HomeFragment extends Fragment
             } else
             {
                 TeamListAdapter teamAdapter = new TeamListAdapter(config.getPlayer().getPlayerTeams(), getContext());
-                teamListView.setAdapter(teamAdapter);
+                binding.homepageTeamList.setAdapter(teamAdapter);
 
                 List<Game> playerGameList = trimGames(config.getPlayer().getPlayerGameList());
 
                 GameListAdapter scheduleAdapter = new GameListAdapter(playerGameList, getContext());
-                scheduleListView.setAdapter(scheduleAdapter);
-                scheduleListView.setOnItemClickListener((adapterView, v, index, arg3) ->
+                binding.homepageScheduleList.setAdapter(scheduleAdapter);
+                binding.homepageScheduleList.setOnItemClickListener((adapterView, v, index, arg3) ->
                 {
                     adapterView.callOnClick();
                     Game game = (Game) adapterView.getItemAtPosition(index);
@@ -89,8 +81,8 @@ public class HomeFragment extends Fragment
 
                 List<Game> playerResultList = trimGames(config.getPlayer().getPlayerResultList());
                 GameListAdapter resultAdapter = new GameListAdapter(playerResultList, getContext());
-                resultListView.setAdapter(resultAdapter);
-                resultListView.setOnItemClickListener((adapterView, v, index, arg3) ->
+                binding.homepageResultList.setAdapter(resultAdapter);
+                binding.homepageResultList.setOnItemClickListener((adapterView, v, index, arg3) ->
                 {
                     adapterView.callOnClick();
                     Game game = (Game) adapterView.getItemAtPosition(index);
@@ -108,7 +100,6 @@ public class HomeFragment extends Fragment
     public void onDestroy()
     {
         super.onDestroy();
-        unbinder.unbind();
     }
 
     /**
@@ -134,22 +125,22 @@ public class HomeFragment extends Fragment
     {
         snackbar = new MchlSnackbar(getView(), "Fetching updated schedule and stats for " + player.getName(" "), Snackbar.LENGTH_INDEFINITE, getContext());
         snackbar.show();
-        spinner.setVisibility(View.VISIBLE);
+        binding.homeProgressBar.setVisibility(View.VISIBLE);
         settingsViewModel.getPlayerInfo(player).observe(getViewLifecycleOwner(), s ->
         {
-            spinner.setVisibility(View.GONE);
+            binding.homeProgressBar.setVisibility(View.GONE);
             snackbar.dismiss();
 
             TeamListAdapter teamAdapter = new TeamListAdapter(config.getPlayer().getPlayerTeams(), getContext());
-            teamListView.setAdapter(teamAdapter);
+            binding.homepageTeamList.setAdapter(teamAdapter);
 
             List<Game> playerGameList = trimGames(config.getPlayer().getPlayerGameList());
             GameListAdapter scheduleAdapter = new GameListAdapter(playerGameList, getContext());
-            scheduleListView.setAdapter(scheduleAdapter);
+            binding.homepageScheduleList.setAdapter(scheduleAdapter);
 
             List<Game> playerResultList = trimGames(config.getPlayer().getPlayerResultList());
             GameListAdapter resultAdapter = new GameListAdapter(playerResultList, getContext());
-            resultListView.setAdapter(resultAdapter);
+            binding.homepageResultList.setAdapter(resultAdapter);
         });
     }
 }

@@ -14,9 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.sportspress.PlayerStatistic;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.R;
 import com.sloppylinux.mchl.ui.common.adapters.TeamPlayersListAdapter;
 import com.sloppylinux.mchl.util.Constants;
+import com.sloppylinux.mchl.databinding.FragmentTeamBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,30 +27,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class TeamFragment extends Fragment
 {
-    @BindView(R.id.teamPlayerList)
-    ListView teamPlayerListView;
-    @BindView(R.id.missingTeamData)
-    TextView missingTeamData;
+    private FragmentTeamBinding binding;
 
     private TeamViewModel teamViewModel;
-    private Unbinder unbinder;
     private final Logger LOG = Logger.getLogger(TeamFragment.class.getName());
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
     {
-        View root = inflater.inflate(R.layout.fragment_team, container, false);
-        unbinder = ButterKnife.bind(this, root);
+        binding = FragmentTeamBinding.inflate(inflater, container, false);
         teamViewModel =
                 new ViewModelProvider(this).get(TeamViewModel.class);
 
-        return root;
+        return binding.getRoot();
     }
 
     public void onViewCreated(@NotNull View view, Bundle bundle)
@@ -85,11 +78,11 @@ public class TeamFragment extends Fragment
             }
             if (hasData)
             {
-                missingTeamData.setVisibility(View.GONE);
+                binding.missingTeamData.setVisibility(View.GONE);
             }
         }
         Collections.sort(playerStatistics, Collections.reverseOrder());
         TeamPlayersListAdapter teamPlayersListAdapter = new TeamPlayersListAdapter(playerStatistics, getContext());
-        teamPlayerListView.setAdapter(teamPlayersListAdapter);
+        binding.teamPlayerList.setAdapter(teamPlayersListAdapter);
     }
 }

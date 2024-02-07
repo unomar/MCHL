@@ -8,24 +8,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
-import com.google.android.material.tabs.TabLayout;
-import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.util.Config;
+import com.sloppylinux.mchl.databinding.FragmentStandingsBinding;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class StandingsFragment extends Fragment
 {
-    @BindView(R.id.standings_pager)
-    ViewPager viewPager;
-    @BindView(R.id.tab_layout)
-    TabLayout tabLayout;
-
-    private Unbinder unbinder;
+    private FragmentStandingsBinding binding;
 
     private StandingsPagerAdapter standingsPagerAdapter;
 
@@ -33,9 +22,10 @@ public class StandingsFragment extends Fragment
                              ViewGroup container, Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        View root = inflater.inflate(R.layout.fragment_standings, container, false);
-        unbinder = ButterKnife.bind(this, root);
-        return root;
+        binding = FragmentStandingsBinding.inflate(inflater, container, true);
+//        View root = inflater.inflate(R.layout.fragment_standings, container, false);
+//        unbinder = ButterKnife.bind(this, root);
+        return binding.getRoot();
     }
 
     @Override
@@ -45,9 +35,9 @@ public class StandingsFragment extends Fragment
         if (config.getLeagueTables() != null)
         {
             standingsPagerAdapter = new StandingsPagerAdapter(config.getLeagueTables(), getChildFragmentManager());
-            viewPager.setAdapter(standingsPagerAdapter);
+            binding.standingsPager.setAdapter(standingsPagerAdapter);
 
-            tabLayout.setupWithViewPager(viewPager);
+            binding.tabLayout.setupWithViewPager(binding.standingsPager);
         }
     }
 
@@ -55,7 +45,6 @@ public class StandingsFragment extends Fragment
     public void onDestroy()
     {
         super.onDestroy();
-        unbinder.unbind();
     }
 }
 

@@ -5,40 +5,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
+import com.sloppylinux.mchl.databinding.PlayerLookupRowBinding;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.R;
 import com.sloppylinux.mchl.util.Utils;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class PlayerListAdapter extends ArrayAdapter<Player>{
-
+    private PlayerLookupRowBinding binding;
     private List<Player> playerList;
     private String numberFormat = "#%d";
     Context mContext;
 
     // View lookup cache
     static class ViewHolder {
-        @BindView(R.id.player_row_name)
-        TextView playerName;
-        @BindView(R.id.player_row_number)
-        TextView playerNumber;
-        @BindView(R.id.player_row_teams)
-        TextView playerTeams;
 
         public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
         }
     }
 
-    public PlayerListAdapter(List<Player> data, Context context) {
+    public PlayerListAdapter(List<Player> data, PlayerLookupRowBinding playerRowBinding, Context context) {
         super(context, R.layout.player_row, data);
+        binding = playerRowBinding;
         this.playerList = data;
         this.mContext = context;
     }
@@ -69,10 +60,10 @@ public class PlayerListAdapter extends ArrayAdapter<Player>{
 
         lastPosition = position;
 
-        viewHolder.playerName.setText(playerModel.getName());
+        binding.playerRowName.setText(playerModel.getName());
         Integer number = playerModel.getNumber();
         if (number != null) {
-            viewHolder.playerNumber.setText(String.format(numberFormat, number));
+            binding.playerRowNumber.setText(String.format(numberFormat, number));
         }
 
         String playerTeams = "";
@@ -80,7 +71,7 @@ public class PlayerListAdapter extends ArrayAdapter<Player>{
         {
             playerTeams += Utils.convertString(team.getName());
         }
-        viewHolder.playerTeams.setText(playerTeams);
+        binding.playerRowTeams.setText(playerTeams);
 
         // Return the completed view to render on screen
         return result;

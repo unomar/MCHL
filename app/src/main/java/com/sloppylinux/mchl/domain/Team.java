@@ -6,6 +6,7 @@ import com.sloppylinux.mchl.domain.sportspress.PlayerStatistic;
 import com.sloppylinux.mchl.domain.sportspress.ResponseBase;
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
 import com.sloppylinux.mchl.domain.sportspress.TeamTable;
+import com.sloppylinux.mchl.util.Utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -399,5 +400,10 @@ public class Team extends ResponseBase implements Comparable<Team>, Serializable
         {
             this.setTeamStatistic(leagueTable.getTableData().get(String.valueOf(this.getId())));
         }
+    }
+
+    public String getNameFormatted(int maxChars)
+    {
+        return this.getName() == null ? "" : Utils.getFormatted(this.getName(), maxChars);
     }
 }

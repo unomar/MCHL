@@ -15,6 +15,7 @@ import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 import com.sloppylinux.mchl.domain.sportspress.Season;
 import com.sloppylinux.mchl.domain.sportspress.TeamTable;
 import com.sloppylinux.mchl.domain.sportspress.Venue;
+import com.sloppylinux.mchl.util.UrlEncodingInterceptor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -74,11 +76,14 @@ public class MCHLWebservice
                 .create();
 
         // Enable this block for DEBUG logging using retrofit
-//		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor((msg)-> { LOG.info(msg); });
-//		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor((msg)-> { LOG.info(msg); });
+		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        UrlEncodingInterceptor urlEncodingInterceptor = new UrlEncodingInterceptor();
+
         OkHttpClient client = new OkHttpClient.Builder()
                 .readTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-//				.addInterceptor(interceptor)
+				.addInterceptor(interceptor)
+                .addInterceptor(urlEncodingInterceptor)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()

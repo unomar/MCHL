@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,53 +16,15 @@ import com.google.android.material.snackbar.Snackbar;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.sportspress.LeagueTable;
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
-import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.views.MchlSnackbar;
 import com.sloppylinux.mchl.util.Constants;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import com.sloppylinux.mchl.databinding.FragmentTeamComparisonBinding;
 
 public class TeamComparisonFragment extends Fragment
 {
-    private Unbinder unbinder;
+    private FragmentTeamComparisonBinding binding;
 
     private View root;
-
-    @BindView(R.id.homeRank)
-    TextView homeRank;
-    @BindView(R.id.homeGP)
-    TextView homeGamesPlayed;
-    @BindView(R.id.homeWins)
-    TextView homeWins;
-    @BindView(R.id.homeTies)
-    TextView homeTies;
-    @BindView(R.id.homeLosses)
-    TextView homeLosses;
-    @BindView(R.id.homePoints)
-    TextView homePoints;
-    @BindView(R.id.homeGF)
-    TextView homeGoalsFor;
-    @BindView(R.id.homeGA)
-    TextView homeGoalsAgainst;
-
-    @BindView(R.id.awayRank)
-    TextView awayRank;
-    @BindView(R.id.awayGP)
-    TextView awayGamesPlayed;
-    @BindView(R.id.awayWins)
-    TextView awayWins;
-    @BindView(R.id.awayTies)
-    TextView awayTies;
-    @BindView(R.id.awayLosses)
-    TextView awayLosses;
-    @BindView(R.id.awayPoints)
-    TextView awayPoints;
-    @BindView(R.id.awayGF)
-    TextView awayGoalsFor;
-    @BindView(R.id.awayGA)
-    TextView awayGoalsAgainst;
 
     private MchlSnackbar snackbar;
     private TeamComparisonViewModel teamComparisonViewModel;
@@ -75,10 +36,9 @@ public class TeamComparisonFragment extends Fragment
         super.onCreateView(inflater, container, savedInstanceState);
         teamComparisonViewModel =
                 new ViewModelProvider(this).get(TeamComparisonViewModel.class);
-        root = inflater.inflate(R.layout.fragment_team_comparison, container, false);
-        unbinder = ButterKnife.bind(this, root);
+        binding = FragmentTeamComparisonBinding.inflate(inflater, container, false);
 
-        return root;
+        return binding.getRoot();
     }
 
     @Override
@@ -109,22 +69,22 @@ public class TeamComparisonFragment extends Fragment
 
     private void updateTeamStats(TeamStatistic homeTeam, TeamStatistic awayTeam)
     {
-        homeRank.setText(String.valueOf(homeTeam.getPosition()));
-        homeGamesPlayed.setText(String.valueOf(homeTeam.getGamesPlayed()));
-        homeWins.setText(String.valueOf(homeTeam.getWins()));
-        homeTies.setText(String.valueOf(homeTeam.getTies()));
-        homeLosses.setText(String.valueOf(homeTeam.getLosses()));
-        homePoints.setText(String.valueOf(homeTeam.getPoints()));
-        homeGoalsFor.setText(String.valueOf(homeTeam.getGoalsFor()));
-        homeGoalsAgainst.setText(String.valueOf(homeTeam.getGoalsAgainst()));
+        binding.homeRank.setText(String.valueOf(homeTeam.getPosition()));
+        binding.homeGP.setText(String.valueOf(homeTeam.getGamesPlayed()));
+        binding.homeWins.setText(String.valueOf(homeTeam.getWins()));
+        binding.homeTies.setText(String.valueOf(homeTeam.getTies()));
+        binding.homeLosses.setText(String.valueOf(homeTeam.getLosses()));
+        binding.homePoints.setText(String.valueOf(homeTeam.getPoints()));
+        binding.homeGF.setText(String.valueOf(homeTeam.getGoalsFor()));
+        binding.homeGA.setText(String.valueOf(homeTeam.getGoalsAgainst()));
 
-        awayRank.setText(String.valueOf(awayTeam.getPosition()));
-        awayGamesPlayed.setText(String.valueOf(awayTeam.getGamesPlayed()));
-        awayWins.setText(String.valueOf(awayTeam.getWins()));
-        awayTies.setText(String.valueOf(awayTeam.getTies()));
-        awayLosses.setText(String.valueOf(awayTeam.getLosses()));
-        awayPoints.setText(String.valueOf(awayTeam.getPoints()));
-        awayGoalsFor.setText(String.valueOf(awayTeam.getGoalsFor()));
-        awayGoalsAgainst.setText(String.valueOf(awayTeam.getGoalsAgainst()));
+        binding.awayRank.setText(String.valueOf(awayTeam.getPosition()));
+        binding.awayGP.setText(String.valueOf(awayTeam.getGamesPlayed()));
+        binding.awayWins.setText(String.valueOf(awayTeam.getWins()));
+        binding.awayTies.setText(String.valueOf(awayTeam.getTies()));
+        binding.awayLosses.setText(String.valueOf(awayTeam.getLosses()));
+        binding.awayPoints.setText(String.valueOf(awayTeam.getPoints()));
+        binding.awayGF.setText(String.valueOf(awayTeam.getGoalsFor()));
+        binding.awayGA.setText(String.valueOf(awayTeam.getGoalsAgainst()));
     }
 }

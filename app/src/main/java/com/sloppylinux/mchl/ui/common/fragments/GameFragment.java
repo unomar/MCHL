@@ -4,47 +4,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
+import com.sloppylinux.mchl.databinding.FragmentGameBinding;
 import com.sloppylinux.mchl.domain.Game;
-import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GamePagerAdapter;
 import com.sloppylinux.mchl.util.Constants;
 
 import org.jetbrains.annotations.NotNull;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * A DialogFragment which displays a single upcoming game.
  */
 public class GameFragment extends DialogFragment
 {
-    protected Unbinder unbinder;
-    @BindView(R.id.gameDate)
-    TextView gameDate;
-    @BindView(R.id.gameLocation)
-    TextView gameLocation;
-    @BindView(R.id.gameHomeName)
-    TextView homeTeamName;
-    @BindView(R.id.gameHomeTeamScore)
-    TextView homeTeamScore;
-    @BindView(R.id.gameAwayName)
-    TextView awayTeamName;
-    @BindView(R.id.gameAwayTeamScore)
-    TextView awayTeamScore;
-    @BindView(R.id.gamePager)
-    ViewPager viewPager;
-    @BindView(R.id.gameTabs)
-    TabLayout tabLayout;
+    private FragmentGameBinding binding;
 
     public GameFragment()
     {
@@ -68,10 +45,10 @@ public class GameFragment extends DialogFragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        View root = inflater.inflate(R.layout.fragment_game, container, false);
-        unbinder = ButterKnife.bind(this, root);
+//        View root = inflater.inflate(R.layout.fragment_game, container, false);
+        binding = FragmentGameBinding.inflate(inflater,container, false);
 
-        return root;
+        return binding.getRoot();
     }
 
     @Override
@@ -82,10 +59,10 @@ public class GameFragment extends DialogFragment
 
         if (game != null)
         {
-            gameDate.setText(game.getDateString());
-            gameLocation.setText(game.getLocation());
-            homeTeamName.setText(game.getHomeTeamName());
-            awayTeamName.setText(game.getAwayTeamName());
+            binding.gameDate.setText(game.getDateString());
+            binding.gameLocation.setText(game.getLocation());
+            binding.gameHomeName.setText(game.getHomeTeamName());
+            binding.gameAwayName.setText(game.getAwayTeamName());
 
             String homeScore = "";
             String awayScore = "";
@@ -94,14 +71,14 @@ public class GameFragment extends DialogFragment
                 homeScore = String.valueOf(game.getHomeScore());
                 awayScore = String.valueOf(game.getAwayScore());
             }
-            homeTeamScore.setText(homeScore);
-            awayTeamScore.setText(awayScore);
+            binding.gameHomeTeamScore.setText(homeScore);
+            binding.gameAwayTeamScore.setText(awayScore);
 
             GamePagerAdapter gamePagerAdapter = new GamePagerAdapter(game, getChildFragmentManager());
-            viewPager.setAdapter(gamePagerAdapter);
+            binding.gamePager.setAdapter(gamePagerAdapter);
 
-            tabLayout.setupWithViewPager(viewPager);
-            tabLayout.selectTab(tabLayout.getTabAt(1));
+            binding.gameTabs.setupWithViewPager(binding.gamePager);
+            binding.gameTabs.selectTab(binding.gameTabs.getTabAt(1));
         }
     }
 
@@ -110,6 +87,5 @@ public class GameFragment extends DialogFragment
     public void onDestroy()
     {
         super.onDestroy();
-        unbinder.unbind();
     }
 }

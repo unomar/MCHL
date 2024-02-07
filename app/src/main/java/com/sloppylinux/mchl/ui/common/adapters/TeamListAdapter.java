@@ -8,38 +8,27 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.sloppylinux.mchl.databinding.HomepageTeamBinding;
 import com.sloppylinux.mchl.domain.Team;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.R;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class TeamListAdapter extends ArrayAdapter<Team>{
-
     private List<Team> teamList;
     Context mContext;
 
     // View lookup cache
     static class ViewHolder {
-        @BindView(R.id.homepage_team_name)
-        TextView teamName;
-        @BindView(R.id.homepage_team_wins)
-        TextView wins;
-        @BindView(R.id.homepage_team_losses)
-        TextView losses;
-        @BindView(R.id.homepage_team_ties)
-        TextView ties;
+        HomepageTeamBinding binding;
 
         public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
+
         }
     }
 
     public TeamListAdapter(List<Team> data, Context context) {
         super(context, R.layout.homepage_team, data);
-
         this.teamList = data;
         this.mContext = context;
     }
@@ -57,8 +46,11 @@ public class TeamListAdapter extends ArrayAdapter<Team>{
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.homepage_team, parent, false);
+            HomepageTeamBinding homepageTeamBinding = HomepageTeamBinding.inflate(inflater, parent, false);
+
+            convertView = homepageTeamBinding.getRoot();
             viewHolder = new ViewHolder(convertView);
+            viewHolder.binding = homepageTeamBinding;
 
             result=convertView;
 
@@ -73,22 +65,22 @@ public class TeamListAdapter extends ArrayAdapter<Team>{
         // First entry should be our header
         if (position == 0)
         {
-            viewHolder.teamName.setText(getContext().getString(R.string.team_name));
-            viewHolder.wins.setText(getContext().getString(R.string.winHeader));
-            viewHolder.losses.setText(getContext().getString(R.string.lossHeader));
-            viewHolder.ties.setText(getContext().getString(R.string.tieHeader));
+            viewHolder.binding.homepageTeamName.setText(getContext().getString(R.string.team_name));
+            viewHolder.binding.homepageTeamWins.setText(getContext().getString(R.string.winHeader));
+            viewHolder.binding.homepageTeamLosses.setText(getContext().getString(R.string.lossHeader));
+            viewHolder.binding.homepageTeamTies.setText(getContext().getString(R.string.tieHeader));
 
-            viewHolder.teamName.setTypeface(null, Typeface.BOLD);
-            viewHolder.wins.setTypeface(null, Typeface.BOLD);
-            viewHolder.losses.setTypeface(null, Typeface.BOLD);
-            viewHolder.ties.setTypeface(null, Typeface.BOLD);
+            viewHolder.binding.homepageTeamName.setTypeface(null, Typeface.BOLD);
+            viewHolder.binding.homepageTeamWins.setTypeface(null, Typeface.BOLD);
+            viewHolder.binding.homepageTeamLosses.setTypeface(null, Typeface.BOLD);
+            viewHolder.binding.homepageTeamTies.setTypeface(null, Typeface.BOLD);
         }
         else
         {
-            viewHolder.teamName.setText(teamModel.getName());
-            viewHolder.wins.setText(String.valueOf(teamModel.getWins()));
-            viewHolder.losses.setText(String.valueOf(teamModel.getLosses()));
-            viewHolder.ties.setText(String.valueOf(teamModel.getTies()));
+            viewHolder.binding.homepageTeamName.setText(teamModel.getNameFormatted(24));
+            viewHolder.binding.homepageTeamWins.setText(String.valueOf(teamModel.getWins()));
+            viewHolder.binding.homepageTeamLosses.setText(String.valueOf(teamModel.getLosses()));
+            viewHolder.binding.homepageTeamTies.setText(String.valueOf(teamModel.getTies()));
         }
         // Return the completed view to render on screen
         return result;

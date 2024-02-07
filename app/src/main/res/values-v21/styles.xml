@@ -6,6 +6,7 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
     <style name="MCHLTheme" parent="Theme.AppCompat.DayNight">
 
         <!-- Uncomment to override default BG colors.

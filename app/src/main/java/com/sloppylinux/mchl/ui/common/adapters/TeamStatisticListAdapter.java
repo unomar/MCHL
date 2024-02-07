@@ -9,9 +9,10 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.sloppylinux.mchl.databinding.StandingsRowBinding;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.R;
 import com.sloppylinux.mchl.ui.common.viewholders.TeamStatisticViewHolder;
 import com.sloppylinux.mchl.util.Config;
 import com.sloppylinux.mchl.util.Utils;
@@ -59,7 +60,8 @@ public class TeamStatisticListAdapter extends ArrayAdapter<TeamStatistic>
         {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.standings_row, parent, false);
-            viewHolder = new TeamStatisticViewHolder(convertView);
+            StandingsRowBinding standingsRowBinding = StandingsRowBinding.inflate(inflater, parent, false);
+            viewHolder = new TeamStatisticViewHolder(convertView, standingsRowBinding);
 
             textViews.add(viewHolder.getTeamRank());
             textViews.add(viewHolder.getTeamName());

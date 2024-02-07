@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 
 import com.sloppylinux.mchl.databinding.PlayerRowBinding;
 import com.sloppylinux.mchl.domain.sportspress.PlayerStatistic;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.R;
 
 import java.util.List;
 

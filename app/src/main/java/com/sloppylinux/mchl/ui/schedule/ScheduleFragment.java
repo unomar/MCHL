@@ -4,19 +4,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.sloppylinux.mchl.R;
+import com.sloppylinux.mchl.databinding.FragmentScheduleBinding;
+import com.sloppylinux.mchl.databinding.ScheduleGameRowBinding;
 import com.sloppylinux.mchl.domain.Game;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.TeamSchedule;
-import com.sloppylinux.mchl.ui.R;
 import com.sloppylinux.mchl.ui.common.adapters.GameListAdapter;
 import com.sloppylinux.mchl.ui.common.fragments.GameFragment;
 import com.sloppylinux.mchl.ui.common.views.MchlSnackbar;
@@ -28,19 +28,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class ScheduleFragment extends Fragment
 {
-    @BindView(R.id.scheduleList)
-    ListView scheduleListView;
-    @BindView(R.id.scheduleRefreshView)
-    SwipeRefreshLayout refreshLayout;
-
+    private FragmentScheduleBinding binding;
+    private ScheduleGameRowBinding scheduleGameRowBinding;
     private RefreshScheduleViewModel refreshScheduleViewModel;
-    private Unbinder unbinder;
     private GameListAdapter adapter;
     private Config config;
     private MchlSnackbar snackbar;
@@ -53,16 +46,16 @@ public class ScheduleFragment extends Fragment
             config = new Config(this.getContext());
         }
 
-        View root = inflater.inflate(R.layout.fragment_schedule, container, false);
-        unbinder = ButterKnife.bind(this, root);
+        binding = FragmentScheduleBinding.inflate(inflater, container, true);
+        scheduleGameRowBinding = ScheduleGameRowBinding.inflate(inflater, container, true);
 
         refreshScheduleViewModel = new ViewModelProvider(this).get(RefreshScheduleViewModel.class);
-        refreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimaryDark);
-        refreshLayout.setOnRefreshListener(
+        binding.scheduleRefreshView.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimaryDark);
+        binding.scheduleRefreshView.setOnRefreshListener(
                 () -> updateSchedule(config.getPlayer())
         );
 
-        return root;
+        return binding.getRoot();
     }
 
     @Override
@@ -72,8 +65,8 @@ public class ScheduleFragment extends Fragment
         if (config.getPlayer() != null)
         {
             adapter = new GameListAdapter(config.getPlayer().getPlayerGameList(), getContext());
-            scheduleListView.setAdapter(adapter);
-            scheduleListView.setOnItemClickListener((adapterView, v, index, arg3) ->
+            binding.scheduleList.setAdapter(adapter);
+            binding.scheduleList.setOnItemClickListener((adapterView, v, index, arg3) ->
             {
                 adapterView.callOnClick();
                 Game game = (Game) adapterView.getItemAtPosition(index);
@@ -89,7 +82,6 @@ public class ScheduleFragment extends Fragment
     public void onDestroy()
     {
         super.onDestroy();
-        unbinder.unbind();
     }
 
     /**
@@ -103,7 +95,7 @@ public class ScheduleFragment extends Fragment
         snackbar.show();
         refreshScheduleViewModel.getPlayerSchedule(player).observe(getViewLifecycleOwner(), s ->
         {
-            refreshLayout.setRefreshing(false);
+            binding.scheduleRefreshView.setRefreshing(false);
             snackbar.dismiss();
 
             adapter.clear();

@@ -7,36 +7,35 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.sloppylinux.mchl.databinding.LeagueStandingsRowBinding;
 import com.sloppylinux.mchl.domain.Team;
 import com.sloppylinux.mchl.domain.sportspress.TeamStatistic;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.R;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class LeagueTableListAdapter extends ArrayAdapter<Team>{
-
+    private LeagueStandingsRowBinding binding;
     private List<Team> teamList;
     Context mContext;
 
     // View lookup cache
     static class ViewHolder {
-        @BindView(R.id.league_standings_list)
-        ListView leagueTable;
+
+//        @BindView(R.id.league_standings_list)
+//        ListView leagueTable;
 
         public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
         }
     }
 
-    public LeagueTableListAdapter(List<Team> data, Context context) {
+    public LeagueTableListAdapter(List<Team> data, LeagueStandingsRowBinding leagueStandingsRowBinding, Context context) {
         super(context, R.layout.homepage_team, data);
         this.teamList = data;
+        binding = leagueStandingsRowBinding;
         this.mContext = context;
     }
 
@@ -53,8 +52,9 @@ public class LeagueTableListAdapter extends ArrayAdapter<Team>{
 
         if (convertView == null) {
 
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.league_standings_row, parent, false);
+//            LayoutInflater inflater = LayoutInflater.from(getContext());
+//            convertView = inflater.inflate(R.layout.league_standings_row, parent, false);
+
             viewHolder = new ViewHolder(convertView);
 
             result=convertView;
@@ -68,7 +68,7 @@ public class LeagueTableListAdapter extends ArrayAdapter<Team>{
         lastPosition = position;
 
         TeamStatisticListAdapter adapter = new TeamStatisticListAdapter(getTeamStatistics(teamModel), this.mContext);
-        viewHolder.leagueTable.setAdapter(adapter);
+        binding.leagueStandingsList.setAdapter(adapter);
         // Return the completed view to render on screen
         return result;
     }

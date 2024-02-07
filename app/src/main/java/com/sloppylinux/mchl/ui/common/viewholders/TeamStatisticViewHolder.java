@@ -5,81 +5,61 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sloppylinux.mchl.ui.R;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.sloppylinux.mchl.databinding.StandingsRowBinding;
 
 public class TeamStatisticViewHolder extends RecyclerView.ViewHolder
 {
-    @BindView(R.id.standingsTeamRank)
-    TextView teamRank;
-    @BindView(R.id.standingsTeamName)
-    TextView teamName;
-    @BindView(R.id.standingsGamesPlayed)
-    TextView teamGamesPlayed;
-    @BindView(R.id.standingsWins)
-    TextView teamWins;
-    @BindView(R.id.standingsLosses)
-    TextView teamLosses;
-    @BindView(R.id.standingsTies)
-    TextView teamTies;
-    @BindView(R.id.standingsPoints)
-    TextView teamPoints;
-    @BindView(R.id.standingsGoalsFor)
-    TextView teamGoalsFor;
+    private StandingsRowBinding binding;
 
-    public TeamStatisticViewHolder(View view)
+    public TeamStatisticViewHolder(View view, StandingsRowBinding standingsRowBinding)
     {
         super(view);
-        ButterKnife.bind(this, view);
+        this.binding = standingsRowBinding;
     }
 
     public TextView getTeamRank()
     {
-        return teamRank;
+        return binding.standingsTeamRank;
     }
 
     public TextView getTeamName()
     {
-        return teamName;
+        return binding.standingsTeamName;
     }
 
     public TextView getTeamGamesPlayed()
     {
-        return teamGamesPlayed;
+        return binding.standingsGamesPlayed;
     }
 
     public TextView getTeamWins()
     {
-        return teamWins;
+        return binding.standingsWins;
     }
 
     public TextView getTeamLosses()
     {
-        return teamLosses;
+        return binding.standingsLosses;
     }
 
     public TextView getTeamTies()
     {
-        return teamTies;
+        return binding.standingsTies;
     }
 
     public TextView getTeamPoints()
     {
-        return teamPoints;
+        return binding.standingsPoints;
     }
 
     public TextView getTeamGoalsFor()
     {
-        return teamGoalsFor;
+        return binding.standingsGoalsFor;
     }
 
     public TextView getTeamGoalsAgainst()
     {
-        return teamGoalsAgainst;
+        return binding.standingsGoalsAgainst;
     }
 
-    @BindView(R.id.standingsGoalsAgainst)
-    TextView teamGoalsAgainst;
 }

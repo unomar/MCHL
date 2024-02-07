@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -17,7 +18,7 @@ import com.sloppylinux.mchl.databinding.ActivityNavigationBinding;
 import com.sloppylinux.mchl.databinding.AppBarNavigationBinding;
 import com.sloppylinux.mchl.domain.Player;
 import com.sloppylinux.mchl.domain.Team;
-import com.sloppylinux.mchl.ui.R;
+import com.sloppylinux.mchl.R;
 import com.sloppylinux.mchl.util.Config;
 
 import org.apache.log4j.Logger;
@@ -26,11 +27,12 @@ public class MchlNavigation extends AppCompatActivity
 {
     private ActivityNavigationBinding activityNavigationBinding;
     private AppBarNavigationBinding appBarBinding;
-//    @BindView(R.id.drawer_layout)
+
     DrawerLayout drawer;
-//    @BindView(R.id.nav_view)
+
 //    NavigationView navigationView;
-//    @BindView(R.id.toolbar)
+    private NavController navController;
+
     Toolbar toolbar;
     private AppBarConfiguration mAppBarConfiguration;
     private Config config;
@@ -42,17 +44,25 @@ public class MchlNavigation extends AppCompatActivity
     {
         logger.debug("Entering MCHL Navigation");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation);
 
-//        ButterKnife.bind(this);
         activityNavigationBinding = ActivityNavigationBinding.inflate(getLayoutInflater());
         appBarBinding = AppBarNavigationBinding.inflate(getLayoutInflater());
 
+        setContentView(activityNavigationBinding.getRoot());
+
+//        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navController = navHostFragment.getNavController();
+
         drawer = activityNavigationBinding.drawerLayout;
         toolbar = appBarBinding.toolbar;
-
-
         setSupportActionBar(toolbar);
+
+        NavigationUI.setupActionBarWithNavController(this, navController);
+
+
+
+
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -61,9 +71,9 @@ public class MchlNavigation extends AppCompatActivity
                 R.id.nav_settings)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(activityNavigationBinding.navView, navController);
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+//        NavigationUI.setupWithNavController(activityNavigationBinding.navView, navController);
 
         config = new Config(this.getBaseContext());
 
@@ -106,11 +116,15 @@ public class MchlNavigation extends AppCompatActivity
         return true;
     }
 
+//    @Override
+//    public boolean onSupportNavigateUp()
+//    {
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+//        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+//                || super.onSupportNavigateUp();
+//    }
     @Override
-    public boolean onSupportNavigateUp()
-    {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+    public boolean onSupportNavigateUp() {
+        return NavigationUI.navigateUp(navController, (DrawerLayout) null);
     }
 }
